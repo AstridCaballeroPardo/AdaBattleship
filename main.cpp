@@ -11,16 +11,16 @@ int main()
   Grid grid; 
 
 //Main game loop
-  while(true) 
-  {
+  // while(true) 
+  // {
    
-  }
+  // }
 
-  // grid.updateGrid('A', 1);
-  // grid.revealGrid();
+  grid.updateGrid('A', 1);
+  grid.revealGrid();
 
-  // grid.updateGrid('E', 5);
-  // grid.revealGrid();
+  grid.updateGrid('E', 5);
+  grid.revealGrid();
 
   return 0;
 }
