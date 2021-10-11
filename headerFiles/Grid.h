@@ -2,11 +2,17 @@
 
 #include <vector>
 #include <string>
+#include <memory>
+
+#include "constants.h"
+#include "VectorResource.h"
 
 class Grid {
   private:
-    int **grid = NULL;    
-
+    // int grid[GRID_SIZE][GRID_SIZE];
+    // int **grid = nullptr;  
+    std::vector<std::vector<int>> grid;
+    
   public:
   //constructor
   Grid();  
@@ -18,6 +24,8 @@ class Grid {
 
   void setGrid(int size);
 
-  //inline. I implemented it here to be able to access the private attribute 'grid'
-  int ** getGrid() {return grid;}
+  //inline implementation to have access to the private attribute 'grid'
+  // int ** getGrid() const {return grid;}
+  
+  void updateGrid(char letter, int number);
 };
