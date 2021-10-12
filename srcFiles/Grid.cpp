@@ -11,7 +11,7 @@ Grid::Grid():grid()
 {
   setGrid(GRID_SIZE);
   createGrid();
-  // revealGrid();   
+  revealGrid();   
 }
 
 //Implementing Grid member methods
