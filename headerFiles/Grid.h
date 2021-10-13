@@ -4,28 +4,25 @@
 #include <string>
 #include <memory>
 
-#include "constants.h"
-#include "VectorResource.h"
+#include "Tile.h"
 
 class Grid {
-  private:
-    // int grid[GRID_SIZE][GRID_SIZE];
-    // int **grid = nullptr;  
-    std::vector<std::vector<int>> grid;
+  private:    
+    std::vector<std::vector<Tile>> grid;
     
   public:
   //constructor
   Grid();  
 
   //Grid member methods
-  void createGrid();
-
   void revealGrid();
 
   void setGrid(int size);
 
   //inline implementation to have access to the private attribute 'grid'
   // int ** getGrid() const {return grid;}
+
+  Tile getTile(char row, int column);
   
   void updateGrid(char letter, int number);
 };
