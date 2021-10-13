@@ -29,7 +29,7 @@ void Grid::revealGrid()
     std::cout << std::setfill(' ') << std::setw(TILE_PADDING) << " " << (char)(x + CAPITAL_LETTER) << "  ";
       
     for (int y = 0; y < GRID_SIZE; y++) {        
-      std::cout << "|" << std::setw(TILE_PADDING) << " " << Grid::grid[x][y].getTileState() << "  ";
+      std::cout << "|" << std::setw(TILE_PADDING) << " " << Grid::grid[x][y].getIcon() << "  ";
     }    
   std::cout << "|\n";    
   }  

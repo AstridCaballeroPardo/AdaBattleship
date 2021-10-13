@@ -1,21 +1,31 @@
 #pragma once
 
-#include <vector>
 #include <string>
 
 #include "constants.h"
 
 class Ship {
   private:
-    std::vector<int> ship;
-    int x; // will be the numeric header
-    int y; // will be the letter turn to int
-    char orientation; // v - for vertical, h - for horizontal
+    int shipId_;
+    static int currentShipId_;
+    int shipLen_; 
+    int shipType_;
+    int orientation_; // v - for vertical, h - for horizontal
+    bool isSunk;
 
   public:
   //constructor
   Ship();  
 
   //Grid member methods
-  void createShip();
-}
+  void setShip(int shipType, int orientation);
+
+  void setIsSunk(bool sunk);
+
+  //inline implementation to have access to the private attributes
+  int getShipId()const {return shipId_;}
+  int getShipLen()const {return shipLen_;}
+  int getShipType()const {return shipType_;}
+  int getOrientation()const {return orientation_;}
+  bool getIsSunk()const {return isSunk;}
+};

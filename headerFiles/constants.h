@@ -15,6 +15,23 @@ enum class TileState
   bombedTile
 };
 
+enum class shipType 
+{
+  carrier,
+  battleship,
+  destroyer,
+  submarine,
+  patrolBoat
+};
+
+enum class shipOrientation
+{
+  none,
+  vertical,
+  horizontal
+};
+
+
 //create a struct to hold the extracted coordinates from the player's input
 struct udtCoord{
   char row;
