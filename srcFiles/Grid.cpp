@@ -1,4 +1,5 @@
 #include "../headerFiles/Grid.h"
+#include "../headerFiles/Ship.h"
 #include "../headerFiles/constants.h"
 
 #include <iostream>
@@ -44,23 +45,79 @@ void Grid::revealGrid()
 }
 
 
-void Grid::updateGrid(char letter, int x)
+void Grid::updateGrid(char letter, int y, int shipType, int orientation)
 {
+  int countEmpty = 0;
+  int len;
   int eT = (int)TileState::emptyTile;
   // int sT = (int)TileState::shipTile;
   // int bT = (int)TileState::bombedTile;
+
+  switch(shipType) {
+    case 0: 
+      len = 5;
+      break;
+    case 1:
+      len = 4;
+      break;
+    case 2: 
+      len = 3;
+      break;
+    case 3:
+      len = 3;
+      break;
+    case 4:
+      len = 2;
+      break;
+  }
   
   // x is the scaled value of the letter 
-  int y = letter - CAPITAL_LETTER ;
-  //check if tile is empty
-  if (grid[y][x - 1].getTileState() == eT) {
-    grid[y][x - 1].setX(letter);
-    grid[y][x - 1].setY(x);
-    grid[y][x - 1].setTileState((int)TileState::shipTile);
-    grid[y][x - 1].setIcon('^');
-    //TODO set shipId
+  int x = letter - CAPITAL_LETTER ;
+  //loop through n number of tiles in the given orientation
+  for (int n = 0; n < len; n++) {
+    //check horizontally to the right 
+    if (orientation == 2) {      
+      //check if tile is empty
+      if (grid[x][(y - 1) + n].getTileState() == eT) {
+        countEmpty++;
+      }    
+    }
+    //check vertically to the bottom
+    else {
+      if (grid[x + n][y - 1].getTileState() == eT) {
+        countEmpty++;
+      }  
+    }
+  }
+  //update grid
+  if (countEmpty == len) {
+    //set up ship
+    Ship newShip;
+    newShip.setShip(shipType, orientation);
+    //loop through n number of tiles in the given orientation
+    for (int n = 0; n < len; n++) {
+      //update horizontally to the right 
+      if (orientation == 2) {
+        //update tile
+        grid[x][(y - 1) + n].setX(letter) ;       
+        grid[x][(y - 1) + n].setY(y + n);
+        grid[x][(y - 1) + n].setTileState((int)TileState::shipTile);
+        grid[x][(y - 1) + n].setIcon('^');
+        grid[x][(y - 1) + n].setShipId(newShip.getShipId());
+      }  
+      //update vertically to the bottom
+      else {
+        //update tile
+        grid[x + n][y - 1].setX(letter + n) ;       
+        grid[x + n][y - 1].setY(y);
+        grid[x + n][y - 1].setTileState((int)TileState::shipTile);
+        grid[x + n][y - 1].setIcon('^');
+        grid[x + n][y - 1].setShipId(newShip.getShipId());
+      }
+    }
+  } else {
+    std::cout << "space not available for ship, try again." << '\n';
   }  
-  
 }
 
  Tile Grid::getTile(char row, int column){
@@ -68,3 +125,4 @@ void Grid::updateGrid(char letter, int x)
    Tile myTile = grid[y][column - 1];
    return myTile;
  }
+

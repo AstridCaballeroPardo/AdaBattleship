@@ -1,8 +1,10 @@
 #pragma once
 
 
-bool validateCoordFormat(std::string str);
+bool validateInputFormat(std::string str);
 
-bool validateCoordLimits(udtCoord coord);
+bool validateCoordLimits(udtCoordInput coord);
 
-udtCoord getXY(std::string input, Grid grid);
+std::string extractSubStr(std::string input, std::string regPatt, int group);
+
+udtCoordInput getParams(std::string input, Grid grid);

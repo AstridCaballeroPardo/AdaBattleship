@@ -12,52 +12,45 @@
 
 int main() 
 {
-//   std::string input;  
-//   udtCoord coord;
-//   Grid grid; 
+  std::string input;  
+  udtCoordInput coordInput;
+  Grid grid; 
   
 
-// //Main game loop
-//   while(true) 
-//   {
-//     puts("Enter target X and Y coordinates (e.g. B4): ");
-//     getline(std::cin, input);
-//     coord = getXY(input, grid);
+//Main game loop
+  while(true) 
+  {
+    puts("Enter ship information: X, Y, type and orientation (e.g. B4 0 v): ");
+    getline(std::cin, input);
+    coordInput = getParams(input, grid);
   
-//     //update grid with player's input
-//     if (validateCoordLimits(coord)){      
-//       grid.updateGrid(coord.row, coord.column);
-//       grid.revealGrid();
+    //update grid with player's input
+    if (validateCoordLimits(coordInput)){      
+      grid.updateGrid(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation);
+      grid.revealGrid();
 
       
-//       Tile newTile = grid.getTile(coord.row, coord.column);      
-//       std::cout << newTile.getX() << '\n';
-//       std::cout << newTile.getY() << '\n';
-//     }
-//     else {
-//       //display message error
-//       std::cout << "out of boundaries, try again.\n";
-//     }    
-//   }
+      Tile newTile = grid.getTile(coordInput.row, coordInput.column);      
+      std::cout << "row: " << newTile.getX() << '\n';
+      std::cout << "column: " << newTile.getY() << '\n';
+      std::cout << "ship Id: " << newTile.getShipId() << '\n';
 
-  // Tile tileA;
-  // std::cout << tileA.getX() << '\n';
-  // std::cout << tileA.getY() << '\n';
-  // tileA.setX('B');
-  // std::cout << tileA.getX() << '\n';
-  // std::cout << tileA.getTileState() << '\n';
- 
+      newTile = grid.getTile(coordInput.row, coordInput.column + 1);      
+      std::cout << "Tile to the right\n";
+      std::cout << "row: " << newTile.getX() << '\n';
+      std::cout << "column: " << newTile.getY() << '\n';
+      std::cout << "ship Id: " << newTile.getShipId() << '\n';
 
-  Ship ship1;  
-  std::cout << ship1.getShipId() << '\n';
-  Ship ship2;  
-  std::cout << ship2.getShipId() << '\n';
-  std::cout << ship2.getOrientation() << '\n';
-
-  ship2.setShip((int)shipType::carrier, (int)shipOrientation::vertical);
-  std::cout << '\n' << ship2.getShipType() << '\n';
-  std::cout << ship2.getShipLen() << '\n';
-  std::cout << ship2.getOrientation() << '\n';
+      newTile = grid.getTile(coordInput.row + 1, coordInput.column);   
+      std::cout << "Tile below\n";   
+      std::cout << "row: " << newTile.getX() << '\n';
+      std::cout << "column: " << newTile.getY() << '\n';
+      std::cout << "ship Id: " << newTile.getShipId() << '\n';
+    } else {
+      //display message error
+      std::cout << "out of boundaries, try again.\n";
+    }    
+  }  
 
   return 0;
 }

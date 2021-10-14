@@ -22,7 +22,7 @@ class Grid {
   //inline implementation to have access to the private attribute 'grid'
   // int ** getGrid() const {return grid;}
 
-  Tile getTile(char row, int column);
+  Tile getTile(char row, int column);  
   
-  void updateGrid(char letter, int number);
+  void updateGrid(char letter, int number, int shipType, int orientation);
 };
