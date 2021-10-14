@@ -8,6 +8,7 @@
 #include "headerFiles/Tile.h"
 #include "headerFiles/Ship.h"
 #include "headerFiles/Utility.h"
+#include "headerFiles/Menu.h"
 
 
 int main() 
@@ -19,38 +20,38 @@ int main()
 
 //Main game loop
   while(true) 
-  {
-    puts("Enter ship information: X, Y, type and orientation (e.g. B4 0 v): ");
+  {    
+    //display ship options
+    menuShipType();
+
+    //display orientation options
+    menuOrientation();
+
+    //get input from player
+    puts("\nEnter row letter, column number, ship and orientation (e.g. B4 0 V): ");
     getline(std::cin, input);
-    coordInput = getParams(input, grid);
+    //validate input
+    if(validateInputFormat(input)){
+      coordInput = getParams(input, grid);
   
     //update grid with player's input
-    if (validateCoordLimits(coordInput)){      
-      grid.updateGrid(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation);
-      grid.revealGrid();
-
+      if (validateCoordLimits(coordInput)){      
+        grid.updateGrid(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation);
+        grid.revealGrid();
       
-      Tile newTile = grid.getTile(coordInput.row, coordInput.column);      
-      std::cout << "row: " << newTile.getX() << '\n';
-      std::cout << "column: " << newTile.getY() << '\n';
-      std::cout << "ship Id: " << newTile.getShipId() << '\n';
+      // Tile newTile = grid.getTile(coordInput.row, coordInput.column);      
+      // std::cout << "row: " << newTile.getX() << '\n';
+      // std::cout << "column: " << newTile.getY() << '\n';
+      // std::cout << "ship Id: " << newTile.getShipId() << '\n';
 
-      newTile = grid.getTile(coordInput.row, coordInput.column + 1);      
-      std::cout << "Tile to the right\n";
-      std::cout << "row: " << newTile.getX() << '\n';
-      std::cout << "column: " << newTile.getY() << '\n';
-      std::cout << "ship Id: " << newTile.getShipId() << '\n';
-
-      newTile = grid.getTile(coordInput.row + 1, coordInput.column);   
-      std::cout << "Tile below\n";   
-      std::cout << "row: " << newTile.getX() << '\n';
-      std::cout << "column: " << newTile.getY() << '\n';
-      std::cout << "ship Id: " << newTile.getShipId() << '\n';
+      } else {
+      //display message error
+      std::cout << "\033[1;31mOut of boundaries! try again.\033[0m\n\n";
+      } 
     } else {
       //display message error
-      std::cout << "out of boundaries, try again.\n";
-    }    
+      std::cout << "\033[1;31mIncorrect entry, try again (e.g. B4 0 V).\033[0m\n\n";
+    }      
   }  
-
   return 0;
 }

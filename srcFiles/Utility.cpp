@@ -48,7 +48,7 @@ udtCoordInput getParams(std::string input, Grid grid){
   coord.orientation = 0;
   
   //check format of input          
-    if (validateInputFormat(input)){
+    // if (validateInputFormat(input)){
       //extract row from string      
       row = extractSubStr(input, REGEXPLACESHIP, 1);      
       coord.row  = toupper(*row.c_str());//dereferencing the char*
@@ -71,6 +71,6 @@ udtCoordInput getParams(std::string input, Grid grid){
           coord.orientation = 2;
           break;               
       }           
-    }      
+    // }      
   return coord;
 }

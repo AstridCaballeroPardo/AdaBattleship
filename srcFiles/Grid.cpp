@@ -17,7 +17,7 @@ Grid::Grid():grid()
 //Implementing Grid member methods
 void Grid::revealGrid()
 {
-  //print headers - letters
+  //print headers - column
   std::cout << std::setfill(' ') << std::setw(TILE_WIDTH + 1);
   for (int i = 1; i <= GRID_SIZE; i++){     
     std::cout << "|" << std::setw(TILE_PADDING) << " "  << i << "  ";
@@ -26,7 +26,7 @@ void Grid::revealGrid()
   std::cout << std::setw(TILE_WIDTH + 1);
   std::cout << " " << std::setfill('-') << std::setw((GRID_SIZE * TILE_WIDTH) + GRID_SIZE) << '\n';
   for (int x = 0; x < GRID_SIZE; x++) {
-    //print headers - row number
+    //print headers - row
     std::cout << std::setfill(' ') << std::setw(TILE_PADDING) << " " << (char)(x + CAPITAL_LETTER) << "  ";
       
     for (int y = 0; y < GRID_SIZE; y++) {        
