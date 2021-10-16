@@ -26,18 +26,19 @@ bool validateCoordLimits(udtCoordInput coord){
 
 
 //extract substrings
-std::string extractSubStr(std::string input, std::string regPatt, int group = 0){
-  std::string subStr;
+std::smatch extractSubStr(std::string input, std::string regPatt){
+  // std::string subStr;
   std::regex regexLetter(regPatt); 
   std::smatch subStrMatch;
   std::regex_search(input, subStrMatch, regexLetter);
-  subStr = subStrMatch[group];
+  // subStr = subStrMatch[group];
 
-  return subStr;
+  return subStrMatch;
 }
 
 //get the coordinates in the expected format and store it as a struct that holds a char and an integer
 udtCoordInput getParams(std::string input, Grid grid){
+  std::smatch matchResult;
   std::string row;
   std::string orientation;
   char orient;
@@ -49,18 +50,21 @@ udtCoordInput getParams(std::string input, Grid grid){
   
   //check format of input          
     // if (validateInputFormat(input)){
+      //parse the input
+      matchResult = extractSubStr(input, REGEXPLACESHIP);
+      
       //extract row from string      
-      row = extractSubStr(input, REGEXPLACESHIP, 1);      
+      row = matchResult[1];            
       coord.row  = toupper(*row.c_str());//dereferencing the char*
      
-      //extract column from string      
-      coord.column = std::stoi(extractSubStr(input, REGEXPLACESHIP, 2));
+      //extract column from string
+      coord.column = std::stoi(matchResult[2]);
 
-      //extract shipType
-      coord.shipType = std::stoi(extractSubStr(input, REGEXPLACESHIP, 3));
+      //extract shipType     
+      coord.shipType = std::stoi(matchResult[3]);
 
-      //extract orientation
-      orientation = extractSubStr(input, REGEXPLACESHIP, 4);
+      //extract orientation     
+      orientation = matchResult[4];
       orient = toupper(*orientation.c_str());//dereferencing the char*
 
       switch(orient) {

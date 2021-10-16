@@ -4,7 +4,8 @@
 #define CAPITAL_LETTER 65
 #define TILE_WIDTH 5
 #define TILE_PADDING 2
-#define REGEXPLACESHIP R"((^[a-zA-Z])[^\S]?([0-9]{1,2})[^\S]([0-9])[^\S]?([hHvV])$)"
+#define FLEET_SIZE 5
+#define REGEXPLACESHIP R"((^[a-zA-Z])[^\S]?([0-9]{1,2})[^\S]([1-9])[^\S]?([hHvV])$)"
 
 enum class TileState 
 {
@@ -15,6 +16,7 @@ enum class TileState
 
 enum class shipType 
 {
+  none,
   carrier,
   battleship,
   destroyer,
