@@ -60,19 +60,19 @@ void Grid::updateGrid(char letter, int y, int shipType, int orientation)
   // int bT = (int)TileState::bombedTile;
 
   switch(shipType) {
-    case 0: 
+    case 1: 
       len = 5;
       break;
-    case 1:
+    case 2:
       len = 4;
       break;
-    case 2: 
-      len = 3;
-      break;
-    case 3:
+    case 3: 
       len = 3;
       break;
     case 4:
+      len = 3;
+      break;
+    case 5:
       len = 2;
       break;
   }
@@ -131,30 +131,7 @@ void Grid::updateGrid(char letter, int y, int shipType, int orientation)
         }
       }
     }
-    //set up ship
-    // Ship newShip;
-    // newShip.setShip(shipType, orientation);
-    //loop through n number of tiles in the given orientation
-    // for (int n = 0; n < len; n++) {
-    //   //update horizontally to the right 
-    //   if (orientation == 2) {
-    //     //update tile
-    //     grid[x][(y - 1) + n].setX(letter) ;       
-    //     grid[x][(y - 1) + n].setY(y + n);
-    //     grid[x][(y - 1) + n].setTileState((int)TileState::shipTile);
-    //     grid[x][(y - 1) + n].setIcon('^');
-    //     grid[x][(y - 1) + n].setShipId(newShip.getShipId());
-    //   }  
-    //   //update vertically to the bottom
-    //   else {
-    //     //update tile
-    //     grid[x + n][y - 1].setX(letter + n) ;       
-    //     grid[x + n][y - 1].setY(y);
-    //     grid[x + n][y - 1].setTileState((int)TileState::shipTile);
-    //     grid[x + n][y - 1].setIcon('^');
-    //     grid[x + n][y - 1].setShipId(newShip.getShipId());
-    //   }
-    // }
+   
   } else {
     std::cout << "\033[1;31mspace not available for ship, try again.\033[0m\n\n";
   }  
