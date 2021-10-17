@@ -18,19 +18,19 @@ void Ship::setShip(int shipType, int orientation){
   shipType_ = shipType;
   orientation_ = orientation;
   switch(shipType) {
-    case 0: 
+    case 1: 
       shipLen_ = 5;
       break;
-    case 1:
+    case 2:
       shipLen_ = 4;
       break;
-    case 2: 
-      shipLen_ = 3;
-      break;
-    case 3:
+    case 3: 
       shipLen_ = 3;
       break;
     case 4:
+      shipLen_ = 3;
+      break;
+    case 5:
       shipLen_ = 2;
       break;
   }

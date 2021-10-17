@@ -20,8 +20,10 @@ void Fleet::setSize(int size){
   size_ = size;
 }
 void Fleet::setFleet(int size){
-  //Populate the FleetVector with n(size) number of default ships 
-  fleetVector.assign(size, Ship());
+  //Populate the FleetVector with n(size) number of default ships (each ship has a unique Id)  
+  for (int i = 0; i < size; i++) {
+    fleetVector.push_back(Ship());
+  }
 }
 
 void Fleet::setGridId(int gridId){
