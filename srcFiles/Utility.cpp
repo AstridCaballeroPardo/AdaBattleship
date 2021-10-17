@@ -24,7 +24,6 @@ bool validateCoordLimits(udtCoordInput coord){
   else {return false;}
 }
 
-
 //extract substrings
 std::smatch extractSubStr(std::string input, std::string regPatt){
   // std::string subStr;
@@ -77,4 +76,11 @@ udtCoordInput getParams(std::string input, Grid grid){
       }           
     // }      
   return coord;
+}
+
+std::string userInput(std::string msg) {
+  std::string reply = "";  
+  std::cout << msg;    
+  std::getline(std::cin, reply);  
+  return reply;
 }

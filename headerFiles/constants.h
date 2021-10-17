@@ -5,7 +5,7 @@
 #define TILE_WIDTH 5
 #define TILE_PADDING 2
 #define FLEET_SIZE 5
-#define REGEXPLACESHIP R"((^[a-zA-Z])[^\S]?([0-9]{1,2})[^\S]([1-9])[^\S]?([hHvV])$)"
+#define REGEXPLACESHIP R"((^[a-zA-Z])[^\S]?([0-9]{1,2})[^\S]([1-5])[^\S]?([hHvV])$)" // regex using subgroups for parsing and validation
 
 enum class TileState 
 {
@@ -31,8 +31,7 @@ enum class shipOrientation
   horizontal
 };
 
-
-//create a struct to hold the extracted coordinates from the player's input
+//create a struct to hold the extracted coordinates, ship type and orientation from the player's input
 struct udtCoordInput{
   char row;
   int column;
