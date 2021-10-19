@@ -1,6 +1,7 @@
 #include "../headerFiles/Ship.h"
 #include "../headerFiles/Tile.h"
 #include "../headerFiles/constants.h"
+#include "../headerFiles/Utility.h"
 
 #include <iostream>
 #include <iomanip>
@@ -16,27 +17,13 @@ Ship::Ship():shipId_(currentShipId_++),isSunk(false), shipLen_(0), shipType_(0),
 //Grid member methods
 void Ship::setShip(int shipType, int orientation){  
   shipType_ = shipType;
-  orientation_ = orientation;
-  switch(shipType) {
-    case 1: 
-      shipLen_ = 5;
-      break;
-    case 2:
-      shipLen_ = 4;
-      break;
-    case 3: 
-      shipLen_ = 3;
-      break;
-    case 4:
-      shipLen_ = 3;
-      break;
-    case 5:
-      shipLen_ = 2;
-      break;
-  }
+  orientation_ = orientation; 
+  shipLen_ = calcShipLength(shipType);
 }
 
  void Ship::setIsSunk(bool sunk){
    isSunk = sunk;
  }
+
+
 

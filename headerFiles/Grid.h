@@ -33,5 +33,5 @@ class Grid {
   Tile getTile(char row, int column);   
   
   
-  void updateGrid(char letter, int number, int shipType, int orientation);
+  bool placeShip(char letter, int number, int shipType, int orientation);
 };

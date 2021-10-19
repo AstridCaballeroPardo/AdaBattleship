@@ -84,3 +84,65 @@ std::string userInput(std::string msg) {
   std::getline(std::cin, reply);  
   return reply;
 }
+
+//calculate the len a ship will be
+ int calcShipLength(int shipType){
+  int Len = 0;
+  switch(shipType) {
+    case 1: 
+      Len = 5;
+      break;
+    case 2:
+      Len = 4;
+      break;
+    case 3: 
+      Len = 3;
+      break;
+    case 4:
+      Len = 3;
+      break;
+    case 5:
+      Len = 2;
+      break;
+  }
+  return Len;
+}
+
+int letterToInt(char letter){
+   return letter - CAPITAL_LETTER ;
+}
+char intToLetter(int x){
+   return x + CAPITAL_LETTER ;
+}
+
+bool isShipInFleet(std::vector<Ship>& ships, int shipType){
+    for (int i = 0; i < ships.size(); i++) {
+      if (ships[i].getShipType() == shipType) {        
+        return true;
+      }
+    }
+    return false;
+}
+
+bool areTilesAvailable(int len, int orientation, int x, int y, int tileState, std::vector<std::vector<Tile>>& grid){
+  int countAvailableTiles = 0;
+  for (int n = 0; n < len; n++) {
+      //check horizontally to the right 
+      if (orientation == 2) {      
+        //check if tile is empty
+        if (grid[x][(y - 1) + n].getTileState() == tileState) {
+          countAvailableTiles++;
+        }    
+      }
+      //check vertically to the bottom
+      else {
+        if (grid[x + n][y - 1].getTileState() == tileState) {
+          countAvailableTiles++;
+        }  
+      }
+    }
+  if (countAvailableTiles == len) {
+    return true;
+  }
+  return false;
+}
