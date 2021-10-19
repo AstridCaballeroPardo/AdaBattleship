@@ -13,10 +13,11 @@ class Grid {
     static int currentGridId_;
     std::vector<std::vector<Tile>> grid;
     Fleet gridFleet;
+    int size_;
     
   public:
   //constructor
-  Grid();  
+  Grid(int size = GRID_SIZE);  
 
   //Grid member methods
   void renderGrid();
@@ -31,7 +32,7 @@ class Grid {
   Fleet getFleet() const {return gridFleet;} 
 
   Tile getTile(char row, int column);   
-  
+  int getSize()const {return size_;} 
   
   bool placeShip(char letter, int number, int shipType, int orientation);
 };

@@ -28,11 +28,14 @@ void manuallySetFleet(Grid grid){
 
   while(true) 
   {    
+    //display grid
+    grid.renderGrid(); 
+
     //display ship options
     menuShipType();
 
     //display orientation options
-    menuOrientation();
+    menuOrientation();    
 
     //ask user to input information to set up a ship
     msg = "\nEnter row letter, column number, ship Id and orientation (e.g. B4 1 V): ";
@@ -43,7 +46,7 @@ void manuallySetFleet(Grid grid){
       coordInput = getParams(input, grid);
   
     //update grid with player's input
-      if (validateCoordLimits(coordInput)){      
+      if (validateCoordLimits(coordInput, grid.getSize(), coordInput.shipType)){      
         if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation)) {
           //keep track of placed ships to know when fleet is completed
           shipCount --; 
@@ -80,9 +83,7 @@ void manuallySetFleet(Grid grid){
     } else {
       //display message error
       std::cout << "\033[1;31mIncorrect entry, try again (e.g. B4 1 V).\033[0m\n\n";
-    } 
-
-    grid.renderGrid();
+    }     
 
     //keep track if fleet is completed
     if (shipCount == 0){

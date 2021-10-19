@@ -17,10 +17,10 @@
 int Grid::currentGridId_ = 1;
 
 //Implementing constructor
-Grid::Grid():gridId_(currentGridId_++),gridFleet(),grid()
+Grid::Grid(int size):gridId_(currentGridId_++),gridFleet(),grid(), size_(size)
 {
-  setGrid(GRID_SIZE);  
-  renderGrid();   
+  setGrid(size_);  
+  // renderGrid();   
   setFleetId(gridId_);
 }
 
@@ -30,24 +30,24 @@ void Grid::renderGrid()
   std::cout << "\n";
   //print headers - column
   std::cout << std::setfill(' ') << std::setw(TILE_WIDTH + 1);
-  for (int i = 1; i <= GRID_SIZE; i++){     
+  for (int i = 1; i <= size_; i++){     
     std::cout << "|" << std::setw(TILE_PADDING) << " "  << i << "  ";
   }
   std::cout << "|\n";
   std::cout << std::setw(TILE_WIDTH + 1);
-  std::cout << " " << std::setfill('-') << std::setw((GRID_SIZE * TILE_WIDTH) + GRID_SIZE) << '\n';
-  for (int x = 0; x < GRID_SIZE; x++) {
+  std::cout << " " << std::setfill('-') << std::setw((size_ * TILE_WIDTH) + size_) << '\n';
+  for (int x = 0; x < size_; x++) {
     //print headers - row
     std::cout << std::setfill(' ') << std::setw(TILE_PADDING) << " " << intToLetter(x) << "  ";
       
     //print tiles
-    for (int y = 0; y < GRID_SIZE; y++) {        
+    for (int y = 0; y < size_; y++) {        
       std::cout << "|" << std::setw(TILE_PADDING) << " " << Grid::grid[x][y].getIcon() << "  ";
     }    
   std::cout << "|\n";    
   }  
   std::cout << std::setfill(' ') << std::setw(TILE_WIDTH + 1);
-  std::cout << " " << std::setfill('-') << std::setw((GRID_SIZE * TILE_WIDTH) + GRID_SIZE) << "\n";    
+  std::cout << " " << std::setfill('-') << std::setw((size_ * TILE_WIDTH) + size_) << "\n";    
 }
 
  void Grid::setGrid(int size)

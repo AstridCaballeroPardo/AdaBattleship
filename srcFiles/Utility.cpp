@@ -5,6 +5,7 @@
 
 #include "../headerFiles/constants.h"
 #include "../headerFiles/Grid.h"
+#include "../headerFiles/Utility.h"
 
 //validate the player input has follows the expected pattern
 bool validateInputFormat(std::string str){
@@ -17,11 +18,15 @@ bool validateInputFormat(std::string str){
 }
 
 //validate player's target is within the grid boundaries
-bool validateCoordLimits(udtCoordInput coord){
-  if (coord.column >= 1 && coord.column <= GRID_SIZE && coord.row >= CAPITAL_LETTER && coord.row < CAPITAL_LETTER + GRID_SIZE) {
-    return true;
+bool validateCoordLimits(udtCoordInput coord, int gridSize, int shipType){  
+  if ((coord.column >= 1 && coord.column < gridSize) && (coord.row >= CAPITAL_LETTER && coord.row < CAPITAL_LETTER + gridSize)) {
+    //check if last tile for requested ship is within limits  
+    int len = calcShipLength(shipType) - 1;  
+    if (coord.column + len <= gridSize &&  coord.row + len < CAPITAL_LETTER + gridSize){
+      return true;
+    }    
   }
-  else {return false;}
+  return false;
 }
 
 //extract substrings
@@ -135,7 +140,7 @@ bool areTilesAvailable(int len, int orientation, int x, int y, int tileState, st
         }    
       }
       //check vertically to the bottom
-      else {
+      else {        
         if (grid[x + n][y - 1].getTileState() == tileState) {
           countAvailableTiles++;
         }  

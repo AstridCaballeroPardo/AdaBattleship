@@ -1,12 +1,14 @@
 #pragma once
 
+#include <regex>
+
 #include "Grid.h"
 
 bool validateInputFormat(std::string str);
 
-bool validateCoordLimits(udtCoordInput coord);
+bool validateCoordLimits(udtCoordInput coord, int gridSize, int shipType);
 
-std::string extractSubStr(std::string input, std::string regPatt);
+std::smatch extractSubStr(std::string input, std::string regPatt);
 
 //Parsing player input
 udtCoordInput getParams(std::string input, Grid grid);
