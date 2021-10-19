@@ -46,7 +46,7 @@ void manuallySetFleet(Grid grid){
       coordInput = getParams(input, grid);
   
     //update grid with player's input
-      if (validateCoordLimits(coordInput, grid.getSize(), coordInput.shipType)){      
+      if (validateCoordLimits(coordInput, grid.getSize())){      
         if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation)) {
           //keep track of placed ships to know when fleet is completed
           shipCount --; 

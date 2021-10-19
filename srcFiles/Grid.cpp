@@ -116,7 +116,7 @@ bool Grid::placeShip(char letter, int y, int shipType, int orientation)
       }
       return true;
     } else {
-      std::cout << "\033[1;31mspace not available for ship, try again.\033[0m\n\n";
+      std::cout << "\033[1;31mOverlapping existing ship, try again.\033[0m\n\n";
     } 
   } else {
     std::cout << "\033[1;31mShip already placed, try again.\033[0m\n\n";

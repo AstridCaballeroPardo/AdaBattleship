@@ -6,7 +6,7 @@
 
 bool validateInputFormat(std::string str);
 
-bool validateCoordLimits(udtCoordInput coord, int gridSize, int shipType);
+bool validateCoordLimits(udtCoordInput coord, int gridSize);
 
 std::smatch extractSubStr(std::string input, std::string regPatt);
 

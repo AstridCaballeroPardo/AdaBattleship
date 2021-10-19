@@ -18,12 +18,21 @@ bool validateInputFormat(std::string str){
 }
 
 //validate player's target is within the grid boundaries
-bool validateCoordLimits(udtCoordInput coord, int gridSize, int shipType){  
-  if ((coord.column >= 1 && coord.column < gridSize) && (coord.row >= CAPITAL_LETTER && coord.row < CAPITAL_LETTER + gridSize)) {
+bool validateCoordLimits(udtCoordInput coord, int gridSize){  
+  if ((coord.column >= 1 && coord.column <= gridSize) && (coord.row >= CAPITAL_LETTER && coord.row <= CAPITAL_LETTER + gridSize)) {
     //check if last tile for requested ship is within limits  
-    int len = calcShipLength(shipType) - 1;  
-    if (coord.column + len <= gridSize &&  coord.row + len < CAPITAL_LETTER + gridSize){
-      return true;
+    int len = calcShipLength(coord.shipType) - 1;  
+    //horizontally
+    if (coord.orientation == 2){
+      if (coord.column + len <= gridSize  ) {
+        return true;
+      }
+    }
+    //vertically
+    else if (coord.orientation == 1 ) {
+      if (coord.row + len <= CAPITAL_LETTER + gridSize) {
+        return true;
+      }
     }    
   }
   return false;
