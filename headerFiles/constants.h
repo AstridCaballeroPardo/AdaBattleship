@@ -36,5 +36,5 @@ struct udtCoordInput{
   char row;
   int column;
   int shipType;
-  int orientation;
+  char orientation;
 };

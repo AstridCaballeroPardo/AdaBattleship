@@ -18,7 +18,7 @@ class Ship {
   Ship();  
 
   //Grid member methods
-  void setShip(int shipType, int orientation);
+  void setShip(int shipType, char orientation);
 
   void setIsSunk(bool sunk);
 

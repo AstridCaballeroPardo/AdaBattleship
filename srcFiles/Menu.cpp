@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h> 
 
 #include "../headerFiles/Menu.h"
 #include "../headerFiles/Grid.h"
@@ -20,7 +21,7 @@ void menuOrientation(){
   std::cout << "H. Horizontal\n";
 }
 
-void manuallySetFleet(Grid grid){
+void manuallySetFleet(Grid& grid){
   std::string input;  
   std::string msg;
   udtCoordInput coordInput;   
@@ -91,4 +92,61 @@ void manuallySetFleet(Grid grid){
       break;
     }    
   }    
+}
+
+void automaticallySetFleet(Grid& grid){
+  int totalTiles = pow(grid.getSize(), 2);
+  int shipCount = grid.getFleet().getSize();
+  udtCoordInput coordInput; 
+  int randomIndex = 0;
+  int gridSize = grid.getSize();
+  int len = 0;
+  int availableTiles_ = 0;
+  
+
+  //create set with values form 0 to GRID_SIZE (side's size), they will represent the location of the elements (tiles) in the grid
+  std::set<int> index = createSet(totalTiles); 
+
+  //main loop to place the ships
+  while (shipCount != 0) {   
+    //claculate len per ship
+    len = calcShipLength(shipCount); 
+    availableTiles_ = 0;
+
+    //get random index based on set size
+    randomIndex = randomVal(0, totalTiles - 1);
+    std::cout << "random index: " << randomIndex << std::endl;
+
+    //check random index is in set(find is O(log n))
+    if (index.find(randomIndex) != index.end()){
+      availableTiles_++;
+
+      //get random orientation 
+      coordInput.orientation = orientationIntToChar(randomVal( 1, 2));
+
+      //check number of tiles available
+      availableTiles_ += availableTiles(coordInput.orientation, randomIndex, gridSize, index, len);
+
+      //setup the ship
+      if (availableTiles_ == len) {        
+        coordInput.row = intToLetter((randomIndex / gridSize));
+        coordInput.column = (randomIndex % gridSize) + 1;
+        coordInput.shipType = shipCount;
+      
+        //update grid with player's input                       
+        if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation)) {
+          //keep track of placed ships to know when fleet is completed
+          shipCount --; 
+
+          // remove values from set(the one with values from 0 to GRID_SIZE)
+          removeValueSet(coordInput.orientation, randomIndex, gridSize, index, len);
+          //print index set after removing elements
+          std::cout << "size of index set: " << index.size() << '\n';          
+        }
+      } else {
+        //display message error
+        std::cout << "\033[1;31mOut of boundaries! try again.\033[0m\n\n";
+      }
+    }
+  }  
 }

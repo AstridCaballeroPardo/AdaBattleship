@@ -57,7 +57,7 @@ void Grid::renderGrid()
 }
 
 
-bool Grid::placeShip(char letter, int y, int shipType, int orientation)
+bool Grid::placeShip(char letter, int y, int shipType, char orientation)
 {
   int countAvailableTiles = 0;
   int len = 0;
@@ -94,7 +94,7 @@ bool Grid::placeShip(char letter, int y, int shipType, int orientation)
           ships[i].setShip(shipType, orientation);
           for (int n = 0; n < len; n++) {
             //update horizontally to the right 
-            if (orientation == 2) {
+            if (orientation == 'H') {
               //update tile
               grid[x][(y - 1) + n].setX(letter) ;       
               grid[x][(y - 1) + n].setY(y + n);
@@ -103,7 +103,7 @@ bool Grid::placeShip(char letter, int y, int shipType, int orientation)
               grid[x][(y - 1) + n].setShipId(ships[i].getShipId());
             }  
             //update vertically to the bottom
-            else if(orientation == 1){
+            else if(orientation == 'V'){
               //update tile
               grid[x + n][y - 1].setX(letter + n) ;       
               grid[x + n][y - 1].setY(y);

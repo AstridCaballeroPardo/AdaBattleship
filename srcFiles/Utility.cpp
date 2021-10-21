@@ -2,6 +2,9 @@
 #include <memory>
 #include <regex>
 #include <cctype>
+#include <set>
+#include <random>
+#include <math.h> 
 
 #include "../headerFiles/constants.h"
 #include "../headerFiles/Grid.h"
@@ -23,13 +26,13 @@ bool validateCoordLimits(udtCoordInput coord, int gridSize){
     //check if last tile for requested ship is within limits  
     int len = calcShipLength(coord.shipType) - 1;  
     //horizontally
-    if (coord.orientation == 2){
+    if (coord.orientation == 'H'){
       if (coord.column + len <= gridSize  ) {
         return true;
       }
     }
     //vertically
-    else if (coord.orientation == 1 ) {
+    else if (coord.orientation == 'V' ) {
       if (coord.row + len < CAPITAL_LETTER + gridSize) {
         return true;
       }
@@ -53,8 +56,7 @@ std::smatch extractSubStr(std::string input, std::string regPatt){
 udtCoordInput getParams(std::string input, Grid grid){
   std::smatch matchResult;
   std::string row;
-  std::string orientation;
-  char orient;
+  std::string orientation;  
   udtCoordInput coord;
   coord.row = ' ';
   coord.column = -1;  
@@ -78,17 +80,7 @@ udtCoordInput getParams(std::string input, Grid grid){
 
       //extract orientation     
       orientation = matchResult[4];
-      orient = toupper(*orientation.c_str());//dereferencing the char*
-
-      switch(orient) {
-        case 'V': 
-          coord.orientation = 1;
-          break;
-        case 'H':
-          coord.orientation = 2;
-          break;               
-      }           
-    // }      
+      coord.orientation = toupper(*orientation.c_str());//dereferencing the char*          
   return coord;
 }
 
@@ -138,11 +130,11 @@ bool isShipInFleet(std::vector<Ship>& ships, int shipType){
     return false;
 }
 
-bool areTilesAvailable(int len, int orientation, int x, int y, int tileState, std::vector<std::vector<Tile>>& grid){
+bool areTilesAvailable(int len, char orientation, int x, int y, int tileState, std::vector<std::vector<Tile>>& grid){
   int countAvailableTiles = 0;
   for (int n = 0; n < len; n++) {
       //check horizontally to the right 
-      if (orientation == 2) {      
+      if (orientation == 'H') {      
         //check if tile is empty
         if (grid[x][(y - 1) + n].getTileState() == tileState) {
           countAvailableTiles++;
@@ -159,4 +151,72 @@ bool areTilesAvailable(int len, int orientation, int x, int y, int tileState, st
     return true;
   }
   return false;
+}
+
+
+std::set<int> createSet(int size){
+   std::set<int> mySet;
+  
+  for (int i = 0; i < size; i++) {
+    mySet.insert(i);
+  }  
+  return mySet;
+}
+
+int randomVal( int min, int max) {
+  std::random_device ramdomDev;
+   std::mt19937 rng(ramdomDev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist(min,max);
+
+    return dist(rng);
+}
+
+char orientationIntToChar(int orientation) {
+  char cOrientation = ' ';
+  switch(orientation) {
+          case 1: 
+            cOrientation = 'V';
+            break;
+          case 2:
+            cOrientation = 'H';
+            break;               
+        }
+        return cOrientation;
+}
+
+int availableTiles(char orientation, int randomNum, int gridSize, std::set<int>& index, int len) {
+  int availableTiles = 0;
+
+  if (orientation == 'V') {      
+        for (int i = randomNum + gridSize, j = 1; j < len; i+=gridSize, j++) {        
+          if (index.find(i) != index.end()) {
+              availableTiles++;
+          } else {
+            break;
+          }
+        }
+      } else {
+        for (int i = randomNum + 1, j = 1; j < len; i++, j++) {  
+          //calculate row values to make sure elements belong to the same row
+          char xRandom = intToLetter((randomNum / gridSize));
+          char xNext = intToLetter((i / gridSize));
+
+          if (index.find(i) != index.end() && xRandom == xNext ) {
+              availableTiles++;
+          }
+        }
+      }  
+  return availableTiles;
+}
+
+void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>& index, int len) {
+  if (orientation == 'V') {      
+            for (int i = randomNum, j = 0; j < len; i+=gridSize, j++) {       
+              index.erase(i);
+            }
+          } else {
+            for (int i = randomNum, j = 0; j < len; i++, j++) {        
+            index.erase(i);
+            }
+          }
 }

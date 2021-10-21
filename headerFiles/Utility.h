@@ -1,6 +1,7 @@
 #pragma once
 
 #include <regex>
+#include <set>
 
 #include "Grid.h"
 
@@ -23,4 +24,14 @@ char intToLetter(int x);
 
 bool isShipInFleet(std::vector<Ship>& ships, int shipType);
 
-bool areTilesAvailable(int len, int orientation, int x, int y, int tileState, std::vector<std::vector<Tile>>& grid);
+bool areTilesAvailable(int len, char orientation, int x, int y, int tileState, std::vector<std::vector<Tile>>& grid);
+
+std::set<int> createSet(int size);
+
+int randomVal( int min, int max);
+
+char orientationIntToChar(int orientation);
+
+int availableTiles(char orientation, int randomNum, int gridSize, std::set<int>& index, int len);
+
+void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>& index, int len);
