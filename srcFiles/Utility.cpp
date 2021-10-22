@@ -53,7 +53,7 @@ std::smatch extractSubStr(std::string input, std::string regPatt){
 }
 
 //get the coordinates in the expected format and store it as a struct that holds a char and an integer
-udtCoordInput getParams(std::string input, Grid grid){
+udtCoordInput getParams(std::string input){
   std::smatch matchResult;
   std::string row;
   std::string orientation;  
@@ -61,7 +61,7 @@ udtCoordInput getParams(std::string input, Grid grid){
   coord.row = ' ';
   coord.column = -1;  
   coord.shipType = -1;
-  coord.orientation = 0;
+  coord.orientation = ' ';
   
   //check format of input          
     // if (validateInputFormat(input)){
@@ -72,8 +72,8 @@ udtCoordInput getParams(std::string input, Grid grid){
       row = matchResult[1];            
       coord.row  = toupper(*row.c_str());//dereferencing the char*
      
-      //extract column from string
-      coord.column = std::stoi(matchResult[2]);
+      //extract column from string and make it zero based
+      coord.column = std::stoi(matchResult[2]) - 1;
 
       //extract shipType     
       coord.shipType = std::stoi(matchResult[3]);
@@ -130,30 +130,6 @@ bool isShipInFleet(std::vector<Ship>& ships, int shipType){
     return false;
 }
 
-bool areTilesAvailable(int len, char orientation, int x, int y, int tileState, std::vector<std::vector<Tile>>& grid){
-  int countAvailableTiles = 0;
-  for (int n = 0; n < len; n++) {
-      //check horizontally to the right 
-      if (orientation == 'H') {      
-        //check if tile is empty
-        if (grid[x][(y - 1) + n].getTileState() == tileState) {
-          countAvailableTiles++;
-        }    
-      }
-      //check vertically to the bottom
-      else {        
-        if (grid[x + n][y - 1].getTileState() == tileState) {
-          countAvailableTiles++;
-        }  
-      }
-    }
-  if (countAvailableTiles == len) {
-    return true;
-  }
-  return false;
-}
-
-
 std::set<int> createSet(int size){
    std::set<int> mySet;
   
@@ -163,7 +139,7 @@ std::set<int> createSet(int size){
   return mySet;
 }
 
-int randomVal( int min, int max) {
+int randomVal(int min, int max) {
   std::random_device ramdomDev;
    std::mt19937 rng(ramdomDev());
     std::uniform_int_distribution<std::mt19937::result_type> dist(min,max);
@@ -219,4 +195,11 @@ void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>
             index.erase(i);
             }
           }
+}
+
+udtCoordInput indexToXY(int index, int gridSize) {
+  udtCoordInput xy;
+  xy.row = intToLetter((index / gridSize));
+  xy.column = (index % gridSize);
+  return xy;
 }

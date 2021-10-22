@@ -26,7 +26,15 @@ void manuallySetFleet(Grid& grid){
   std::string msg;
   udtCoordInput coordInput;   
   int shipCount =grid.getFleet().getSize(); 
+  int totalTiles = pow(grid.getSize(), 2);
+  int availableTiles_ = 0;
+  int gridSize = grid.getSize();
+  int len = 0;
 
+
+  //create set with values form 0 to GRID_SIZE (side's size), they will represent the location of the elements (tiles) in the grid    
+  std::set<int> indexSet = createSet(totalTiles); 
+  
   while(true) 
   {    
     //display grid
@@ -37,6 +45,8 @@ void manuallySetFleet(Grid& grid){
 
     //display orientation options
     menuOrientation();    
+    
+       
 
     //ask user to input information to set up a ship
     msg = "\nEnter row letter, column number, ship Id and orientation (e.g. B4 1 V): ";
@@ -44,57 +54,57 @@ void manuallySetFleet(Grid& grid){
 
     //validate input
     if(validateInputFormat(input)){
-      coordInput = getParams(input, grid);
+      coordInput = getParams(input);
+
+      len = calcShipLength(coordInput.shipType); 
+
+      //calculate index value ((row * length of grid's side) + col)
+      int indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
+      availableTiles_ = 0;
+
+      //check if target index is in set(find is O(log n))
+      if (indexSet.find(indVal) != indexSet.end()){
+      availableTiles_++;
+      
+      
+
+      //check number of tiles available in the set collection
+      availableTiles_ += availableTiles(coordInput.orientation, indVal, gridSize, indexSet, len);
+
+      
   
-    //update grid with player's input
-      if (validateCoordLimits(coordInput, grid.getSize())){      
-        if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation)) {
-          //keep track of placed ships to know when fleet is completed
-          shipCount --; 
-        }     
+      //update grid with player's input
+        // if (validateCoordLimits(coordInput, grid.getSize()))
+        if (availableTiles_ == len){      
+          if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, indVal)) {
+            //keep track of placed ships to know when fleet is completed
+            shipCount --; 
 
-      // Tile newTile = grid.getTile(coordInput.row, coordInput.column);      
-      // std::cout << "row: " << newTile.getX() << '\n';
-      // std::cout << "column: " << newTile.getY() << '\n';
-      // std::cout << "ship Id: " << newTile.getShipId() << '\n';
-      // // std::cout << "ship type: " << newTile.getTileState() << '\n';
+            // remove values from set(the one with values from 0 to GRID_SIZE)
+            removeValueSet(coordInput.orientation, indVal, gridSize, indexSet, len);
+          } 
 
-      // Fleet fleetPlayer = grid.getFleet();
-      // std::vector<Ship>& ships = fleetPlayer.getFleetVector();
-      // std::cout << "Grid Id: \n";
-      // std::cout << grid.getGridId() << '\n';
-
-      // std::cout << "fleetPlayer: \n";
-      // std::cout << "Fleet id: " << fleetPlayer.getGridId() << '\n';
-      // std::cout << "Fleet size: " << fleetPlayer.getSize() << '\n';
-
-      // for (int i = 0; i < fleetPlayer.getSize(); i++) {  
-      //   std::cout << ships[i].getShipType() << '\n'; 
-      // }
-
-      // newTile = grid.getTile(coordInput.row, coordInput.column);      
-      // std::cout << "row: " << newTile.getX() << '\n';
-      // std::cout << "column: " << newTile.getY() << '\n';
-      // std::cout << "ship Id: " << newTile.getShipId() << '\n';
-
+        } else {
+        //display message error
+        std::cout << "\033[1;31mShip can't be placed try again.\033[0m\n\n";
+        } 
       } else {
-      //display message error
-      std::cout << "\033[1;31mOut of boundaries! try again.\033[0m\n\n";
-      } 
+        //display message error
+        std::cout << "\033[1;31mShip can't be placed try again.\033[0m\n\n";
+        } 
+      //keep track if fleet is completed
+      if (shipCount == 0){
+        std::cout << "\033[1;32mAll ships placed!\033[0m\n\n";
+        break;
+      }    
     } else {
       //display message error
       std::cout << "\033[1;31mIncorrect entry, try again (e.g. B4 1 V).\033[0m\n\n";
     }     
-
-    //keep track if fleet is completed
-    if (shipCount == 0){
-      std::cout << "\033[1;32mAll ships placed!\033[0m\n\n";
-      break;
-    }    
-  }    
+  } 
 }
 
-void automaticallySetFleet(Grid& grid){
+void automaticallySetFleet(Grid& grid) {
   int totalTiles = pow(grid.getSize(), 2);
   int shipCount = grid.getFleet().getSize();
   udtCoordInput coordInput; 
@@ -105,7 +115,7 @@ void automaticallySetFleet(Grid& grid){
   
 
   //create set with values form 0 to GRID_SIZE (side's size), they will represent the location of the elements (tiles) in the grid
-  std::set<int> index = createSet(totalTiles); 
+  std::set<int> indexSet = createSet(totalTiles); 
 
   //main loop to place the ships
   while (shipCount != 0) {   
@@ -118,30 +128,30 @@ void automaticallySetFleet(Grid& grid){
     std::cout << "random index: " << randomIndex << std::endl;
 
     //check random index is in set(find is O(log n))
-    if (index.find(randomIndex) != index.end()){
+    if (indexSet.find(randomIndex) != indexSet.end()){
       availableTiles_++;
 
       //get random orientation 
       coordInput.orientation = orientationIntToChar(randomVal( 1, 2));
 
       //check number of tiles available
-      availableTiles_ += availableTiles(coordInput.orientation, randomIndex, gridSize, index, len);
+      availableTiles_ += availableTiles(coordInput.orientation, randomIndex, gridSize, indexSet, len);
 
       //setup the ship
       if (availableTiles_ == len) {        
         coordInput.row = intToLetter((randomIndex / gridSize));
-        coordInput.column = (randomIndex % gridSize) + 1;
+        coordInput.column = (randomIndex % gridSize);
         coordInput.shipType = shipCount;
       
         //update grid with player's input                       
-        if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation)) {
+        if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
           //keep track of placed ships to know when fleet is completed
           shipCount --; 
 
           // remove values from set(the one with values from 0 to GRID_SIZE)
-          removeValueSet(coordInput.orientation, randomIndex, gridSize, index, len);
+          removeValueSet(coordInput.orientation, randomIndex, gridSize, indexSet, len);
           //print index set after removing elements
-          std::cout << "size of index set: " << index.size() << '\n';          
+          std::cout << "size of index set: " << indexSet.size() << '\n';          
         }
       } else {
         //display message error
@@ -149,4 +159,5 @@ void automaticallySetFleet(Grid& grid){
       }
     }
   }  
-}
+} 
+

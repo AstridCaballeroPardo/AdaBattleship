@@ -33,6 +33,7 @@ class Grid {
 
   Tile getTile(char row, int column);   
   int getSize()const {return size_;} 
+  std::vector<std::vector<Tile>>& getGrid() {return grid;}
   
-  bool placeShip(char letter, int number, int shipType, char orientation);
+  bool placeShip(char letter, int number, int shipType, char orientation, int index);
 };

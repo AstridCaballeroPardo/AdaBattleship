@@ -15,15 +15,18 @@ int Ship::currentShipId_ = 1;
 Ship::Ship():shipId_(currentShipId_++),isSunk(false), shipLen_(0), shipType_(0), orientation_(0) {}
 
 //Grid member methods
-void Ship::setShip(int shipType, char orientation){  
+void Ship::setShip(int shipType, char orientation, int index){  
   shipType_ = shipType;
   orientation_ = orientation; 
   shipLen_ = calcShipLength(shipType);
+  index_ = index;
 }
 
  void Ship::setIsSunk(bool sunk){
    isSunk = sunk;
  }
+
+
 
 
 
