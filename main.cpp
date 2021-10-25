@@ -15,19 +15,16 @@
 #include "headerFiles/Menu.h"
 
 
-//Refactoring
-
-
 int main() 
 {  
-  // Grid gridPlayer;
-  // manuallySetFleet(gridPlayer);
-  // // automaticallySetFleet(gridPlayer);
-  // gridPlayer.renderGrid();
+  Grid gridPlayer;
+  manuallySetFleet(gridPlayer);  
+  gridPlayer.renderGrid();
 
-  Grid gridComputer(5); 
+  Grid gridComputer; 
   gridComputer.renderGrid();
   automaticallySetFleet(gridComputer);  
   gridComputer.renderGrid();
+
   return 0;
 }

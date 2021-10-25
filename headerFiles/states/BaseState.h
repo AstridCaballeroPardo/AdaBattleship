@@ -1,6 +1,9 @@
 class BaseState {
   public:
-    void init();
+    //Constructor
+    void BaseState();
+
+    //member methods
     void enter();
     void exit();
     void update();

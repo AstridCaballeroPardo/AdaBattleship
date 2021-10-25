@@ -8,6 +8,6 @@ class StateMachine {
   StateMachine(std::string states);
 
   //StateMachine member methods
-  void change();
+  void change(std::string states, parameters???);
   void update();
   void render();
