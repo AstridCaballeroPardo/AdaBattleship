@@ -1,3 +1,5 @@
+#pragma once
+
 class SetupState: public BaseState {
   public:
     //Constructor

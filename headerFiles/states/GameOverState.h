@@ -1,3 +1,5 @@
+#pragma once
+
 class GameOverState: public BaseState {
   public:
     //Constructor

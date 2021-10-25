@@ -1,3 +1,5 @@
+#pragma once
+
 class IntroState: public BaseState {
   public:
     //Constructor

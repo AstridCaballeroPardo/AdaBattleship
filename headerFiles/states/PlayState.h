@@ -1,3 +1,5 @@
+#pragma once
+
 class PlayState: public BaseState {
   public:
     //Constructor
