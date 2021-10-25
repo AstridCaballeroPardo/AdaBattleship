@@ -1,11 +1,13 @@
 class BaseState {
   public:
     //Constructor
-    void BaseState();
+    BaseState();
+    //Destructor
+    ~BaseState();
 
     //member methods
-    void enter();
-    void exit();
-    void update();
-    void render();
-}
+    virtual void enter();
+    virtual void exit();
+    virtual void update();
+    virtual void render();
+};
