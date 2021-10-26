@@ -1,9 +1,9 @@
-// #include "../../headerFiles/states/BaseState.h"
+#include "../../headerFiles/states/BaseState.h"
 #include "../../headerFiles/states/PlayState.h"
 
 
     //Constructor
-    PlayState::PlayState() {};
+    PlayState::PlayState():BaseState() {};
     //Destructor
     PlayState::~PlayState(){};
 

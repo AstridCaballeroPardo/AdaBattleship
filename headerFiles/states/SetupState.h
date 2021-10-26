@@ -1,6 +1,14 @@
 #pragma once
 
+#include "../StateMachine.h"
+#include "BaseState.h"
+#include "../Grid.h"
+
 class SetupState: public BaseState {
+  private:
+    Grid gridPlayer;
+    Grid gridComputer;
+    
   public:
     //Constructor
     SetupState();

@@ -1,9 +1,9 @@
-// #include "../../headerFiles/states/BaseState.h"
+#include "../../headerFiles/states/BaseState.h"
 #include "../../headerFiles/states/VictoryState.h"
 
 
     //Constructor
-    VictoryState::VictoryState() {};
+    VictoryState::VictoryState():BaseState() {};
     //Destructor
     VictoryState::~VictoryState(){};
 

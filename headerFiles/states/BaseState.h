@@ -1,13 +1,11 @@
 #pragma once
 
-
-
 class BaseState {
   public:
     //Constructor
     BaseState();
     //Destructor
-    ~BaseState();
+    virtual ~BaseState();
 
     //member methods
     virtual void enter();

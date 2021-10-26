@@ -1,6 +1,13 @@
 #pragma once
 
-class IntroState: public BaseState {
+#include "BaseState.h"
+#include "../StateMachine.h"
+
+#include <map>
+#include <string>
+#include <memory>
+
+class IntroState:public BaseState {
   public:
     //Constructor
     IntroState();

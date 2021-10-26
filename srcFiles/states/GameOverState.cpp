@@ -1,9 +1,9 @@
-// #include "../../headerFiles/states/BaseState.h"
+#include "../../headerFiles/states/BaseState.h"
 #include "../../headerFiles/states/GameOverState.h"
 
 
     //Constructor
-    GameOverState::GameOverState() {};
+    GameOverState::GameOverState():BaseState() {};
     //Destructor
     GameOverState::~GameOverState(){};
 
