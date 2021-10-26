@@ -5,10 +5,12 @@
 #include "../headerFiles/states/PlayState.h"
 #include "../headerFiles/states/VictoryState.h"
 #include "../headerFiles/states/GameOverState.h"
-#include "../headerFiles/constants.h"
+#include "../headerFiles/Utility.h"
+#include "../headerFiles/Grid.h"
 
 #include <iostream>
 #include <map>
+
 
 
 //Constructor
@@ -20,8 +22,9 @@ StateMachine::StateMachine()
   states_.insert(std::make_pair("victory", new VictoryState()));
   states_.insert(std::make_pair("gameover", new GameOverState()));
 
-  currentState = states_.find("intro")->second;
-  
+  currentState = states_.find("intro")->second;  
+  gridPlayer1_ = new Grid;
+  gridPlayer2_ = new Grid;
 }
 //Destructor
 StateMachine::~StateMachine(){}
@@ -29,7 +32,8 @@ StateMachine::~StateMachine(){}
 StateMachine* StateMachine::inst_= nullptr;
 
 //singleton getInstance
-StateMachine *StateMachine::getInstance() {
+StateMachine *StateMachine::getInstance() 
+{
 	if(inst_== nullptr){
 		inst_ = new StateMachine(); 
 	}
@@ -42,19 +46,22 @@ void StateMachine::change(std::string state)
   if (!currentState) {
     currentState->exit();
   } else {
-    //MAP is a typedef created in 'constants.h';
+    //MAP is a typedef created in 'Utility.h';
     MAP::const_iterator iter = states_.find(state);
     if (iter == states_.end()) {
       //handle the error
       std::cout << "\n\033[1;31mState doesn't exist\033[0m\n";
     } else {
     currentState = iter->second;    
-    currentState->enter(); //TODO add parameters to pass inside the 'enter' method
+    currentState->enter(); 
     }
   }
 }
 
-void StateMachine::update(){}
+void StateMachine::update()
+{
+  currentState->update();
+}
 void StateMachine::render()
 {
   currentState->render();

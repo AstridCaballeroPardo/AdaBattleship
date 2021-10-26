@@ -6,6 +6,7 @@
 
 #include "Tile.h"
 #include "Fleet.h"
+#include "constants.h"
 
 class Grid {
   private:    
@@ -16,24 +17,24 @@ class Grid {
     int size_;
     
   public:
-  //constructor
-  Grid(int size = GRID_SIZE);  
+    //constructor
+    Grid(int size = GRID_SIZE);  
 
-  //Grid member methods
-  void renderGrid();
+    //Grid member methods
+    void renderGrid();
 
-  void setGrid(int size);
+    void setGrid(int size);
 
-  void setFleetId(int gridId_);
+    void setFleetId(int gridId_);
 
-  //inline implementation to have access to the private attribute 'grid'
-  // int ** getGrid() const {return grid;}
-  int getGridId()const {return gridId_;} 
-  Fleet getFleet() const {return gridFleet;} 
+    //inline implementation to have access to the private attribute 'grid'
+    // int ** getGrid() const {return grid;}
+    int getGridId()const {return gridId_;} 
+    Fleet getFleet() const {return gridFleet;} 
 
-  Tile getTile(char row, int column);   
-  int getSize()const {return size_;} 
-  std::vector<std::vector<Tile>>& getGrid() {return grid;}
-  
-  bool placeShip(char letter, int number, int shipType, char orientation, int index);
+    Tile getTile(char row, int column);   
+    int getSize()const {return size_;} 
+    std::vector<std::vector<Tile>>& getGrid() {return grid;}
+    
+    bool placeShip(char letter, int number, int shipType, char orientation, int index);
 };

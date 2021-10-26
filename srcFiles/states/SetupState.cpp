@@ -6,34 +6,31 @@
 
 
     //Constructor
-    SetupState::SetupState():BaseState()
-    {
-      Grid gridPlayer;
-      Grid gridComputer; 
-    }
+    SetupState::SetupState():BaseState(){}
     //Destructor
     SetupState::~SetupState(){}
 
     //member methods
     void SetupState::enter()
     {
-      // Grid gridPlayer;
-      manuallySetFleet(gridPlayer);  
-      // gridPlayer.renderGrid();
-
-      // Grid gridComputer; 
-      gridComputer.renderGrid();
-      automaticallySetFleet(gridComputer);  
-      // gridComputer.renderGrid();
+      
+      manuallySetFleet(StateMachine::getInstance()->getGridPlayer1());  
+      
+      StateMachine::getInstance()->getGridPlayer2()->renderGrid();
+      automaticallySetFleet(StateMachine::getInstance()->getGridPlayer2());  
+      
       render();
     }
     void SetupState::exit(){}
     void SetupState::update()
     {
-      
+      //transition to next state
+      StateMachine::getInstance()->change("play"); 
     }
     void SetupState::render()
     {
-      gridPlayer.renderGrid();
-      gridComputer.renderGrid();
+      StateMachine::getInstance()->getGridPlayer1()->renderGrid();
+      StateMachine::getInstance()->getGridPlayer2()->renderGrid();
+      //move to the play state
+      update();
     }

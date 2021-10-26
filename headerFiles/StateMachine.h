@@ -1,6 +1,9 @@
 #pragma once
 
+#include "Grid.h"
 #include "states/BaseState.h"
+
+
 #include <iostream>
 #include <map>
 
@@ -16,8 +19,11 @@ class StateMachine {
   protected:
     std::map<std::string, BaseState*> states_;
     BaseState* currentState = nullptr;
+    Grid* gridPlayer1_ = nullptr;
+    Grid* gridPlayer2_ = nullptr;
     
   public:
+    
     StateMachine(StateMachine &other) = delete; 
     void operator = (const StateMachine &) = delete; 
     
@@ -25,6 +31,15 @@ class StateMachine {
     ~StateMachine();
 
     static StateMachine *getInstance();
+    
+    //getters
+    Grid* getGridPlayer1() const {
+        return gridPlayer1_;
+    }
+
+    Grid* getGridPlayer2() const {
+        return gridPlayer2_;
+    }
     
     //StateMachine member methods
     void change(std::string state);

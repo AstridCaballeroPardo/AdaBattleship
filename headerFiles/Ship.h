@@ -2,8 +2,6 @@
 
 #include <string>
 
-#include "constants.h"
-
 class Ship {
   private:
     int shipId_;
@@ -15,20 +13,20 @@ class Ship {
     int index_;
 
   public:
-  //constructor
-  Ship();  
+    //constructor
+    Ship();  
 
-  //Grid member methods
-  void setShip(int shipType, char orientation, int index);
+    //Grid member methods
+    void setShip(int shipType, char orientation, int index);
 
-  void setIsSunk(bool sunk);
+    void setIsSunk(bool sunk);
 
 
-  //inline implementation to have access to the private attributes
-  int getShipId()const {return shipId_;}
-  int getShipLen()const {return shipLen_;}
-  int getShipType()const {return shipType_;}
-  int getOrientation()const {return orientation_;}
-  bool getIsSunk()const {return isSunk;}  
-  int getShipIndex()const {return index_;} 
+    //inline implementation to have access to the private attributes
+    int getShipId()const {return shipId_;}
+    int getShipLen()const {return shipLen_;}
+    int getShipType()const {return shipType_;}
+    int getOrientation()const {return orientation_;}
+    bool getIsSunk()const {return isSunk;}  
+    int getShipIndex()const {return index_;} 
 };

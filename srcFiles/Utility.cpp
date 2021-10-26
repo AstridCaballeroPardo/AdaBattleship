@@ -11,7 +11,8 @@
 #include "../headerFiles/Utility.h"
 
 //validate the player input has follows the expected pattern
-bool validateInputFormat(std::string str){
+bool validateInputFormat(std::string str)
+{
    std::regex regexPattern(REGEXPLACESHIP); //starts with a letter, has only one letter, after the letter it might have one space, after a space (if exists) must have a number of max two digits (grid won't be bigger than 25x25 this is a constraint in order to not exceed the row letters and avoid to go into double letters (i.e. AA, AB, etc))   
     std::smatch match;  
     if (std::regex_search(str, match, regexPattern)){
@@ -21,7 +22,8 @@ bool validateInputFormat(std::string str){
 }
 
 //validate player's target is within the grid boundaries
-bool validateCoordLimits(udtCoordInput coord, int gridSize){  
+bool validateCoordLimits(udtCoordInput coord, int gridSize)
+{  
   if ((coord.column >= 1 && coord.column <= gridSize) && (coord.row >= CAPITAL_LETTER && coord.row < CAPITAL_LETTER + gridSize)) {
     //check if last tile for requested ship is within limits  
     int len = calcShipLength(coord.shipType) - 1;  
@@ -53,7 +55,8 @@ std::smatch extractSubStr(std::string input, std::string regPatt){
 }
 
 //get the coordinates in the expected format and store it as a struct that holds a char and an integer
-udtCoordInput getParams(std::string input){
+udtCoordInput getParams(std::string input)
+{
   std::smatch matchResult;
   std::string row;
   std::string orientation;  
@@ -84,7 +87,8 @@ udtCoordInput getParams(std::string input){
   return coord;
 }
 
-std::string userInput(std::string msg) {
+std::string userInput(std::string msg) 
+{
   std::string reply = "";  
   std::cout << msg;    
   std::getline(std::cin, reply);  
@@ -92,7 +96,8 @@ std::string userInput(std::string msg) {
 }
 
 //calculate the len a ship will be
- int calcShipLength(int shipType){
+ int calcShipLength(int shipType)
+ {
   int Len = 0;
   switch(shipType) {
     case 1: 
@@ -114,14 +119,17 @@ std::string userInput(std::string msg) {
   return Len;
 }
 
-int letterToInt(char letter){
+int letterToInt(char letter)
+{
    return letter - CAPITAL_LETTER ;
 }
-char intToLetter(int x){
+char intToLetter(int x)
+{
    return x + CAPITAL_LETTER ;
 }
 
-bool isShipInFleet(std::vector<Ship>& ships, int shipType){
+bool isShipInFleet(std::vector<Ship>& ships, int shipType)
+{
     for (int i = 0; i < ships.size(); i++) {
       if (ships[i].getShipType() == shipType) {        
         return true;
@@ -130,16 +138,19 @@ bool isShipInFleet(std::vector<Ship>& ships, int shipType){
     return false;
 }
 
-std::set<int> createSet(int size){
+std::set<int> createSet(int size)
+{
    std::set<int> mySet;
   
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < size; i++)
+  {
     mySet.insert(i);
   }  
   return mySet;
 }
 
-int randomVal(int min, int max) {
+int randomVal(int min, int max)
+{
   std::random_device ramdomDev;
    std::mt19937 rng(ramdomDev());
     std::uniform_int_distribution<std::mt19937::result_type> dist(min,max);
@@ -147,7 +158,8 @@ int randomVal(int min, int max) {
     return dist(rng);
 }
 
-char orientationIntToChar(int orientation) {
+char orientationIntToChar(int orientation)
+{
   char cOrientation = ' ';
   switch(orientation) {
           case 1: 
@@ -160,7 +172,8 @@ char orientationIntToChar(int orientation) {
         return cOrientation;
 }
 
-int availableTiles(char orientation, int randomNum, int gridSize, std::set<int>& index, int len) {
+int availableTiles(char orientation, int randomNum, int gridSize, std::set<int>& index, int len) 
+{
   int availableTiles = 0;
 
   if (orientation == 'V') {      
@@ -185,7 +198,8 @@ int availableTiles(char orientation, int randomNum, int gridSize, std::set<int>&
   return availableTiles;
 }
 
-void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>& index, int len) {
+void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>& index, int len) 
+{
   if (orientation == 'V') {      
             for (int i = randomNum, j = 0; j < len; i+=gridSize, j++) {       
               index.erase(i);
@@ -197,7 +211,8 @@ void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>
           }
 }
 
-udtCoordInput indexToXY(int index, int gridSize) {
+udtCoordInput indexToXY(int index, int gridSize) 
+{
   udtCoordInput xy;
   xy.row = intToLetter((index / gridSize));
   xy.column = (index % gridSize);

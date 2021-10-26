@@ -2,9 +2,6 @@
 
 #include <string>
 
-#include "constants.h"
-
-
 class Tile{
   private:
     char x_;

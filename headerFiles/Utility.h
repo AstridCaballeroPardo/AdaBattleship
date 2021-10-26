@@ -2,8 +2,13 @@
 
 #include <regex>
 #include <set>
+#include <map>
 
+#include "states/BaseState.h"
+#include "StateMachine.h"
 #include "Grid.h"
+
+typedef std::map<std::string, BaseState*> MAP;
 
 bool validateInputFormat(std::string str);
 

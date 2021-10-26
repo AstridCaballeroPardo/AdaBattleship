@@ -6,8 +6,7 @@
 #include <string>
 #include <memory>
 
-std::string input;
-std::string msg;
+
 
 //Constructor
 IntroState::IntroState():BaseState() {}
@@ -21,18 +20,20 @@ void IntroState::exit(){}
 void IntroState::update()
 {
   //get the statemachine
-  StateMachine* gStateMachine = StateMachine::getInstance();
-  std::cout << "inside update\n";
+  StateMachine* gStateMachine = StateMachine::getInstance();  
+  //transition to next state
   gStateMachine->change("setup"); 
 }
 
 void IntroState::render()
 {
+  std::string input;
+  std::string msg;
   std::cout << "Welcome to AdaShip! let's play\n\n";
   msg = "press enter to start\n";
   input = userInput(msg);
   if (input.length() == 0) {
-    std::cout << input.length() << '\n';
+    //move to setup state
     update();
   }
 }

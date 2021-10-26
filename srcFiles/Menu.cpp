@@ -5,7 +5,8 @@
 #include "../headerFiles/Grid.h"
 #include "../headerFiles/Utility.h"
 
-void menuShipType(){
+void menuShipType()
+{
   std::cout << "\nShip options: \n";
   std::cout << "ID TYPE         SIZE\n";
   std::cout << "1. Carrier        5\n";
@@ -15,20 +16,22 @@ void menuShipType(){
   std::cout << "5. Patrol Boat    2\n";
 }
 
-void menuOrientation(){
+void menuOrientation()
+{
   std::cout << "\nOrientation options: \n";
   std::cout << "V. Vertical\n";
   std::cout << "H. Horizontal\n";
 }
 
-void manuallySetFleet(Grid& grid){
+void manuallySetFleet(Grid* grid)
+{
   std::string input;  
   std::string msg;
   udtCoordInput coordInput;   
-  int shipCount =grid.getFleet().getSize(); 
-  int totalTiles = pow(grid.getSize(), 2);
+  int shipCount =grid->getFleet().getSize(); 
+  int totalTiles = pow(grid->getSize(), 2);
   int availableTiles_ = 0;
-  int gridSize = grid.getSize();
+  int gridSize = grid->getSize();
   int len = 0;
 
 
@@ -38,7 +41,7 @@ void manuallySetFleet(Grid& grid){
   while(true) 
   {    
     //display grid
-    grid.renderGrid(); 
+    grid->renderGrid(); 
 
     //display ship options
     menuShipType();
@@ -76,7 +79,7 @@ void manuallySetFleet(Grid& grid){
       //update grid with player's input
         // if (validateCoordLimits(coordInput, grid.getSize()))
         if (availableTiles_ == len){      
-          if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, indVal)) {
+          if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, indVal)) {
             //keep track of placed ships to know when fleet is completed
             shipCount --; 
 
@@ -104,12 +107,13 @@ void manuallySetFleet(Grid& grid){
   } 
 }
 
-void automaticallySetFleet(Grid& grid) {
-  int totalTiles = pow(grid.getSize(), 2);
-  int shipCount = grid.getFleet().getSize();
+void automaticallySetFleet(Grid* grid) 
+{
+  int totalTiles = pow(grid->getSize(), 2);
+  int shipCount = grid->getFleet().getSize();
   udtCoordInput coordInput; 
   int randomIndex = 0;
-  int gridSize = grid.getSize();
+  int gridSize = grid->getSize();
   int len = 0;
   int availableTiles_ = 0;
   int shipTypeIt = 1;
@@ -145,7 +149,7 @@ void automaticallySetFleet(Grid& grid) {
         coordInput.shipType = shipTypeIt;
       
         //update grid with player's input                       
-        if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
+        if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
           //keep track of placed ships to know when fleet is completed           
           shipTypeIt ++;
 
@@ -169,7 +173,7 @@ void automaticallySetFleet(Grid& grid) {
           coordInput.shipType = shipTypeIt;
       
           //update grid with player's input                       
-          if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
+          if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
             //keep track of placed ships to know when fleet is completed
             shipTypeIt ++;
 
