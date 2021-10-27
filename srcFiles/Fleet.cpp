@@ -36,17 +36,16 @@ void Fleet::setGridId(int gridId)
 
 Ship& Fleet::getShip(std::vector<Ship> &fleet, int shipId)
 {
-  std::unique_ptr<Ship> myShip1; 
+  int index = -1;
   for (int i = 0, count = 0; i < fleet.size(); i++) 
   {
     if (fleet[i].getShipId() == shipId)
     {
-      myShip1 = (std::unique_ptr<Ship>) &fleet[i];
+      index = i;
+      break;
     }
   }
-  Ship& myShip2 = *myShip1;
-
-  return myShip2; //TODO test this!!!!
+  return fleet[index];
 }
 
 void Fleet::reduceFleetSize(){

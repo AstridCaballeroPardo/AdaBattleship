@@ -128,14 +128,15 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
   return false;
 }
 
- Tile Grid::getTile(char row, int column)
- {   
-   Tile& myTile = grid[letterToInt(row)][column];
-   return myTile;
- }
+Tile& Grid::getTile(char row, int column)
+{      
+  return grid[letterToInt(row)][column];
+}
 
- void Grid::setFleetId(int gridId)
- {   
-   gridFleet.setGridId(gridId);
- }
+void Grid::setFleetId(int gridId)
+{   
+  gridFleet.setGridId(gridId);
+}
+
+
 

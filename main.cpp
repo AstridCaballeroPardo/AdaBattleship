@@ -21,12 +21,12 @@ int main()
 {  
   // Grid gridPlayer;
   // manuallySetFleet(gridPlayer);  
-  // gridPlayer.renderGrid();
+  // gridPlayer->renderGrid();
 
   // Grid gridComputer; 
-  // gridComputer.renderGrid();
+  // // gridComputer.renderGrid();
   // automaticallySetFleet(gridComputer);  
-  // gridComputer.renderGrid();
+  // gridComputer->renderGrid();
 
   // Create object with the states
  

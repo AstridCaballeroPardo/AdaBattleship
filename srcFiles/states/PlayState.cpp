@@ -56,12 +56,15 @@
             {
               //go to targeted tile
               x = letterToInt(coordInput.row);
-              tileTargetState = StateMachine::getInstance()->getGridPlayer2()->getGrid()[x][coordInput.column].getTileState();
+              std::vector<std::vector<Tile>>& grid = StateMachine::getInstance()->getGridPlayer2()->getGrid();
+              Tile& tileTarget = grid[x][coordInput.column];
+              tileTargetState = tileTarget.getTileState();
               //if is part of a ship and has not been boombed
               if (tileTargetState == 1) 
               {
                 //Update tile. change tileState and icon
-                StateMachine::getInstance()->getGridPlayer2()->getGrid()[x][coordInput.column].setTileState((int)TileState::bombedTile);
+                tileTarget.setTileState((int)TileState::bombedTile);
+                tileTarget.setIcon('X');
                 
                 //identify ship
                 shipTargetId = StateMachine::getInstance()->getGridPlayer2()->getGrid()[x][coordInput.column].getShipId();
@@ -80,6 +83,7 @@
                     shipTarget.setIsSunk(true);
                     std::cout << "Ship is sunk!\n";
 
+                    //TODO check Fleet gest updated as game is not finishing!!!!
                     StateMachine::getInstance()->getGridPlayer2()->getFleet().reduceFleetSize();
                     //transition state
                     if (StateMachine::getInstance()->getGridPlayer2()->getFleet().getSize() == 0) 
@@ -98,9 +102,8 @@
               } else if (tileTargetState == 0) 
               {
                 //Update tile. change tileState and icon
-                StateMachine::getInstance()->getGridPlayer2()->getGrid()[x][coordInput.column].setTileState((int)TileState::bombedTile);
-                StateMachine::getInstance()->getGridPlayer2()->getGrid()[x][coordInput.column].setIcon('-');
-                // break;
+                tileTarget.setTileState((int)TileState::bombedTile);
+                tileTarget.setIcon('-');                
               }
               //end of player's turn
               //display computer's grid
@@ -128,21 +131,20 @@
           //check random index is in set(find is O(log n))
           if (indexSetPlayer2.find(randomIndex) != indexSetPlayer2.end())
           {
-            coordInput.row = intToLetter((randomIndex / gridSize));
-            std::cout << "row: " << randomIndex / gridSize << '\n';
+            x = (randomIndex / gridSize);            
             coordInput.column = (randomIndex % gridSize);
 
             //go to targeted tile
-            x = letterToInt(coordInput.row);
-            std::cout << "x: " << x << '\n';
-            
-            tileTargetState = StateMachine::getInstance()->getGridPlayer1()->getGrid()[x][coordInput.column].getTileState();
+            std::vector<std::vector<Tile>>& grid = StateMachine::getInstance()->getGridPlayer1()->getGrid();
+            Tile& tileTarget = grid[x][coordInput.column];
+            tileTargetState = tileTarget.getTileState();
 
             if (tileTargetState == 1) 
             {
-              //Update tile. change tileState and icon
-              StateMachine::getInstance()->getGridPlayer1()->getGrid()[x][coordInput.column].setTileState((int)TileState::bombedTile);
-              
+              //Update tile. change tileState and icon              
+              tileTarget.setTileState((int)TileState::bombedTile);
+              tileTarget.setIcon('X');
+
               //identify ship
               shipTargetId = StateMachine::getInstance()->getGridPlayer1()->getGrid()[x][coordInput.column].getShipId();
               
@@ -160,36 +162,35 @@
                   shipTarget.setIsSunk(true);
                   std::cout << "Ship is sunk!\n";
 
+                  //TODO check Fleet gest updated as game is not finishing!!!!
+
                   StateMachine::getInstance()->getGridPlayer1()->getFleet().reduceFleetSize();
-                  //transition state
+                  
                   if (StateMachine::getInstance()->getGridPlayer1()->getFleet().getSize() == 0) 
                   {
                     std::cout << "Fleet is sunk!\n";
                     keepPlaying = false;
-                    // update();
-                  } else {
-                    //display computer's grid
-                    StateMachine::getInstance()->getGridPlayer1()->renderGrid();
-                    // break;
-                  }
+                  } 
                 }
               }
             } 
             else if (tileTargetState == 0) 
             {
               //Update tile. change tileState and icon
-              StateMachine::getInstance()->getGridPlayer1()->getGrid()[x][coordInput.column].setTileState((int)TileState::bombedTile);
-              StateMachine::getInstance()->getGridPlayer1()->getGrid()[x][coordInput.column].setIcon('-');
-              // break;
+              tileTarget.setTileState((int)TileState::bombedTile);
+              tileTarget.setIcon('-');
             }
             //remove tile's index from set so computer won't select it again
             removeTarjetSet(randomIndex, indexSetPlayer2);
 
             //end of computer's turn
+            //display computer's grid
+            StateMachine::getInstance()->getGridPlayer1()->renderGrid();
             break;
           }
         }
       }
+      //transition state
       update();
     }
 
