@@ -26,7 +26,9 @@
 
       int totalTiles = pow(gridSize, 2);
       //create set with values form 0 to GRID_SIZE (side's size), they will represent the location of the elements (tiles) in the grid
-      std::set<int> indexSet = createSet(totalTiles); 
+      std::set<int> indexSetPlayer1 = createSet(totalTiles); 
+      int indVal;
+      std::set<int> indexSetPlayer2 = createSet(totalTiles); 
       int randomIndex = 0;
 
       bool keepPlaying = true;
@@ -45,9 +47,12 @@
           //validate input
           if(validateInputShootFormat(input))
           {
-            coordInput = getParams(input);
+            coordInput = getParams(input, REGEXSHOOTTILE);
             //validate is within limits
-            if(validateCoordLimits(coordInput, gridSize)) 
+            //calculate index value ((row * length of grid's side) + col)
+            indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
+            
+            if(indexSetPlayer1.find(indVal) != indexSetPlayer1.end()) 
             {
               //go to targeted tile
               x = letterToInt(coordInput.row);
@@ -86,7 +91,7 @@
                     } else {
                       //display computer's grid
                       StateMachine::getInstance()->getGridPlayer2()->renderGrid();
-                      // break;
+                      
                     }
                   }
                 }
@@ -98,7 +103,14 @@
                 // break;
               }
               //end of player's turn
+              //display computer's grid
+              StateMachine::getInstance()->getGridPlayer2()->renderGrid();
               break; 
+            }
+            else 
+            {
+              //display message error
+              std::cout << "\033[1;31mOut of boundaries, try again.\033[0m\n\n";
             }
           }
         }
@@ -114,7 +126,7 @@
           randomIndex = randomVal(0, totalTiles - 1);
 
           //check random index is in set(find is O(log n))
-          if (indexSet.find(randomIndex) != indexSet.end())
+          if (indexSetPlayer2.find(randomIndex) != indexSetPlayer2.end())
           {
             coordInput.row = intToLetter((randomIndex / gridSize));
             std::cout << "row: " << randomIndex / gridSize << '\n';
@@ -170,7 +182,8 @@
               StateMachine::getInstance()->getGridPlayer1()->getGrid()[x][coordInput.column].setIcon('-');
               // break;
             }
-            //TODO remove tile's index from set so computer won't select it again
+            //remove tile's index from set so computer won't select it again
+            removeTarjetSet(randomIndex, indexSetPlayer2);
 
             //end of computer's turn
             break;

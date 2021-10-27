@@ -14,7 +14,10 @@ IntroState::IntroState():BaseState() {}
 IntroState::~IntroState(){};
 
 //member methods
-void IntroState::enter(){}
+void IntroState::enter()
+{
+  render();
+}
 void IntroState::exit(){}
 
 void IntroState::update()

@@ -44,7 +44,9 @@ Ship& Fleet::getShip(std::vector<Ship> &fleet, int shipId)
       myShip1 = (std::unique_ptr<Ship>) &fleet[i];
     }
   }
-  return *myShip1;
+  Ship& myShip2 = *myShip1;
+
+  return myShip2; //TODO test this!!!!
 }
 
 void Fleet::reduceFleetSize(){

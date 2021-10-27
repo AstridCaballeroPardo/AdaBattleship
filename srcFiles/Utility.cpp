@@ -33,26 +33,26 @@ bool validateInputShootFormat(std::string str)
 }
 
 //validate player's target is within the grid boundaries
-bool validateCoordLimits(udtCoordInput coord, int gridSize)
-{  
-  if ((coord.column >= 1 && coord.column <= gridSize) && (coord.row >= CAPITAL_LETTER && coord.row < CAPITAL_LETTER + gridSize)) {
-    //check if last tile for requested ship is within limits  
-    int len = calcShipLength(coord.shipType) - 1;  
-    //horizontally
-    if (coord.orientation == 'H'){
-      if (coord.column + len <= gridSize  ) {
-        return true;
-      }
-    }
-    //vertically
-    else if (coord.orientation == 'V' ) {
-      if (coord.row + len < CAPITAL_LETTER + gridSize) {
-        return true;
-      }
-    }    
-  }
-  return false;
-}
+// bool validateCoordLimits(udtCoordInput coord, int gridSize)
+// {  
+//   if ((coord.column >= 0 && coord.column < gridSize) && (coord.row >= CAPITAL_LETTER && coord.row < CAPITAL_LETTER + gridSize)) {
+//     //check if last tile for requested ship is within limits  
+//     int len = calcShipLength(coord.shipType) - 1;  
+//     //horizontally
+//     if (coord.orientation == 'H'){
+//       if (coord.column + len <= gridSize  ) {
+//         return true;
+//       }
+//     }
+//     //vertically
+//     else if (coord.orientation == 'V' ) {
+//       if (coord.row + len < CAPITAL_LETTER + gridSize) {
+//         return true;
+//       }
+//     }    
+//   }
+//   return false;
+// }
 
 //extract substrings
 std::smatch extractSubStr(std::string input, std::string regPatt){
@@ -66,7 +66,7 @@ std::smatch extractSubStr(std::string input, std::string regPatt){
 }
 
 //get the coordinates in the expected format and store it as a struct that holds a char and an integer
-udtCoordInput getParams(std::string input)
+udtCoordInput getParams(std::string input, std::string regPatt)
 {
   std::smatch matchResult;
   std::string row;
@@ -76,25 +76,26 @@ udtCoordInput getParams(std::string input)
   coord.column = -1;  
   coord.shipType = -1;
   coord.orientation = ' ';
+   
+  //parse the input
+  matchResult = extractSubStr(input, regPatt);
   
-  //check format of input          
-    // if (validateInputFormat(input)){
-      //parse the input
-      matchResult = extractSubStr(input, REGEXPLACESHIP);
-      
-      //extract row from string      
-      row = matchResult[1];            
-      coord.row  = toupper(*row.c_str());//dereferencing the char*
-     
-      //extract column from string and make it zero based
-      coord.column = std::stoi(matchResult[2]) - 1;
+  //extract row from string      
+  row = matchResult[1];            
+  coord.row  = toupper(*row.c_str());//dereferencing the char*
+  
+  //extract column from string and make it zero based
+  coord.column = std::stoi(matchResult[2]) - 1;
 
-      //extract shipType     
-      coord.shipType = std::stoi(matchResult[3]);
+  if(matchResult.size() > 3){
+    //extract shipType     
+    coord.shipType = std::stoi(matchResult[3]);
 
-      //extract orientation     
-      orientation = matchResult[4];
-      coord.orientation = toupper(*orientation.c_str());//dereferencing the char*          
+    //extract orientation     
+    orientation = matchResult[4];
+    coord.orientation = toupper(*orientation.c_str());//dereferencing the char* 
+  }
+               
   return coord;
 }
 
@@ -220,6 +221,11 @@ void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>
             index.erase(i);
             }
           }
+}
+
+void removeTarjetSet(int randomNum, std::set<int>& index)
+{
+  index.erase(randomNum);
 }
 
 udtCoordInput indexToXY(int index, int gridSize) 

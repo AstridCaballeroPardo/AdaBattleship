@@ -57,7 +57,7 @@ void manuallySetFleet(Grid* grid)
 
     //validate input
     if(validateInputFormat(input)){
-      coordInput = getParams(input);
+      coordInput = getParams(input, REGEXPLACESHIP);
 
       len = calcShipLength(coordInput.shipType); 
 
@@ -68,16 +68,11 @@ void manuallySetFleet(Grid* grid)
       //check if target index is in set(find is O(log n))
       if (indexSet.find(indVal) != indexSet.end()){
       availableTiles_++;
-      
-      
 
       //check number of tiles available in the set collection
       availableTiles_ += availableTiles(coordInput.orientation, indVal, gridSize, indexSet, len);
-
-      
   
-      //update grid with player's input
-        // if (validateCoordLimits(coordInput, grid.getSize()))
+      //update grid with player's input        
         if (availableTiles_ == len){      
           if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, indVal)) {
             //keep track of placed ships to know when fleet is completed

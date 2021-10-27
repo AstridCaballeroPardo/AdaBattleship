@@ -19,7 +19,7 @@ bool validateCoordLimits(udtCoordInput coord, int gridSize);
 std::smatch extractSubStr(std::string input, std::string regPatt);
 
 //Parsing player input
-udtCoordInput getParams(std::string input);
+udtCoordInput getParams(std::string input, std::string regPatt);
 
 std::string userInput(std::string msg); 
 
@@ -40,5 +40,7 @@ char orientationIntToChar(int orientation);
 int availableTiles(char orientation, int randomNum, int gridSize, std::set<int>& index, int len);
 
 void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>& index, int len);
+
+void removeTarjetSet(int randomNum, std::set<int>& index);
 
 udtCoordInput indexToXY(int index, int gridSize);

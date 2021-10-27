@@ -16,7 +16,7 @@
       
       manuallySetFleet(StateMachine::getInstance()->getGridPlayer1());  
       
-      StateMachine::getInstance()->getGridPlayer2()->renderGrid();
+      std::cout << "\nComputer placing Fleet\n";
       automaticallySetFleet(StateMachine::getInstance()->getGridPlayer2());  
       
       render();
@@ -29,7 +29,9 @@
     }
     void SetupState::render()
     {
+      //render player's fleet
       StateMachine::getInstance()->getGridPlayer1()->renderGrid();
+      //render computer's fleet
       StateMachine::getInstance()->getGridPlayer2()->renderGrid();
       //move to the play state
       update();

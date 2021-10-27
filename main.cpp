@@ -29,10 +29,10 @@ int main()
   // gridComputer.renderGrid();
 
   // Create object with the states
-  // StateMachine gStateMachine;
+ 
   StateMachine* gStateMachine = StateMachine::getInstance();
   gStateMachine->change("intro");
-  gStateMachine->render();
+  
 
   return 0;
 }

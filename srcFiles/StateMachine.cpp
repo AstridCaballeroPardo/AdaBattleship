@@ -22,9 +22,11 @@ StateMachine::StateMachine()
   states_.insert(std::make_pair("victory", new VictoryState()));
   states_.insert(std::make_pair("gameover", new GameOverState()));
 
-  currentState = states_.find("intro")->second;  
+  currentState = states_.find("intro")->second; 
   gridPlayer1_ = new Grid;
   gridPlayer2_ = new Grid;
+  
+  // change("intro");
 }
 //Destructor
 StateMachine::~StateMachine(){}
