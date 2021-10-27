@@ -1,5 +1,7 @@
 #pragma once
 
+
+//abstract class that will be the base for the 'states' of the game. 'virtual' is what allows polymorphism
 class BaseState {
   public:
     //Constructor

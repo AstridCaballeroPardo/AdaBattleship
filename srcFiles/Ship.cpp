@@ -28,6 +28,9 @@ void Ship::setShip(int shipType, char orientation, int index)
    isSunk = sunk;
  }
 
+void Ship::reduceShipLen(){
+  shipLen_--;
+}
 
 
 

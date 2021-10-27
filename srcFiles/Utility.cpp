@@ -10,7 +10,7 @@
 #include "../headerFiles/Grid.h"
 #include "../headerFiles/Utility.h"
 
-//validate the player input has follows the expected pattern
+//validate the player input has follows the expected pattern to place ships
 bool validateInputFormat(std::string str)
 {
    std::regex regexPattern(REGEXPLACESHIP); //starts with a letter, has only one letter, after the letter it might have one space, after a space (if exists) must have a number of max two digits (grid won't be bigger than 25x25 this is a constraint in order to not exceed the row letters and avoid to go into double letters (i.e. AA, AB, etc))   
@@ -19,6 +19,17 @@ bool validateInputFormat(std::string str)
       return true;
     }
     return false;
+}
+
+//validate the player input has follows the expected pattern to shoot
+bool validateInputShootFormat(std::string str)
+{
+  std::regex regexPattern(REGEXSHOOTTILE); //starts with a letter, has only one letter, after the letter it might have one space, after a space (if exists) must have a number of max two digits (grid won't be bigger than 25x25 this is a constraint in order to not exceed the row letters and avoid to go into double letters (i.e. AA, AB, etc))   
+      std::smatch match;  
+      if (std::regex_search(str, match, regexPattern)){
+        return true;
+      }
+      return false;
 }
 
 //validate player's target is within the grid boundaries

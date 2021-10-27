@@ -21,6 +21,8 @@ class Ship {
 
     void setIsSunk(bool sunk);
 
+    void reduceShipLen();
+
 
     //inline implementation to have access to the private attributes
     int getShipId()const {return shipId_;}

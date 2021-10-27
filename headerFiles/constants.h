@@ -8,6 +8,7 @@
 #define TILE_PADDING 2
 #define FLEET_SIZE 5
 #define REGEXPLACESHIP R"((^[a-zA-Z])[^\S]?([0-9]{1,2})[^\S]([1-5])[^\S]?([hHvV])$)" // regex using subgroups for parsing and validation
+#define REGEXSHOOTTILE R"((^[a-zA-Z])[^\S]?([0-9]{1,2})$)"
 
 
 

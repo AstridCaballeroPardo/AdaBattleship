@@ -32,5 +32,6 @@ class Fleet{
     int getGridId() const {return gridId_;}  
     std::vector<Ship>& getFleetVector() {return fleetVector;};
     
-    Ship getShip(std::vector<Ship> &fleet);         
+    Ship& getShip(std::vector<Ship> &fleet, int shipId);  
+    void reduceFleetSize();       
 };

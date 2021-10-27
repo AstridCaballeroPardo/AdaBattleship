@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <vector>
 #include <string>
+#include <memory>
 
 //Implementing constructor
 Fleet::Fleet():size_(FLEET_SIZE),fleetVector()
@@ -33,11 +34,19 @@ void Fleet::setGridId(int gridId)
   gridId_ = gridId;
 }
 
-Ship getShip(std::vector<Ship> &fleet, int shipId)
+Ship& Fleet::getShip(std::vector<Ship> &fleet, int shipId)
 {
-  Ship myShip; 
-  // = fleet->fleetVector;
-  //loop through the fleet searching for an specific ship
-  // for ()
-  return myShip;
+  std::unique_ptr<Ship> myShip1; 
+  for (int i = 0, count = 0; i < fleet.size(); i++) 
+  {
+    if (fleet[i].getShipId() == shipId)
+    {
+      myShip1 = (std::unique_ptr<Ship>) &fleet[i];
+    }
+  }
+  return *myShip1;
 }
+
+void Fleet::reduceFleetSize(){
+  size_ --;
+}  

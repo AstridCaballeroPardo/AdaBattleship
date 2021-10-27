@@ -30,18 +30,21 @@ void Grid::renderGrid()
   std::cout << "\n";
   //print headers - column
   std::cout << std::setfill(' ') << std::setw(TILE_WIDTH + 1);
-  for (int i = 1; i <= size_; i++){     
+  for (int i = 1; i <= size_; i++)
+  {     
     std::cout << "|" << std::setw(TILE_PADDING) << " "  << i << "  ";
   }
   std::cout << "|\n";
   std::cout << std::setw(TILE_WIDTH + 1);
   std::cout << " " << std::setfill('-') << std::setw((size_ * TILE_WIDTH) + size_) << '\n';
-  for (int x = 0; x < size_; x++) {
+  for (int x = 0; x < size_; x++) 
+  {
     //print headers - row
     std::cout << std::setfill(' ') << std::setw(TILE_PADDING) << " " << intToLetter(x) << "  ";
       
     //print tiles
-    for (int y = 0; y < size_; y++) {        
+    for (int y = 0; y < size_; y++) 
+    {        
       std::cout << "|" << std::setw(TILE_PADDING) << " " << Grid::grid[x][y].getIcon() << "  ";
     }    
   std::cout << "|\n";    
@@ -73,8 +76,8 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
   isShipInFleet_ = isShipInFleet(ships, shipType); 
 
   // place ship
-  if (!isShipInFleet_) {  
-  
+  if (!isShipInFleet_) 
+  {  
     len = calcShipLength(shipType);
     
     // x is the scaled value of the letter
@@ -82,15 +85,19 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
     
     //update grid    
     //find unassigned ship
-    for (int i = 0, count = 0; i < gridFleet.getSize() && count < 1; i++) {
-      if(ships[i].getShipType() == 0){
+    for (int i = 0, count = 0; i < gridFleet.getSize() && count < 1; i++) 
+    {
+      if(ships[i].getShipType() == 0)
+      {
         // count is used to make sure only one ship gets updated instead of all the ships of the vector
         count++;
         //update empty ship
         ships[i].setShip(shipType, orientation, index);
-        for (int n = 0; n < len; n++) {
+        for (int n = 0; n < len; n++) 
+        {
           //update horizontally to the right 
-          if (orientation == 'H') {
+          if (orientation == 'H') 
+          {
             //update tile
             grid[x][y + n].setX(letter) ; 
             //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)
@@ -100,7 +107,8 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
             grid[x][y + n].setShipId(ships[i].getShipId());
           }  
           //update vertically to the bottom
-          else if(orientation == 'V'){
+          else if(orientation == 'V')
+          {
             //update tile
             grid[x + n][y].setX(letter + n) ;  
             //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)     
@@ -113,18 +121,21 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
       }
     }
     return true;    
-  } else {
+  } else 
+  {
     std::cout << "\033[1;31mShip already placed, try again.\033[0m\n\n";
   }
   return false;
 }
 
- Tile Grid::getTile(char row, int column){   
+ Tile Grid::getTile(char row, int column)
+ {   
    Tile& myTile = grid[letterToInt(row)][column];
    return myTile;
  }
 
- void Grid::setFleetId(int gridId){   
+ void Grid::setFleetId(int gridId)
+ {   
    gridFleet.setGridId(gridId);
  }
 

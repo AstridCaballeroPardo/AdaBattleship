@@ -18,11 +18,9 @@ void IntroState::enter(){}
 void IntroState::exit(){}
 
 void IntroState::update()
-{
-  //get the statemachine
-  StateMachine* gStateMachine = StateMachine::getInstance();  
+{    
   //transition to next state
-  gStateMachine->change("setup"); 
+  StateMachine::getInstance()->change("setup"); 
 }
 
 void IntroState::render()
