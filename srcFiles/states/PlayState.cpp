@@ -38,10 +38,7 @@
       {
         //player's turn
         while(true) 
-        {          
-          //display computer's grid
-          StateMachine::getInstance()->getGridPlayer2()->renderGrid();
-
+        {   
           msg = "\nEnter row letter, column number(e.g. B4): ";
           input = userInput(msg);
           //validate input
@@ -83,20 +80,15 @@
                     shipTarget.setIsSunk(true);
                     std::cout << "Ship is sunk!\n";
 
-                    //TODO check Fleet gest updated as game is not finishing!!!!
-                    StateMachine::getInstance()->getGridPlayer2()->getFleet().reduceFleetSize();
+                    Fleet& fleet = StateMachine::getInstance()->getGridPlayer2()->getFleet();
+                    fleet.reduceFleetSize();
                     //transition state
-                    if (StateMachine::getInstance()->getGridPlayer2()->getFleet().getSize() == 0) 
+                    if (fleet.getSize() == 0) 
                     {
                       std::cout << "Fleet is sunk!\n";
                       keepPlaying = false;
-                      // break;
-                      // update();
-                    } else {
-                      //display computer's grid
-                      StateMachine::getInstance()->getGridPlayer2()->renderGrid();
                       
-                    }
+                    } 
                   }
                 }
               } else if (tileTargetState == 0) 
@@ -121,10 +113,7 @@
 
         //computer's turn
         while(true)
-        {          
-          //display players's grid
-          StateMachine::getInstance()->getGridPlayer1()->renderGrid();
-
+        {  
           //get random index based on set size
           randomIndex = randomVal(0, totalTiles - 1);
 
@@ -162,11 +151,11 @@
                   shipTarget.setIsSunk(true);
                   std::cout << "Ship is sunk!\n";
 
-                  //TODO check Fleet gest updated as game is not finishing!!!!
-
-                  StateMachine::getInstance()->getGridPlayer1()->getFleet().reduceFleetSize();
+                  //TODO check Fleet gets updated as game is not finishing!!!!
+                  Fleet& fleet = StateMachine::getInstance()->getGridPlayer1()->getFleet();
+                  fleet.reduceFleetSize();
                   
-                  if (StateMachine::getInstance()->getGridPlayer1()->getFleet().getSize() == 0) 
+                  if (fleet.getSize() == 0) 
                   {
                     std::cout << "Fleet is sunk!\n";
                     keepPlaying = false;

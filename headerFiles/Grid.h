@@ -30,9 +30,9 @@ class Grid {
     //inline implementation to have access to the private attribute 'grid'
     // int ** getGrid() const {return grid;}
     int getGridId()const {return gridId_;} 
-    Fleet getFleet() const {return gridFleet;} 
+    Fleet& getFleet() {return gridFleet;} 
 
-    Tile& getTile(char row, int column);   
+    // Tile& getTile(char row, int column);   
     int getSize()const {return size_;} 
     std::vector<std::vector<Tile>>& getGrid() {return grid;}
     

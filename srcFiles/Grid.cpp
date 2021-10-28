@@ -128,10 +128,10 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
   return false;
 }
 
-Tile& Grid::getTile(char row, int column)
-{      
-  return grid[letterToInt(row)][column];
-}
+// Tile& Grid::getTile(char row, int column)
+// {      
+//   return grid[letterToInt(row)][column];
+// }
 
 void Grid::setFleetId(int gridId)
 {   
