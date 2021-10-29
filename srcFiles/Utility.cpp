@@ -32,27 +32,16 @@ bool validateInputShootFormat(std::string str)
       return false;
 }
 
-//validate player's target is within the grid boundaries
-// bool validateCoordLimits(udtCoordInput coord, int gridSize)
-// {  
-//   if ((coord.column >= 0 && coord.column < gridSize) && (coord.row >= CAPITAL_LETTER && coord.row < CAPITAL_LETTER + gridSize)) {
-//     //check if last tile for requested ship is within limits  
-//     int len = calcShipLength(coord.shipType) - 1;  
-//     //horizontally
-//     if (coord.orientation == 'H'){
-//       if (coord.column + len <= gridSize  ) {
-//         return true;
-//       }
-//     }
-//     //vertically
-//     else if (coord.orientation == 'V' ) {
-//       if (coord.row + len < CAPITAL_LETTER + gridSize) {
-//         return true;
-//       }
-//     }    
-//   }
-//   return false;
-// }
+//validate the player menu input has follows the expected pattern
+bool validateInputMenu(std::string str, std::string regPatt)
+{
+  std::regex regexPattern(regPatt); //only has one number 
+      std::smatch match;  
+      if (std::regex_search(str, match, regexPattern)){
+        return true;
+      }
+      return false;
+}
 
 //extract substrings
 std::smatch extractSubStr(std::string input, std::string regPatt){
@@ -234,4 +223,162 @@ udtCoordInput indexToXY(int index, int gridSize)
   xy.row = intToLetter((index / gridSize));
   xy.column = (index % gridSize);
   return xy;
+}
+
+std::string getStringForEnum(int enum_val)
+{
+  std::string tmp;
+    switch(enum_val){
+      case 1:
+      tmp = "Carrier";
+      break;
+      case 2:
+      tmp = "Battleship";
+      break;
+      case 3:
+      tmp = "Destroyer";
+      break;
+      case 4:
+      tmp = "Submarine";
+      break;
+      case 5:
+      tmp = "Patrol Boat";
+      break;
+    }
+    return tmp;
+}
+
+void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtCoordInput coordInput, bool& keepPlaying, Grid* gridPlayer)
+{
+  int shipTargetId;
+  int tileTargetState;
+  int x;
+  //check random index is in set(find is O(log n))
+  // if (indexSetPlayer.find(valIndex) != indexSetPlayer.end())
+  // {
+    if (gridPlayer->getPlayerType() == "human") {
+      x = (valIndex / gridSize);            
+      coordInput.column = (valIndex % gridSize);
+    } 
+    else if (gridPlayer->getPlayerType() == "computer")
+    {
+      x = letterToInt(coordInput.row);
+    }
+    
+
+    //go to targeted tile
+    std::vector<std::vector<Tile>>& grid = gridPlayer->getGrid();
+    Tile& tileTarget = grid[x][coordInput.column];
+    tileTargetState = tileTarget.getTileState();
+
+    if (tileTargetState == 1) 
+    {
+      //Update tile. change tileState and icon              
+      tileTarget.setTileState((int)tileState::bombedTile);
+      tileTarget.setIcon('X');
+
+      //identify shipId from tile
+      shipTargetId = grid[x][coordInput.column].getShipId();
+      
+      //find ship in fleet
+      std::vector<Ship>& ships = gridPlayer->getFleet().getFleetVector();              
+      Ship& shipTarget = gridPlayer->getFleet().getShip(ships, shipTargetId);
+      if (shipTarget.getShipId() == shipTargetId)
+      {
+        //reduce length
+        shipTarget.reduceShipLen();
+
+        //update fleet if ship is sunk
+        if (shipTarget.getShipLen() == 0)
+        {
+          shipTarget.setIsSunk(true);
+          std::cout << "\033[1;32mShip is sunk!\033[0m\n";
+
+          Fleet& fleet = gridPlayer->getFleet();
+          fleet.reduceFleetSize();
+          
+          if (fleet.getSize() == 0) 
+          {
+            std::cout << "\033[1;32mFleet is sunk!\033[0m\n";
+            keepPlaying = false;
+          } 
+        }
+      }
+    } 
+    else if (tileTargetState == 0) 
+    {
+      //Update tile. change tileState and icon
+      tileTarget.setTileState((int)tileState::bombedTile);              
+    }
+
+    //if human it is allowed to shoot an already shooted tile, human wastes her/his turn    
+    if (gridPlayer->getPlayerType() == "computer")
+    {
+      //remove tile's index from set so computer won't select it again
+      removeTarjetSet(valIndex, indexSetPlayer);
+    }
+
+    //end of players's turn
+    //display player's grid
+    gridPlayer->renderGrid();                
+  // }
+}
+
+std::string menuContinue()
+{
+  std::string input = " ";
+  while(!validateInputMenu(input, MENURESET))
+  {
+    std::string msg = "Select next step:\n1.continue\n2.reset\n3.quit\n";
+    input = userInput(msg);
+  }
+  
+  return input;
+}
+
+std::string menuTransToPlay()
+{
+  std::string input = " ";
+  while(!validateInputMenu(input, MENUTRANSTOPLAY))
+  {
+  std::string msg = "Select next step:\n1.continue\n2.quit\n";
+  input = userInput(msg);
+  }
+  return input;
+}
+
+void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, char row, int column, int tileState, char icon, int shipId) 
+{
+  for (int n = 0; n < len; n++) 
+        {
+          //reset horizontally to the right 
+          if (orientation == 'H') 
+          {
+            //reset tile
+            grid[x][y + n].setX(row) ; 
+            //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)
+            grid[x][y + n].setY(column);
+            grid[x][y + n].setTileState(tileState);
+            grid[x][y + n].setIcon(icon);
+            grid[x][y + n].setShipId(shipId);
+          }  
+          //reset vertically to the bottom
+          else if(orientation == 'V')
+          {
+            //reset tile
+            grid[x + n][y].setX(row) ;  
+            //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)     
+            grid[x + n][y].setY(column);
+            grid[x + n][y].setTileState(tileState);
+            grid[x + n][y].setIcon(icon);
+            grid[x + n][y].setShipId(shipId);
+          }
+        } 
+}
+
+bool isHuman(Grid* gridPlayer){
+  if (gridPlayer->getPlayerType() == "computer") {
+    return false;
+  }
+  return true;
 }

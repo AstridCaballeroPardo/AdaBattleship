@@ -15,6 +15,7 @@ class Grid {
     std::vector<std::vector<Tile>> grid;
     Fleet gridFleet;
     int size_;
+    std::string playerType_;
     
   public:
     //constructor
@@ -27,14 +28,14 @@ class Grid {
 
     void setFleetId(int gridId_);
 
-    //inline implementation to have access to the private attribute 'grid'
-    // int ** getGrid() const {return grid;}
-    int getGridId()const {return gridId_;} 
-    Fleet& getFleet() {return gridFleet;} 
+    void setPlayerType(std::string playerType);
 
-    // Tile& getTile(char row, int column);   
+    //inline implementation to have access to the private attribute 'grid'    
+    int getGridId()const {return gridId_;} 
+    Fleet& getFleet() {return gridFleet;}  
     int getSize()const {return size_;} 
     std::vector<std::vector<Tile>>& getGrid() {return grid;}
+    std::string getPlayerType() const {return playerType_;}
     
     bool placeShip(char letter, int number, int shipType, char orientation, int index);
 };

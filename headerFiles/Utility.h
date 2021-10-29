@@ -44,3 +44,17 @@ void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>
 void removeTarjetSet(int randomNum, std::set<int>& index);
 
 udtCoordInput indexToXY(int index, int gridSize);
+
+std::string getStringForEnum( int enum_val );
+
+void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtCoordInput coordInput, bool& keepPlaying, Grid* gridPlayer);
+
+bool validateInputMenu(std::string str, std::string regPatt);
+
+std::string menuContinue();
+
+std::string menuTransToPlay();
+
+void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, char row, int column, int tileState, char icon, int shipId); 
+
+bool isHuman();

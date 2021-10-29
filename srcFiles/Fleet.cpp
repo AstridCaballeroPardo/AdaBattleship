@@ -3,6 +3,7 @@
 #include "../headerFiles/Fleet.h"
 #include "../headerFiles/Ship.h"
 #include "../headerFiles/constants.h"
+#include "../headerFiles/Utility.h"
 
 #include <iostream>
 #include <iomanip>
@@ -11,7 +12,7 @@
 #include <memory>
 
 //Implementing constructor
-Fleet::Fleet():size_(FLEET_SIZE),fleetVector()
+Fleet::Fleet():size_(FLEET_SIZE),fleetVector_()
 {
   setFleet(size_);
 }
@@ -25,7 +26,7 @@ void Fleet::setFleet(int size)
 {
   //Populate the FleetVector with n(size) number of default ships (each ship has a unique Id)  
   for (int i = 0; i < size; i++) {
-    fleetVector.push_back(Ship());
+    fleetVector_.push_back(Ship());
   }
 }
 
@@ -34,20 +35,55 @@ void Fleet::setGridId(int gridId)
   gridId_ = gridId;
 }
 
-Ship& Fleet::getShip(std::vector<Ship> &fleet, int shipId)
+Ship& Fleet::getShip(std::vector<Ship>& fleetVector_, int shipId)
 {
   int index = -1;
-  for (int i = 0, count = 0; i < fleet.size(); i++) 
+  for (int i = 0, count = 0; i < fleetVector_.size(); i++) 
   {
-    if (fleet[i].getShipId() == shipId)
+    if (fleetVector_[i].getShipId() == shipId)
     {
       index = i;
       break;
     }
   }
-  return fleet[index];
+  return fleetVector_[index];
 }
 
 void Fleet::reduceFleetSize(){
   size_ --;
 }  
+
+void Fleet::resetFleet(std::vector<std::vector<Tile>>& grid)
+{
+  // std::vector<Ship>& fleetVector, 
+  //get fleet
+    //get ship
+    for (int i = 0, count = 0; i < fleetVector_.size(); i++) 
+    {
+      if(fleetVector_[i].getShipType() != 0)
+      {
+         //reset tiles of placed ship
+        int shipType = fleetVector_[i].getShipType();
+        char orientation = fleetVector_[i].getOrientation();        
+        int len = calcShipLength(shipType);
+
+        //get Tiles
+        int gridSize= grid.size();
+        // int totalTiles = pow(gridSize, 2);
+        int tileIndex = fleetVector_[i].getShipIndex();
+        int x=(tileIndex / gridSize);
+        int y= (tileIndex % gridSize);  
+        //new values
+        char row = ' ';
+        int column = -1;
+        int tileState = (int)tileState::emptyTile;
+        char icon = '~';
+        int shipId = 0;  
+        
+        resetTiles(len, grid, orientation, x, y, row, column, tileState, icon, shipId);
+             
+      }
+      //reset ship
+      fleetVector_[i].setShip(0, 0, -1);
+    }  
+}

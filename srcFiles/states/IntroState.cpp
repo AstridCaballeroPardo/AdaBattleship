@@ -30,7 +30,7 @@ void IntroState::render()
 {
   std::string input;
   std::string msg;
-  std::cout << "Welcome to AdaShip! let's play\n\n";
+  std::cout << YELLOW << "\n\nWelcome to AdaShip! let's play :)\n\n" << ENDCOLOUR;
   msg = "press enter to start\n";
   input = userInput(msg);
   if (input.length() == 0) {

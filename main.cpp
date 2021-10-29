@@ -18,21 +18,8 @@
 
 
 int main() 
-{  
-  // Grid gridPlayer;
-  // manuallySetFleet(gridPlayer);  
-  // gridPlayer->renderGrid();
-
-  // Grid gridComputer; 
-  // // gridComputer.renderGrid();
-  // automaticallySetFleet(gridComputer);  
-  // gridComputer->renderGrid();
-
-  // Create object with the states
- 
+{    
   StateMachine* gStateMachine = StateMachine::getInstance();
   gStateMachine->change("intro");
-  
-
   return 0;
 }

@@ -1,19 +1,55 @@
 #include <iostream>
+#include <ostream>
 #include <math.h> 
+#include <vector>
+#include <iomanip>
+#include <string>
 
 #include "../headerFiles/Menu.h"
 #include "../headerFiles/Grid.h"
+#include "../headerFiles/Ship.h"
 #include "../headerFiles/Utility.h"
+#include "../headerFiles/constants.h"
 
-void menuShipType()
+void shipTextToPrint(int shipType, std::string shipTypeStr, std::string msg)
 {
+  std::cout << std::setfill(' ') << std::setw(2) << shipType << "  " << std::setw(11) << shipTypeStr << "  " << std::setw(4)  << calcShipLength(shipType) << "  " <<  msg;
+}
+
+std::string getMsg(std::vector<Ship>& ships, int i)
+{
+  std::string msg;
+  for (int j = 0; j < ships.size(); j++) {
+      if (ships[j].getShipType() == i) {
+        if(!ships[j].getIsSunk()){
+          msg = "placed\n";
+          break;
+        }
+        else {
+          msg = "sunk\n";
+          break;
+        }
+      }
+      else {
+        msg = "not placed\n";
+      }
+    }
+    return msg;
+}
+
+void menuShipType(std::vector<Ship>& ships) {
   std::cout << "\nShip options: \n";
-  std::cout << "ID TYPE         SIZE\n";
-  std::cout << "1. Carrier        5\n";
-  std::cout << "2. Battleship     4\n";
-  std::cout << "3. Destroyer      3\n";
-  std::cout << "4. Submarine      3\n";
-  std::cout << "5. Patrol Boat    2\n";
+  //print headers
+  std::cout << std::setfill(' ') << std::setw(2) << "ID" << "  " << std::setw(11) << "TYPE    "  << "  " << std::setw(4) << "SIZE" << "  " << "STATE\n";
+  
+  for (int i = 1; i <= ships.size(); i++) 
+  {
+    std::string shipTypeStr = getStringForEnum(i);
+    //find the ship with shipType == i
+    std::string msg = getMsg(ships, i); 
+    
+    shipTextToPrint(i, shipTypeStr, msg);
+  }
 }
 
 void menuOrientation()
@@ -33,6 +69,7 @@ void manuallySetFleet(Grid* grid)
   int availableTiles_ = 0;
   int gridSize = grid->getSize();
   int len = 0;
+  std::vector<Ship>& ships = grid->getFleet().getFleetVector();
 
 
   //create set with values form 0 to GRID_SIZE (side's size), they will represent the location of the elements (tiles) in the grid    
@@ -44,7 +81,7 @@ void manuallySetFleet(Grid* grid)
     grid->renderGrid(); 
 
     //display ship options
-    menuShipType();
+    menuShipType(ships);
 
     //display orientation options
     menuOrientation();    
@@ -92,7 +129,9 @@ void manuallySetFleet(Grid* grid)
         } 
       //keep track if fleet is completed
       if (shipCount == 0){
-        std::cout << "\033[1;32mAll ships placed!\033[0m\n\n";
+        grid->renderGrid();
+        menuShipType(ships);
+        std::cout << "\n\033[1;32mAll ships placed!\033[0m\n\n";        
         break;
       }    
     } else {
@@ -124,8 +163,7 @@ void automaticallySetFleet(Grid* grid)
     availableTiles_ = 0;
 
     //get random index based on set size
-    randomIndex = randomVal(0, totalTiles - 1);
-    std::cout << "random index: " << randomIndex << std::endl;
+    randomIndex = randomVal(0, totalTiles - 1);    
 
     //check random index is in set(find is O(log n))
     if (indexSet.find(randomIndex) != indexSet.end()){
@@ -150,13 +188,11 @@ void automaticallySetFleet(Grid* grid)
 
           // remove values from set(the one with values from 0 to GRID_SIZE)
           removeValueSet(coordInput.orientation, randomIndex, gridSize, indexSet, len);
-          //print index set after removing elements
-          std::cout << "size of index set: " << indexSet.size() << '\n';          
+                  
         }
       } else {
         //try the other orientation
-        availableTiles_ = 1;
-        std::cout << "trying to place using the other orientation\n";
+        availableTiles_ = 1;        
         coordInput.orientation = coordInput.orientation == 'H' ? 'V':'H';
 
         //check number of tiles available
@@ -173,15 +209,9 @@ void automaticallySetFleet(Grid* grid)
             shipTypeIt ++;
 
             // remove values from set(the one with values from 0 to GRID_SIZE)
-            removeValueSet(coordInput.orientation, randomIndex, gridSize, indexSet, len);
-            //print index set after removing elements
-            std::cout << "size of index set: " << indexSet.size() << '\n';          
+            removeValueSet(coordInput.orientation, randomIndex, gridSize, indexSet, len);                      
           }
-        } else{
-          //display message error
-          std::cout << "\033[1;31mOut of boundaries! try again.\033[0m\n\n";
-        }
-        
+        }         
       }
     }
   }  

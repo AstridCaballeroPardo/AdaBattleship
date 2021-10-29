@@ -8,13 +8,14 @@
 
 #include "constants.h"
 #include "Ship.h"
+#include "Grid.h"
 
 
 class Fleet{
   private:    
     int size_;
     int gridId_;
-    std::vector<Ship> fleetVector;
+    std::vector<Ship> fleetVector_;
     
 
   public:
@@ -30,8 +31,9 @@ class Fleet{
     //inline implementation to have access to the private attributes
     int getSize() const {return size_;}  
     int getGridId() const {return gridId_;}  
-    std::vector<Ship>& getFleetVector() {return fleetVector;};
+    std::vector<Ship>& getFleetVector() {return fleetVector_;};
     
-    Ship& getShip(std::vector<Ship> &fleet, int shipId);  
-    void reduceFleetSize();       
+    Ship& getShip(std::vector<Ship>& fleetVector, int shipId);  
+    void reduceFleetSize();   
+    void resetFleet(std::vector<std::vector<Tile>>& grid);   
 };

@@ -1,13 +1,14 @@
 #include "../headerFiles/Tile.h"
 #include "../headerFiles/constants.h"
 
+
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <string>
 
 //Implementing constructor
-Tile::Tile():x_(' '),y_(-1),tileState_((int)TileState::emptyTile),shipId_(0), icon_('~'){}
+Tile::Tile():x_(' '),y_(-1),tileState_((int)tileState::emptyTile),shipId_(0), icon_('~'){}
 
 //member methods
 void Tile::setX(char x)
