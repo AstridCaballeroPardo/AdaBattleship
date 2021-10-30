@@ -10,7 +10,7 @@
 #define MENURESET R"(^[1230]$)"
 #define MENUTRANSTOPLAY R"(^[10]$)"
 #define MENUTURN R"(^[10]$)"
-#define MENUSETMODE R"(^[1230]$)"
+#define MENUSETMODE R"(^[12]$)"
 #define GREEN "\033[1;32m"
 #define RED "\033[1;31m"
 #define LIGHTBLUE "\033[2;94m"

@@ -122,7 +122,7 @@ void manuallySetFleet(Grid* grid)
       //update grid with player's input        
         if (availableTiles_ == len){      
           if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, indVal)) {
-            grid->renderGrid(); 
+            // grid->renderGrid(); 
             //keep track of placed ships to know when fleet is completed
             shipCount --; 
             
@@ -303,7 +303,7 @@ std::string menuSetFleet()
    std::string input = " ";
     while(!validateInputMenu(input, MENUSETMODE))
     {
-    std::string msg = "\n1.Manually\n2.Auto-place\n3.reset\n0.quit\n";
+    std::string msg = "\n1.Manually\n2.Auto-place\n";
     input = userInput(msg);
     }
     return input;

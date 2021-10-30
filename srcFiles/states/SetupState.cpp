@@ -9,7 +9,7 @@
 
 #include <unistd.h>
 
-bool playAfterFleetset(Grid* grid) {
+bool continueResetQuit(Grid* grid) {
   std::string input;
   input = menuContinue();
   if (input == "1") 
@@ -28,70 +28,30 @@ bool playAfterFleetset(Grid* grid) {
 }
 
 
-
-bool howToPLaceFleet(Grid* grid) 
+void placing(Grid* grid) 
 {
   std::string input;
   input = menuSetFleet();
   if (input == "1") 
   {
-    manuallySetFleet(StateMachine::getInstance()->getGridPlayer1()); 
-    return true;
+    manuallySetFleet(grid);
   }
   else if (input == "2") 
   {
-    automaticallySetFleet(StateMachine::getInstance()->getGridPlayer1());
-
-    //are happy with the placement,continue, reset or quit?
-    if (!playAfterFleetset(grid)){
-      return false;
-    }
-    return true;
-  }
-  else if (input == "3") 
-  {
-    StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
-    return true;
-  }
-  else {
-    return false;
+    automaticallySetFleet(grid);     
   }
 }
 
-
-//massive refactoring
-bool placing(Grid* grid)
- {
-
-  bool isNotQuit = true;
-  std::string input;
-
-  while (isNotQuit) 
-  {
-    //if fleet is completed
-    if (isFleetCompleted(grid)) 
-    {
-      //do you want to continue, reset or quit?
-      if (!playAfterFleetset(grid)) 
-      {
-        isNotQuit = false;
-        break;
-      }
-      else 
-      {
-        break;
-      }
-    }
-    //if fleet is not completed
-    //how do you want to place a ship and do you want to reset or quit?
-    else if (!howToPLaceFleet(grid)) 
-    {
-      isNotQuit = false;
-      break;
-    }         
-  }
-  return isNotQuit;
+//more refactoring
+void playerTurn(Grid* grid) 
+{
+  //keep placing for player or quit?
+  grid->renderGrid();
+  placing(grid);
+  grid->renderGrid();
 }
+
+
 
 //refactoring
 void setPlayersType(Grid* gridPlayer1, Grid* gridPlayer2, std::string type) {
@@ -104,6 +64,9 @@ void setPlayersType(Grid* gridPlayer1, Grid* gridPlayer2, std::string type) {
     gridPlayer2->setPlayerType("human");
   }
 }
+
+
+
 
 //Constructor
 SetupState::SetupState():BaseState(){}
@@ -120,167 +83,82 @@ void SetupState::enter()
 
   input = menuGameType();
   
-  //set type of players
+  //set type of players human/computer
   setPlayersType(StateMachine::getInstance()->getGridPlayer1(), StateMachine::getInstance()->getGridPlayer2(), input);
   
   //player vs computer
   if (input == "1") 
   {
-    while(isNotQuit) {
-      std::cout << YELLOW << "\nPlayerA set your fleet: \n" << ENDCOLOUR; 
-      StateMachine::getInstance()->getGridPlayer1()->renderGrid();     
+    while(!isFleetCompleted(StateMachine::getInstance()->getGridPlayer1())) {
+           
+      std::cout << YELLOW << "\nPlayerA set your fleet: \n" << ENDCOLOUR;
       
-      //keep placing for player or quit?
-      if (!placing(StateMachine::getInstance()->getGridPlayer1()))
-      {
-        isNotQuit = false;
+      playerTurn(StateMachine::getInstance()->getGridPlayer1()); 
+           
+      isNotQuit = continueResetQuit(StateMachine::getInstance()->getGridPlayer1());
+      if(!isNotQuit) {
         break;
       }
-      else {
-        StateMachine::getInstance()->getGridPlayer1()->renderGrid(); 
-      }
     }
+    
     if (!isNotQuit) 
     {
       exit();
     }  
+    //next player
     else 
     {
       std::cout << GREEN << "\nComputer placing Fleet...\n\n" << ENDCOLOUR;
       //add a time delay to improve game's pace.
       usleep(2000000);
       automaticallySetFleet(StateMachine::getInstance()->getGridPlayer2());  
+      render ();
     }
         
     
   }  
   else if(input == "2") 
   {
-    StateMachine::getInstance()->getGridPlayer1()->setPlayerType("human"); 
-    StateMachine::getInstance()->getGridPlayer2()->setPlayerType("human");
-
-      while(true) {
+    while(!isFleetCompleted(StateMachine::getInstance()->getGridPlayer1())) {
+           
       std::cout << YELLOW << "\nPlayerA set your fleet: \n" << ENDCOLOUR;
-      StateMachine::getInstance()->getGridPlayer1()->renderGrid();
-
-      while (true) {
-        //if fleet is completed
-        if (isFleetCompleted(StateMachine::getInstance()->getGridPlayer1())) 
-        {
-          //ask what to to next
-          input = menuContinue();
-          if (input == "1") 
-          {
-            break;
-          }
-          else if (input == "2") 
-          {
-            StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
-            StateMachine::getInstance()->getGridPlayer1()->renderGrid();
-          }
-          else 
-          {
-            exit();
-          }
-        }
-
-        //if fleet is not completed
-        input = menuSetFleet();
-        if (input == "1") {
-          manuallySetFleet(StateMachine::getInstance()->getGridPlayer1()); 
-        }
-        else if (input == "2") 
-        {
-          automaticallySetFleet(StateMachine::getInstance()->getGridPlayer1());
-          StateMachine::getInstance()->getGridPlayer1()->renderGrid();
-          input = menuContinue();
-          if (input == "2") 
-          {
-            StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
-            StateMachine::getInstance()->getGridPlayer1()->renderGrid();
-          }
-          else if (input == "1") 
-          {
-            break;
-          }
-          else 
-          {
-            exit();
-          }
-        }
-        else if (input == "3") 
-        {
-          StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
-          StateMachine::getInstance()->getGridPlayer1()->renderGrid();
-        }
-        else {
-          exit();
-        }
+      
+      playerTurn(StateMachine::getInstance()->getGridPlayer1()); 
+           
+      isNotQuit = continueResetQuit(StateMachine::getInstance()->getGridPlayer1());
+      if(!isNotQuit) {
+        break;
       }
-      break;
     }
-
-      while(true) {
-      std::cout << YELLOW << "\nPlayerB set your fleet: \n" << ENDCOLOUR;
-      StateMachine::getInstance()->getGridPlayer2()->renderGrid();
-
-      while (true) {
-        //if fleet is completed
-        if (isFleetCompleted(StateMachine::getInstance()->getGridPlayer2())) 
-        {
-          //ask what to to next
-          input = menuContinue();
-          if (input == "1") 
-          {
-            break;
-          }
-          else if (input == "2") 
-          {
-            StateMachine::getInstance()->getGridPlayer2()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer2()->getGrid());
-          }
-          else 
-          {
-            exit();
-          }
-        }
-
-        //if fleet is not completed
-        input = menuSetFleet();
-        if (input == "1") {
-          manuallySetFleet(StateMachine::getInstance()->getGridPlayer2()); 
-        }
-        else if (input == "2") 
-        {
-          automaticallySetFleet(StateMachine::getInstance()->getGridPlayer2());
-          StateMachine::getInstance()->getGridPlayer2()->renderGrid();
-          input = menuContinue();
-          if (input == "2") 
-          {
-            StateMachine::getInstance()->getGridPlayer2()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer2()->getGrid());
-            StateMachine::getInstance()->getGridPlayer2()->renderGrid();
-          }
-          else if (input == "1") 
-          {
-            break;
-          }
-          else 
-          {
-            exit();            
-          }
-        }
-        else if (input == "3") 
-        {
-          StateMachine::getInstance()->getGridPlayer2()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer2()->getGrid());
-          StateMachine::getInstance()->getGridPlayer2()->renderGrid();
-        }
-        else {
-          exit();
+    
+    if (!isNotQuit) 
+    {
+      exit();
+    }  
+    //next player
+    else 
+    {
+       while(!isFleetCompleted(StateMachine::getInstance()->getGridPlayer2())) {
+           
+        std::cout << YELLOW << "\nPlayerB set your fleet: \n" << ENDCOLOUR;
+        
+        playerTurn(StateMachine::getInstance()->getGridPlayer2()); 
+            
+        isNotQuit = continueResetQuit(StateMachine::getInstance()->getGridPlayer2());
+        if(!isNotQuit) {
+          break;
         }
       }
-      break;
-    }       
+      if (!isNotQuit) 
+      {
+        exit();
+      }
+      else 
+      {
+        render ();
+      } 
+    }   
   }
-  render ();
 }
 
 void SetupState::exit()
