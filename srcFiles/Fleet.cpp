@@ -53,12 +53,10 @@ void Fleet::reduceFleetSize(){
   size_ --;
 }  
 
+//TODO fix bug
 void Fleet::resetFleet(std::vector<std::vector<Tile>>& grid)
 {
-  // std::vector<Ship>& fleetVector, 
-  //get fleet
-    //get ship
-    for (int i = 0, count = 0; i < fleetVector_.size(); i++) 
+  for (int i = 0, count = 0; i < fleetVector_.size(); i++) 
     {
       if(fleetVector_[i].getShipType() != 0)
       {
@@ -81,7 +79,6 @@ void Fleet::resetFleet(std::vector<std::vector<Tile>>& grid)
         int shipId = 0;  
         
         resetTiles(len, grid, orientation, x, y, row, column, tileState, icon, shipId);
-             
       }
       //reset ship
       fleetVector_[i].setShip(0, 0, -1);

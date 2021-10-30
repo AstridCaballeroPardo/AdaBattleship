@@ -4,6 +4,8 @@
 #include <vector>
 #include <iomanip>
 #include <string>
+#include <numeric>
+#include <algorithm>
 
 #include "../headerFiles/Menu.h"
 #include "../headerFiles/Grid.h"
@@ -74,19 +76,27 @@ void manuallySetFleet(Grid* grid)
 
   //create set with values form 0 to GRID_SIZE (side's size), they will represent the location of the elements (tiles) in the grid    
   std::set<int> indexSet = createSet(totalTiles); 
+
+  //create vetor unplacedShipsVect with numbers from zero to five
+  std::vector<int> unplacedShipsVect(shipCount);
+  std::iota (std::begin(unplacedShipsVect), std::end(unplacedShipsVect), 1);
   
+  //Get unplaced ships and update indexSet
+  getUnplacedShips(grid, shipCount, unplacedShipsVect, gridSize, indexSet);
+
+  //update number of ships to be placed
+  shipCount = unplacedShipsVect.size();
+
   while(true) 
   {    
     //display grid
-    grid->renderGrid(); 
+    // grid->renderGrid(); 
 
     //display ship options
     menuShipType(ships);
 
     //display orientation options
-    menuOrientation();    
-    
-       
+    menuOrientation(); 
 
     //ask user to input information to set up a ship
     msg = "\nEnter row letter, column number, ship Id and orientation (e.g. B4 1 V): ";
@@ -112,11 +122,13 @@ void manuallySetFleet(Grid* grid)
       //update grid with player's input        
         if (availableTiles_ == len){      
           if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, indVal)) {
+            grid->renderGrid(); 
             //keep track of placed ships to know when fleet is completed
             shipCount --; 
-
+            
             // remove values from set(the one with values from 0 to GRID_SIZE)
             removeValueSet(coordInput.orientation, indVal, gridSize, indexSet, len);
+            break;
           } 
 
         } else {
@@ -141,6 +153,28 @@ void manuallySetFleet(Grid* grid)
   } 
 }
 
+void getUnplacedShips(Grid* grid, int shipCount, std::vector<int>& unplacedShipsVect, int gridSize, std::set<int>& indexSet)
+{
+    //check if shipType[i] != 0
+  for (int i = 0; i < shipCount; i++) 
+  {
+    Ship tmpShip = grid->getFleet().getFleetVector()[i];
+    int shipType = tmpShip.getShipType();
+    if(shipType != 0) 
+    {
+      //remove shiptype from placedShipsVect
+      unplacedShipsVect.erase(std::remove(unplacedShipsVect.begin(), unplacedShipsVect.end(), shipType), unplacedShipsVect.end());      
+      //get index and orientation and type(to calculate len) from ship
+      int len = calcShipLength(shipType);
+      //delete indexes from indexSet
+      removeValueSet(tmpShip.getOrientation(), tmpShip.getShipIndex(), gridSize, indexSet, len); 
+    }
+    else {
+      break;
+    }  
+  }
+}
+
 void automaticallySetFleet(Grid* grid) 
 {
   int totalTiles = pow(grid->getSize(), 2);
@@ -150,16 +184,28 @@ void automaticallySetFleet(Grid* grid)
   int gridSize = grid->getSize();
   int len = 0;
   int availableTiles_ = 0;
-  int shipTypeIt = 1;
+  // int shipTypeIt = 0;
+  // int firstEmptyShip = 0;
   
 
   //create set with values form 0 to GRID_SIZE (side's size), they will represent the location of the elements (tiles) in the grid
   std::set<int> indexSet = createSet(totalTiles); 
-
-  //main loop to place the ships
-  while (shipTypeIt != shipCount + 1) {   
-    //claculate len per ship and place first the longest ship
-    len = calcShipLength(shipTypeIt); 
+  //create vetor unplacedShipsVect with numbers from zero to five
+  std::vector<int> unplacedShipsVect(shipCount);
+  std::iota (std::begin(unplacedShipsVect), std::end(unplacedShipsVect), 1);
+  
+  //Get unplaced ships
+  getUnplacedShips(grid, shipCount, unplacedShipsVect, gridSize, indexSet);
+  
+  //update number of ships to be placed
+  shipCount = unplacedShipsVect.size();
+  
+  //main loop to place the ships  
+  for(int unplacedTypeIndex = 0; unplacedTypeIndex < grid->getFleet().getSize(); )
+  { 
+  // while (shipTypeIt != shipCount + 1) {
+    
+    len = calcShipLength(unplacedShipsVect[unplacedTypeIndex]); 
     availableTiles_ = 0;
 
     //get random index based on set size
@@ -179,12 +225,13 @@ void automaticallySetFleet(Grid* grid)
       if (availableTiles_ == len) {        
         coordInput.row = intToLetter((randomIndex / gridSize));
         coordInput.column = (randomIndex % gridSize);
-        coordInput.shipType = shipTypeIt;
+
+        coordInput.shipType = unplacedShipsVect[unplacedTypeIndex];
       
         //update grid with player's input                       
         if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
           //keep track of placed ships to know when fleet is completed           
-          shipTypeIt ++;
+          unplacedTypeIndex++;
 
           // remove values from set(the one with values from 0 to GRID_SIZE)
           removeValueSet(coordInput.orientation, randomIndex, gridSize, indexSet, len);
@@ -201,19 +248,64 @@ void automaticallySetFleet(Grid* grid)
         if(availableTiles_ == len) {
           coordInput.row = intToLetter((randomIndex / gridSize));
           coordInput.column = (randomIndex % gridSize);
-          coordInput.shipType = shipTypeIt;
+          coordInput.shipType = unplacedShipsVect[unplacedTypeIndex];
       
           //update grid with player's input                       
           if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
             //keep track of placed ships to know when fleet is completed
-            shipTypeIt ++;
+            unplacedTypeIndex++;
 
             // remove values from set(the one with values from 0 to GRID_SIZE)
-            removeValueSet(coordInput.orientation, randomIndex, gridSize, indexSet, len);                      
+            removeValueSet(coordInput.orientation, randomIndex, gridSize, indexSet, len);  
           }
         }         
       }
     }
   }  
 } 
+
+std::string menuContinue()
+{
+  std::string input = " ";
+  while(!validateInputMenu(input, MENURESET))
+  {
+    std::string msg = "\nSelect next step:\n1.continue\n2.reset\n0.quit\n";
+    input = userInput(msg);
+  }
+  
+  return input;
+}
+
+std::string menuTransToPlay()
+{
+  std::string input = " ";
+  while(!validateInputMenu(input, MENUTRANSTOPLAY))
+  {
+  std::string msg = "\nReady to play?:\n1.OK\n0.quit\n";
+  input = userInput(msg);
+  }
+  return input;
+}
+
+std::string menuTurn()
+{
+  std::string input = " ";
+  while(!validateInputMenu(input, MENUTURN))
+  {
+  std::string msg = "\nSelect next step:\n1.End turn\n0.quit\n";
+  input = userInput(msg);
+  }
+  return input;
+}
+
+std::string menuSetFleet()
+{
+   std::string input = " ";
+    while(!validateInputMenu(input, MENUSETMODE))
+    {
+    std::string msg = "\n1.Manually\n2.Auto-place\n3.reset\n0.quit\n";
+    input = userInput(msg);
+    }
+    return input;
+}
 

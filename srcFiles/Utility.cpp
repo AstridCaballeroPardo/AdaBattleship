@@ -324,29 +324,6 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
   // }
 }
 
-std::string menuContinue()
-{
-  std::string input = " ";
-  while(!validateInputMenu(input, MENURESET))
-  {
-    std::string msg = "Select next step:\n1.continue\n2.reset\n3.quit\n";
-    input = userInput(msg);
-  }
-  
-  return input;
-}
-
-std::string menuTransToPlay()
-{
-  std::string input = " ";
-  while(!validateInputMenu(input, MENUTRANSTOPLAY))
-  {
-  std::string msg = "Select next step:\n1.continue\n2.quit\n";
-  input = userInput(msg);
-  }
-  return input;
-}
-
 void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, char row, int column, int tileState, char icon, int shipId) 
 {
   for (int n = 0; n < len; n++) 
@@ -376,9 +353,3 @@ void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, 
         } 
 }
 
-bool isHuman(Grid* gridPlayer){
-  if (gridPlayer->getPlayerType() == "computer") {
-    return false;
-  }
-  return true;
-}

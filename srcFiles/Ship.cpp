@@ -12,7 +12,7 @@
 int Ship::currentShipId_ = 1;
 
 //Implementing constructor
-Ship::Ship():shipId_(currentShipId_++),isSunk(false), shipLen_(0), shipType_(0), orientation_(0){}
+Ship::Ship():shipId_(currentShipId_++),isSunk(false), shipLen_(0), shipType_(0), orientation_(' '){}
 
 //Grid member methods
 void Ship::setShip(int shipType, char orientation, int index)

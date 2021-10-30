@@ -9,6 +9,19 @@
 
 #include <unistd.h>
 
+bool isFleetCompleted(Grid* grid){
+  int count = 0;
+  for (int i = 0; i < grid->getFleet().getSize(); i++) {
+    if (grid->getFleet().getFleetVector()[i].getShipType() != 0) {
+      count++;
+    }
+  }
+  if (count == grid->getFleet().getSize()) {
+    return true;
+  }
+  return false;
+}
+
 
 //Constructor
 SetupState::SetupState():BaseState(){}
@@ -32,30 +45,54 @@ void SetupState::enter()
     StateMachine::getInstance()->getGridPlayer2()->setPlayerType("computer");
 
     while(true) {
-      std::cout << YELLOW << "PlayerA set your fleet: \n" << ENDCOLOUR;
-      manuallySetFleet(StateMachine::getInstance()->getGridPlayer1());
+      std::cout << YELLOW << "\nPlayerA set your fleet: \n" << ENDCOLOUR; 
+      StateMachine::getInstance()->getGridPlayer1()->renderGrid();     
       
-      std::string inputMenuReset = menuContinue();
-      //reset
-      if (inputMenuReset == "2")
-      { 
-        StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
+      while (true) {
+        //if fleet is completed
+        if (isFleetCompleted(StateMachine::getInstance()->getGridPlayer1())) 
+        {
+          //ask what to to next
+          input = menuContinue();
+          if (input == "1") 
+          {
+            break;
+          }
+          else if (input == "2") 
+          {
+            StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
+          }
+          else 
+          {
+            exit();
+          }
+          
+        }
+
+        //if fleet is not completed
+        input = menuSetFleet();
+        if (input == "1") {
+          manuallySetFleet(StateMachine::getInstance()->getGridPlayer1()); 
+        }
+        else if (input == "2") 
+        {
+          automaticallySetFleet(StateMachine::getInstance()->getGridPlayer1());
+        }
+        else if (input == "3") 
+        {
+          StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
+        }
+        else {
+          exit();
+        }
       }
-      else if(inputMenuReset == "3")
-      {
-        exit();
-      }
-      else 
-      {
-        break;
-      }
+      break;
     }
       
     std::cout << GREEN << "\nComputer placing Fleet...\n\n" << ENDCOLOUR;
     //add a time delay to improve game's pace.
     usleep(2000000);
-    automaticallySetFleet(StateMachine::getInstance()->getGridPlayer2());
-        
+    automaticallySetFleet(StateMachine::getInstance()->getGridPlayer2());        
     
   }  
   else if(input == "2") 
@@ -64,7 +101,7 @@ void SetupState::enter()
     StateMachine::getInstance()->getGridPlayer2()->setPlayerType("human");
 
       while(true) {
-      std::cout << YELLOW << "PlayerA set your fleet: \n" << ENDCOLOUR;
+      std::cout << YELLOW << "\nPlayerA set your fleet: \n" << ENDCOLOUR;
       manuallySetFleet(StateMachine::getInstance()->getGridPlayer1());
 
       std::string inputMenuReset = menuContinue();
@@ -75,6 +112,11 @@ void SetupState::enter()
       }
       else if(inputMenuReset == "3")
       {
+        //auto-place all/remaining ships
+        automaticallySetFleet(StateMachine::getInstance()->getGridPlayer1());
+      }
+      else if(inputMenuReset == "0")
+      {
         exit();
       }
       else 
@@ -84,7 +126,7 @@ void SetupState::enter()
     }
 
       while(true) {
-      std::cout << YELLOW << "PlayerB set your fleet: \n" << ENDCOLOUR;
+      std::cout << YELLOW << "\nPlayerB set your fleet: \n" << ENDCOLOUR;
       manuallySetFleet(StateMachine::getInstance()->getGridPlayer2());
 
       std::string inputMenuReset = menuContinue();
@@ -94,6 +136,11 @@ void SetupState::enter()
       StateMachine::getInstance()->getGridPlayer2()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer2()->getGrid());
       }
       else if(inputMenuReset == "3")
+      {
+        //auto-place all/remaining ships
+        automaticallySetFleet(StateMachine::getInstance()->getGridPlayer2());
+      }
+      else if(inputMenuReset == "0")
       {
         exit();
       }

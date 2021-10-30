@@ -51,10 +51,5 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
 
 bool validateInputMenu(std::string str, std::string regPatt);
 
-std::string menuContinue();
-
-std::string menuTransToPlay();
-
 void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, char row, int column, int tileState, char icon, int shipId); 
 
-bool isHuman();

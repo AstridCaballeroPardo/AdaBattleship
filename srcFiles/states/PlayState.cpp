@@ -6,8 +6,10 @@
 #include "../../headerFiles/Fleet.h"
 #include "../../headerFiles/Ship.h"
 #include "../../headerFiles/Grid.h"
+#include "../../headerFiles/Menu.h"
 
 #include <math.h>
+#include <unistd.h>
 
 //refactoring
 
@@ -22,9 +24,7 @@ void PlayState::enter()
   std::string input;
   std::string msg;
   udtCoordInput coordInput;
-  int tileTargetState; 
-  int x;
-  int shipTargetId;
+  std::string inputMenuTurn;
   int gridSize = StateMachine::getInstance()->getGridPlayer1()->getSize();
 
   int totalTiles = pow(gridSize, 2);
@@ -44,7 +44,7 @@ void PlayState::enter()
     {   
       //display oponent's board
       std::cout << YELLOW << "\nPlayerA's turn\n" << ENDCOLOUR;
-      // StateMachine::getInstance()->getGridPlayer2()->renderGrid();
+      StateMachine::getInstance()->getGridPlayer2()->renderGrid();
 
       msg = "\nEnter row letter, column number(e.g. B4): ";
       input = userInput(msg);
@@ -58,7 +58,7 @@ void PlayState::enter()
         
         if(indexSetPlayer1.find(indVal) != indexSetPlayer1.end()) 
         {
-          playerShoot(indexSetPlayer1, indVal, gridSize, coordInput, keepPlaying, StateMachine::getInstance()->getGridPlayer2());             
+          playerShoot(indexSetPlayer1, indVal, gridSize, coordInput, keepPlaying, StateMachine::getInstance()->getGridPlayer2());                    
           break; 
         }
         else 
@@ -68,24 +68,40 @@ void PlayState::enter()
         }
       }
     }
+    // if fleet is sunk
+    if (!keepPlaying) 
+    {
+      break;
+    }
+
+    //user ends turn or quits game
+    inputMenuTurn = menuTurn();
+
+    if (inputMenuTurn == "0") {
+      exit();
+    }
     
-    if (!isHuman())
+    if (StateMachine::getInstance()->getGridPlayer2()->getPlayerType() == "computer")
     {
       //computer's turn
       while(true)
       {  
         //display oponent's board
-        std::cout << YELLOW << "\nComputer's turn\n" << ENDCOLOUR;
+        std::cout << YELLOW << "\nComputer's turn...\n" << ENDCOLOUR;
+        StateMachine::getInstance()->getGridPlayer1()->renderGrid();
+        //add time delay
+        //add a time delay to improve game's pace.
+        usleep(2000000);
         //get random index based on set size
         randomIndex = randomVal(0, totalTiles - 1);
 
         //check random index is in set(find is O(log n))
         if (indexSetPlayer2.find(randomIndex) != indexSetPlayer2.end())
         {
-          playerShoot(indexSetPlayer2, randomIndex, gridSize, coordInput, keepPlaying, StateMachine::getInstance()->getGridPlayer1()); 
+          playerShoot(indexSetPlayer2, randomIndex, gridSize, coordInput, keepPlaying, StateMachine::getInstance()->getGridPlayer1());
           break;
         }
-      }
+      }      
     }
     else 
     {
@@ -94,7 +110,7 @@ void PlayState::enter()
       {   
         //display oponent's board
         std::cout << YELLOW << "\nPlayerB's turn\n" << ENDCOLOUR;
-        // StateMachine::getInstance()->getGridPlayer2()->renderGrid();
+        StateMachine::getInstance()->getGridPlayer1()->renderGrid();
 
         msg = "\nEnter row letter, column number(e.g. B4): ";
         input = userInput(msg);
@@ -106,9 +122,9 @@ void PlayState::enter()
           //calculate index value ((row * length of grid's side) + col)
           indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
           
-          if(indexSetPlayer1.find(indVal) != indexSetPlayer1.end()) 
+          if(indexSetPlayer2.find(indVal) != indexSetPlayer2.end()) 
           {
-            playerShoot(indexSetPlayer1, indVal, gridSize, coordInput, keepPlaying, StateMachine::getInstance()->getGridPlayer2());             
+            playerShoot(indexSetPlayer2, indVal, gridSize, coordInput, keepPlaying, StateMachine::getInstance()->getGridPlayer1());             
             break; 
           }
           else 
@@ -118,16 +134,35 @@ void PlayState::enter()
           }
         }
       }
-
+    }
+    // if fleet is sunk
+    if (!keepPlaying) 
+    {
+      break;
     }
     
+    //user ends turn or quits game
+    inputMenuTurn = menuTurn();
+    
+    if (inputMenuTurn == "0") {
+      exit();
+    }
   }
   //transition state
   update();
 }
 
 
-void PlayState::exit(){};
+void PlayState::exit()
+{
+  //transition back to intro
+  StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
+  
+  StateMachine::getInstance()->getGridPlayer2()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer2()->getGrid());
+
+  StateMachine::getInstance()->change("intro"); 
+};
+
 void PlayState::update()
 {
   //if oponent fleet sunk player wins   
@@ -142,7 +177,5 @@ void PlayState::update()
     StateMachine::getInstance()->change("gameover");
   }
 }
-void PlayState::render()
-{
-  
-}
+
+void PlayState::render(){}

@@ -8,7 +8,7 @@ class Ship {
     static int currentShipId_;
     int shipLen_; 
     int shipType_;
-    int orientation_; // v - for vertical, h - for horizontal
+    char orientation_; // v - for vertical, h - for horizontal
     bool isSunk;
     int index_;
 
