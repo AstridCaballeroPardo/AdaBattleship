@@ -1,34 +1,3 @@
 {
-  "files": {
-    "srcFiles/Menu.cpp": [
-      {
-        "id": "cb244930-154b-44b2-a94e-3e4ada18cc09",
-        "line": 84,
-        "version": 6182,
-        "index": 2354
-      },
-      {
-        "id": "a9b7f45e-08e2-4879-8d62-131243440c7b",
-        "line": 162,
-        "version": 6182,
-        "index": 5015
-      }
-    ],
-    "srcFiles/Utility.cpp": [
-      {
-        "id": "7ce9e681-491d-4cee-bf94-d6b6325ff905",
-        "line": 213,
-        "version": 1872,
-        "index": 5689
-      }
-    ],
-    "srcFiles/states/SetupState.cpp": [
-      {
-        "id": "b301d486-c799-4828-bbd9-66ddace69b7d",
-        "line": 75,
-        "version": 4378,
-        "index": 1987
-      }
-    ]
-  }
+  "files": {}
 }

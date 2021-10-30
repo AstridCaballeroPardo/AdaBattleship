@@ -201,11 +201,11 @@ void automaticallySetFleet(Grid* grid)
   shipCount = unplacedShipsVect.size();
   
   //main loop to place the ships  
-  for(int unplacedTypeIndex = 0; unplacedTypeIndex < grid->getFleet().getSize(); )
+  for(int i = 0; i < unplacedShipsVect.size(); )
   { 
   // while (shipTypeIt != shipCount + 1) {
     
-    len = calcShipLength(unplacedShipsVect[unplacedTypeIndex]); 
+    len = calcShipLength(unplacedShipsVect[i]); 
     availableTiles_ = 0;
 
     //get random index based on set size
@@ -226,12 +226,12 @@ void automaticallySetFleet(Grid* grid)
         coordInput.row = intToLetter((randomIndex / gridSize));
         coordInput.column = (randomIndex % gridSize);
 
-        coordInput.shipType = unplacedShipsVect[unplacedTypeIndex];
+        coordInput.shipType = unplacedShipsVect[i];
       
         //update grid with player's input                       
         if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
           //keep track of placed ships to know when fleet is completed           
-          unplacedTypeIndex++;
+          i++;
 
           // remove values from set(the one with values from 0 to GRID_SIZE)
           removeValueSet(coordInput.orientation, randomIndex, gridSize, indexSet, len);
@@ -248,12 +248,12 @@ void automaticallySetFleet(Grid* grid)
         if(availableTiles_ == len) {
           coordInput.row = intToLetter((randomIndex / gridSize));
           coordInput.column = (randomIndex % gridSize);
-          coordInput.shipType = unplacedShipsVect[unplacedTypeIndex];
+          coordInput.shipType = unplacedShipsVect[i];
       
           //update grid with player's input                       
           if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
             //keep track of placed ships to know when fleet is completed
-            unplacedTypeIndex++;
+            i++;
 
             // remove values from set(the one with values from 0 to GRID_SIZE)
             removeValueSet(coordInput.orientation, randomIndex, gridSize, indexSet, len);  
@@ -269,7 +269,7 @@ std::string menuContinue()
   std::string input = " ";
   while(!validateInputMenu(input, MENURESET))
   {
-    std::string msg = "\nSelect next step:\n1.continue\n2.reset\n0.quit\n";
+    std::string msg = "\nSelect:\n1.continue\n2.reset\n0.quit\n";
     input = userInput(msg);
   }
   
