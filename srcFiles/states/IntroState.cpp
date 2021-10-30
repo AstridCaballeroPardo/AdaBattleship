@@ -16,7 +16,10 @@ void IntroState::enter()
 {
   render();
 }
-void IntroState::exit(){}
+void IntroState::exit()
+{
+  std::exit(0);
+}
 
 void IntroState::update()
 {    
@@ -29,7 +32,7 @@ void IntroState::render()
   std::string input;
   std::string msg;
   std::cout << YELLOW << "\n\nWelcome to AdaShip! let's play :)\n\n" << ENDCOLOUR;
-  msg = "press enter to start or 0 to quit game\n";
+  msg = "press enter to start or 0 to exit game\n";
   input = userInput(msg);
   if (input.length() == 0) {
     //move to setup state

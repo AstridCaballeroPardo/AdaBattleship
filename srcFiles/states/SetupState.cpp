@@ -113,9 +113,7 @@ void SetupState::enter()
       usleep(2000000);
       automaticallySetFleet(StateMachine::getInstance()->getGridPlayer2());  
       render ();
-    }
-        
-    
+    }  
   }  
   else if(input == "2") 
   {
