@@ -43,6 +43,7 @@ class StateMachine {
     
     //StateMachine member methods
     void change(std::string state);
+    void change(std::string state, int params);
     void update();
     void render();
     

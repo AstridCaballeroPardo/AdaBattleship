@@ -2,12 +2,13 @@
 
 
     //Constructor
-    BaseState::BaseState() {};
+    BaseState::BaseState() {}
     //Destructor
-    BaseState::~BaseState(){};
+    BaseState::~BaseState(){}
 
     //member methods
-    void BaseState::enter(){};
-    void BaseState::exit(){};
-    void BaseState::update(){};
-    void BaseState::render(){};
+    void BaseState::enter(){}
+    void BaseState::enter(int params){}
+    void BaseState::exit(){}
+    void BaseState::update(){}
+    void BaseState::render(){}

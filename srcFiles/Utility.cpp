@@ -353,3 +353,15 @@ void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, 
         } 
 }
 
+bool isFleetCompleted(Grid* grid){
+  int count = 0;
+  for (int i = 0; i < grid->getFleet().getSize(); i++) {
+    if (grid->getFleet().getFleetVector()[i].getShipType() != 0) {
+      count++;
+    }
+  }
+  if (count == grid->getFleet().getSize()) {
+    return true;
+  }
+  return false;
+}

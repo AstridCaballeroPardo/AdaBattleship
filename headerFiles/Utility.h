@@ -53,3 +53,4 @@ bool validateInputMenu(std::string str, std::string regPatt);
 
 void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, char row, int column, int tileState, char icon, int shipId); 
 
+bool isFleetCompleted(Grid* grid);

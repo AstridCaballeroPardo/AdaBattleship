@@ -11,6 +11,7 @@ class BaseState {
 
     //member methods
     virtual void enter();
+    virtual void enter(int params);
     virtual void exit();
     virtual void update();
     virtual void render();

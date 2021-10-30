@@ -292,7 +292,7 @@ std::string menuTurn()
   std::string input = " ";
   while(!validateInputMenu(input, MENUTURN))
   {
-  std::string msg = "\nSelect next step:\n1.End turn\n0.quit\n";
+  std::string msg = "\nSelect:\n1.End turn\n0.quit\n";
   input = userInput(msg);
   }
   return input;
@@ -309,3 +309,26 @@ std::string menuSetFleet()
     return input;
 }
 
+
+std::string menuEndGame()
+{
+  std::string input = " ";
+  while(!validateInputMenu(input, MENUTURN))
+  {
+  std::string msg = "\npress:\n1.start new game\n0.quit\n";
+  input = userInput(msg);
+  }
+  return input;
+}
+
+
+std::string menuGameType()
+{
+  std::string input = " ";
+  while(!validateInputMenu(input, MENURESET))
+  {
+  std::string msg = "Select from the menu: \n1. One player vs computer game\n2. Two player game\n0. Quit\n";
+  input = userInput(msg);
+  }
+  return input;
+}

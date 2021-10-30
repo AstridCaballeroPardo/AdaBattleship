@@ -8,7 +8,7 @@ class VictoryState: public BaseState {
     ~VictoryState();
 
     //member methods
-    void enter();
+    void enter(int params);
     void exit();
     void update();
     void render();

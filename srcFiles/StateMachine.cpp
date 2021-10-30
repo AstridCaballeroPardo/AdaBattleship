@@ -54,8 +54,25 @@ void StateMachine::change(std::string state)
       //handle the error
       std::cout << "\n\033[1;31mState doesn't exist\033[0m\n";
     } else {
-    currentState = iter->second;    
-    currentState->enter(); 
+    currentState = iter->second;
+    currentState->enter();
+    }
+  }
+}
+
+void StateMachine::change(std::string state, int params)
+{
+  if (!currentState) {
+    currentState->exit();
+  } else {
+    //MAP is a typedef created in 'Utility.h';
+    MAP::const_iterator iter = states_.find(state);
+    if (iter == states_.end()) {
+      //handle the error
+      std::cout << "\n\033[1;31mState doesn't exist\033[0m\n";
+    } else {
+    currentState = iter->second;
+    currentState->enter(params);
     }
   }
 }

@@ -6,12 +6,10 @@
 #include <string>
 #include <memory>
 
-
-
 //Constructor
 IntroState::IntroState():BaseState() {}
 //Destructor
-IntroState::~IntroState(){};
+IntroState::~IntroState(){}
 
 //member methods
 void IntroState::enter()
@@ -31,10 +29,14 @@ void IntroState::render()
   std::string input;
   std::string msg;
   std::cout << YELLOW << "\n\nWelcome to AdaShip! let's play :)\n\n" << ENDCOLOUR;
-  msg = "press enter to start\n";
+  msg = "press enter to start or 0 to quit game\n";
   input = userInput(msg);
   if (input.length() == 0) {
     //move to setup state
     update();
+  }
+  else 
+  {
+    exit();
   }
 }

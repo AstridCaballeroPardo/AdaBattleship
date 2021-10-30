@@ -14,7 +14,7 @@
 //refactoring
 
 //Constructor
-PlayState::PlayState():BaseState() {};
+PlayState::PlayState():BaseState() {}
 //Destructor
 PlayState::~PlayState(){}
 
@@ -165,17 +165,37 @@ void PlayState::exit()
 
 void PlayState::update()
 {
-  //if oponent fleet sunk player wins   
-  if (StateMachine::getInstance()->getGridPlayer2()->getFleet().getSize() == 0) 
+  // check if grid2 is computer
+  if (StateMachine::getInstance()->getGridPlayer2()->getPlayerType() == "computer") 
   {
-    StateMachine::getInstance()->change("victory"); 
+    //if player1 wins  
+    if (StateMachine::getInstance()->getGridPlayer2()->getFleet().getSize() == 0) 
+    {
+      StateMachine::getInstance()->change("victory", 1); 
 
-  }  
-  //if player fleet sunk player looses  
-  else if (StateMachine::getInstance()->getGridPlayer1()->getFleet().getSize() == 0)
-  {
-    StateMachine::getInstance()->change("gameover");
+    }  
+    //if computer wins  
+    else if (StateMachine::getInstance()->getGridPlayer1()->getFleet().getSize() == 0)
+    {
+      StateMachine::getInstance()->change("gameover");
+    }
   }
+  else 
+  {
+    //if player1 wins  
+    if (StateMachine::getInstance()->getGridPlayer2()->getFleet().getSize() == 0) 
+    {
+      StateMachine::getInstance()->change("victory", 1); 
+
+    }  
+    //if computer wins  
+    else if (StateMachine::getInstance()->getGridPlayer1()->getFleet().getSize() == 0)
+    {
+      StateMachine::getInstance()->change("vistory", 2);
+    }
+  }
+  
+  
 }
 
 void PlayState::render(){}
