@@ -25,7 +25,12 @@ void PlayState::enter()
   std::string msg;
   udtCoordInput coordInput;
   std::string inputMenuTurn;
-  int gridSize = StateMachine::getInstance()->getGridPlayer1()->getSize();
+  Grid& grid1 = *StateMachine::getInstance()->getGridPlayer1();
+  Grid& grid2 = *StateMachine::getInstance()->getGridPlayer2();
+  int gridSize = grid1.getSize();
+
+  std::vector<int>& bombedTilesGrid1 = StateMachine::getInstance()->getBombedTilesGrid1();
+  std::vector<int>& bombedTilesGrid2 = StateMachine::getInstance()->getBombedTilesGrid1();
 
   int totalTiles = pow(gridSize, 2);
   //create set with values form 0 to GRID_SIZE (side's size), they will represent the location of the elements (tiles) in the grid
@@ -34,17 +39,20 @@ void PlayState::enter()
   std::set<int> indexSetPlayer2 = createSet(totalTiles); 
   int randomIndex = 0;
 
-  bool keepPlaying = true;
+  // bool keepPlaying = true;
+  bool isNotQuit = true;
 
-  //take turns
-  while (keepPlaying) 
+  
+  
+  //take turns until one of the fleets is sunk
+  while (grid1.getFleet().getSize() != 0 && grid2.getFleet().getSize() != 0) 
   {
     //player1's turn
     while(true) 
     {   
       //display oponent's board
       std::cout << YELLOW << "\nPlayerA's turn\n" << ENDCOLOUR;
-      StateMachine::getInstance()->getGridPlayer2()->renderGrid();
+      grid2.renderGrid();
 
       msg = "\nEnter row letter, column number(e.g. B4): ";
       input = userInput(msg);
@@ -56,9 +64,16 @@ void PlayState::enter()
         //calculate index value ((row * length of grid's side) + col)
         indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
         
-        if(indexSetPlayer1.find(indVal) != indexSetPlayer1.end()) 
+        if(indexSetPlayer2.find(indVal) != indexSetPlayer2.end()) 
         {
-          playerShoot(indexSetPlayer1, indVal, gridSize, coordInput, keepPlaying, StateMachine::getInstance()->getGridPlayer2());                    
+          playerShoot(indexSetPlayer2, indVal, gridSize, coordInput, grid2);  
+          //keep track of bombed tiles         
+          bombedTilesGrid2.push_back(indVal); 
+          //user ends turn or quits game
+          inputMenuTurn = menuTurn();
+          if (inputMenuTurn == "0") {
+            isNotQuit = false;            
+          }                         
           break; 
         }
         else 
@@ -66,105 +81,113 @@ void PlayState::enter()
           //display message error
           std::cout << "\033[1;31mOut of boundaries, try again.\033[0m\n\n";
         }
-      }
-    }
-    // if fleet is sunk
-    if (!keepPlaying) 
-    {
-      break;
-    }
-
-    //user ends turn or quits game
-    inputMenuTurn = menuTurn();
-
-    if (inputMenuTurn == "0") {
-      exit();
-    }
-    
-    if (StateMachine::getInstance()->getGridPlayer2()->getPlayerType() == "computer")
-    {
-      //computer's turn
-      while(true)
-      {  
-        //display oponent's board
-        std::cout << YELLOW << "\nComputer's turn...\n" << ENDCOLOUR;
-        StateMachine::getInstance()->getGridPlayer1()->renderGrid();
-        //add time delay
-        //add a time delay to improve game's pace.
-        usleep(2000000);
-        //get random index based on set size
-        randomIndex = randomVal(0, totalTiles - 1);
-
-        //check random index is in set(find is O(log n))
-        if (indexSetPlayer2.find(randomIndex) != indexSetPlayer2.end())
-        {
-          playerShoot(indexSetPlayer2, randomIndex, gridSize, coordInput, keepPlaying, StateMachine::getInstance()->getGridPlayer1());
-          break;
-        }
       }      
     }
+    //go in if user wants to keep playing and player2 has ships left
+    if (isNotQuit && grid2.getFleet().getSize() != 0) {
+      if (grid2.getPlayerType() == "computer")
+      {
+        //computer's turn
+        while(true)
+        {  
+          //display oponent's board
+          std::cout << YELLOW << "\nComputer's turn...\n" << ENDCOLOUR;
+          grid1.renderGrid();
+          //add time delay
+          //add a time delay to improve game's pace.
+          usleep(2000000);
+          //get random index based on set size
+          randomIndex = randomVal(0, totalTiles - 1);
+
+          //check random index is in set(find is O(log n))
+          if (indexSetPlayer1.find(randomIndex) != indexSetPlayer1.end())
+          {
+            playerShoot(indexSetPlayer1, randomIndex, gridSize, coordInput, grid1);
+            //keep track of bombed tiles         
+            bombedTilesGrid1.push_back(randomIndex);                  
+            //user ends turn or quits game
+            inputMenuTurn = menuTurn();
+            if (inputMenuTurn == "0") {
+              isNotQuit = false;            
+            }                         
+            break;  
+          }          
+        }              
+      }
+      else 
+      {
+        //player2's turn
+        while(true) 
+        {   
+          //display oponent's board
+          std::cout << YELLOW << "\nPlayerB's turn\n" << ENDCOLOUR;
+          StateMachine::getInstance()->getGridPlayer1()->renderGrid();
+
+          msg = "\nEnter row letter, column number(e.g. B4): ";
+          input = userInput(msg);
+          //validate input
+          if(validateInputShootFormat(input))
+          {
+            coordInput = getParams(input, REGEXSHOOTTILE);
+            //validate is within limits
+            //calculate index value ((row * length of grid's side) + col)
+            indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
+            
+            if(indexSetPlayer1.find(indVal) != indexSetPlayer2.end()) 
+            {
+              playerShoot(indexSetPlayer1, indVal, gridSize, coordInput,grid1);      //keep track of bombed tiles         
+              bombedTilesGrid1.push_back(indVal);                  
+              //user ends turn or quits game
+              inputMenuTurn = menuTurn();
+              if (inputMenuTurn == "0") {
+                isNotQuit = false;            
+              }                         
+              break;  
+            }
+            else 
+            {
+              //display message error
+              std::cout << "\033[1;31mOut of boundaries, try again.\033[0m\n\n";
+            }
+          }
+        }        
+      }    
+    }
+    if (!isNotQuit) 
+    {
+      exit(bombedTilesGrid1, bombedTilesGrid2);
+      // break;
+    }
+   // transition state
     else 
     {
-      //player2's turn
-      while(true) 
-      {   
-        //display oponent's board
-        std::cout << YELLOW << "\nPlayerB's turn\n" << ENDCOLOUR;
-        StateMachine::getInstance()->getGridPlayer1()->renderGrid();
-
-        msg = "\nEnter row letter, column number(e.g. B4): ";
-        input = userInput(msg);
-        //validate input
-        if(validateInputShootFormat(input))
-        {
-          coordInput = getParams(input, REGEXSHOOTTILE);
-          //validate is within limits
-          //calculate index value ((row * length of grid's side) + col)
-          indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
-          
-          if(indexSetPlayer2.find(indVal) != indexSetPlayer2.end()) 
-          {
-            playerShoot(indexSetPlayer2, indVal, gridSize, coordInput, keepPlaying, StateMachine::getInstance()->getGridPlayer1());             
-            break; 
-          }
-          else 
-          {
-            //display message error
-            std::cout << "\033[1;31mOut of boundaries, try again.\033[0m\n\n";
-          }
-        }
-      }
-    }
-    // if fleet is sunk
-    if (!keepPlaying) 
-    {
-      break;
-    }
-    
-    //user ends turn or quits game
-    inputMenuTurn = menuTurn();
-    
-    if (inputMenuTurn == "0") {
-      exit();
-    }
+      update();
+    } 
   }
-  //transition state
-  update();
 }
 
 
-void PlayState::exit()
+void PlayState::exit(std::vector<int>& bombedTilesGrid1, std::vector<int>& bombedTilesGrid2)
 {
+  Grid& grid1 = *StateMachine::getInstance()->getGridPlayer1();
+  Grid& grid2 = *StateMachine::getInstance()->getGridPlayer2();
   //transition back to intro
-  StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
+  //reset ships
+  grid1.getFleet().resetFleet(grid1.getGrid());
+  //reset bombed empty tiles 
+  resetBombedTiles(grid1, bombedTilesGrid1);
   
-  StateMachine::getInstance()->getGridPlayer2()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer2()->getGrid());
+  //reset ships
+  grid2.getFleet().resetFleet(grid2.getGrid());
+  //reset bombed empty tiles 
+  resetBombedTiles(grid2, bombedTilesGrid2);
 
   StateMachine::getInstance()->change("intro"); 
 };
 
 void PlayState::update()
 {
+  
   // check if grid2 is computer
   if (StateMachine::getInstance()->getGridPlayer2()->getPlayerType() == "computer") 
   {
@@ -191,11 +214,9 @@ void PlayState::update()
     //if computer wins  
     else if (StateMachine::getInstance()->getGridPlayer1()->getFleet().getSize() == 0)
     {
-      StateMachine::getInstance()->change("vistory", 2);
+      StateMachine::getInstance()->change("victory", 2);
     }
   }
-  
-  
 }
 
 void PlayState::render(){}

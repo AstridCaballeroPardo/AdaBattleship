@@ -21,6 +21,8 @@ class StateMachine {
     BaseState* currentState = nullptr;
     Grid* gridPlayer1_ = nullptr;
     Grid* gridPlayer2_ = nullptr;
+    std::vector<int> bombedTilesGrid1_;
+    std::vector<int> bombedTilesGrid2_;
     
   public:
     
@@ -33,12 +35,22 @@ class StateMachine {
     static StateMachine *getInstance();
     
     //getters
-    Grid* getGridPlayer1() const {
+    Grid* getGridPlayer1() const 
+    {
         return gridPlayer1_;
     }
 
-    Grid* getGridPlayer2() const {
+    Grid* getGridPlayer2() const 
+    {
         return gridPlayer2_;
+    }
+
+    std::vector<int>& getBombedTilesGrid1() {
+      return bombedTilesGrid1_;
+    }
+
+    std::vector<int>& getBombedTilesGrid2() {
+      return bombedTilesGrid2_;
     }
     
     //StateMachine member methods

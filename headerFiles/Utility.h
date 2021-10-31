@@ -48,7 +48,7 @@ udtCoordInput indexToXY(int index, int gridSize);
 
 std::string getStringForEnum( int enum_val );
 
-void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtCoordInput coordInput, bool& keepPlaying, Grid* gridPlayer);
+void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer);
 
 bool validateInputMenu(std::string str, std::string regPatt);
 
@@ -65,3 +65,7 @@ void playerTurn(Grid* grid);
 void setPlayersType(Grid* gridPlayer1, Grid* gridPlayer2, std::string type);
 
 void playerTurnLoop(Grid* grid, bool& isNotQuit, char playerLabel);
+
+void resetTile(Grid& grid, int x, int y, std::shared_ptr<Tile> tmpTile);
+
+void resetBombedTiles(Grid& grid, std::vector<int>& bombedTilesGrid);

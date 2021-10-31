@@ -249,7 +249,7 @@ std::string getStringForEnum(int enum_val)
     return tmp;
 }
 
-void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtCoordInput coordInput, bool& keepPlaying, Grid* gridPlayer)
+void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer)
 {
   int shipTargetId;
   int tileTargetState;
@@ -257,18 +257,17 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
   //check random index is in set(find is O(log n))
   // if (indexSetPlayer.find(valIndex) != indexSetPlayer.end())
   // {
-    if (gridPlayer->getPlayerType() == "human") {
+    if (gridPlayer.getPlayerType() == "human") {
       x = (valIndex / gridSize);            
       coordInput.column = (valIndex % gridSize);
     } 
-    else if (gridPlayer->getPlayerType() == "computer")
+    else if (gridPlayer.getPlayerType() == "computer")
     {
       x = letterToInt(coordInput.row);
     }
-    
 
     //go to targeted tile
-    std::vector<std::vector<Tile>>& grid = gridPlayer->getGrid();
+    std::vector<std::vector<Tile>>& grid = gridPlayer.getGrid();
     Tile& tileTarget = grid[x][coordInput.column];
     tileTargetState = tileTarget.getTileState();
 
@@ -279,13 +278,13 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
       tileTarget.setIcon('X');
 
       //identify shipId from tile
-      shipTargetId = grid[x][coordInput.column].getShipId();
+      shipTargetId = tileTarget.getShipId();
       
       //find ship in fleet
-      std::vector<Ship>& ships = gridPlayer->getFleet().getFleetVector();              
-      Ship& shipTarget = gridPlayer->getFleet().getShip(ships, shipTargetId);
-      if (shipTarget.getShipId() == shipTargetId)
-      {
+      std::vector<Ship>& ships = gridPlayer.getFleet().getFleetVector();              
+      Ship& shipTarget = gridPlayer.getFleet().getShip(ships, shipTargetId);
+      // if (shipTarget.getShipId() == shipTargetId)
+      // {
         //reduce length
         shipTarget.reduceShipLen();
 
@@ -295,16 +294,15 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
           shipTarget.setIsSunk(true);
           std::cout << "\033[1;32mShip is sunk!\033[0m\n";
 
-          Fleet& fleet = gridPlayer->getFleet();
+          Fleet& fleet = gridPlayer.getFleet();
           fleet.reduceFleetSize();
           
           if (fleet.getSize() == 0) 
           {
-            std::cout << "\033[1;32mFleet is sunk!\033[0m\n";
-            keepPlaying = false;
+            std::cout << "\033[1;32mFleet is sunk!\033[0m\n";            
           } 
         }
-      }
+      // }
     } 
     else if (tileTargetState == 0) 
     {
@@ -313,7 +311,7 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
     }
 
     //if human it is allowed to shoot an already shooted tile, human wastes her/his turn    
-    if (gridPlayer->getPlayerType() == "computer")
+    if (gridPlayer.getPlayerType() == "computer")
     {
       //remove tile's index from set so computer won't select it again
       removeTarjetSet(valIndex, indexSetPlayer);
@@ -321,8 +319,7 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
 
     //end of players's turn
     //display player's grid
-    gridPlayer->renderGrid();                
-  // }
+    gridPlayer.renderGrid(); 
 }
 
 void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, char row, int column, int tileState, char icon, int shipId) 
@@ -430,4 +427,26 @@ void playerTurnLoop(Grid* grid, bool& isNotQuit, char playerLabel) {
        break;
      }
    }
+}
+
+void resetTile(Grid& grid, int x, int y, std::shared_ptr<Tile> tmpTile)
+{
+ grid.getGrid()[x][y].setTileState(tmpTile->getTileState());
+}
+
+void resetBombedTiles(Grid& grid, std::vector<int>& bombedTilesGrid)
+{
+ std::shared_ptr<Tile> tmpTile = std::make_shared<Tile>();
+ for (int i = 0; i < bombedTilesGrid.size(); i++)
+ {
+   //find tile and reset
+   //define len, orientation, x and y
+   int x =(bombedTilesGrid[i] / grid.getSize());
+   int y = (bombedTilesGrid[i] % grid.getSize());
+   //only reset the bombed tiles that didn't belong to ships. There is another reset function that reset the ships wheter they were bombed or not.
+   if (grid.getGrid()[x][y].getIcon() == '~' && grid.getGrid()[x][y].getTileState() == 2)
+   {
+     resetTile(grid, x, y, tmpTile);
+   }
+ }
 }

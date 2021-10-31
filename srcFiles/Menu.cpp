@@ -327,8 +327,24 @@ std::string menuGameType()
   std::string input = " ";
   while(!validateInputMenu(input, MENURESET))
   {
-  std::string msg = "Select from the menu: \n1. One player vs computer game\n2. Two player game\n0. Quit\n";
-  input = userInput(msg);
+    std::cout << YELLOW << "\n\nLet's play :)\n" << ENDCOLOUR;
+    std::string msg = "\n\nSelect from the menu: \n1. One player vs computer game\n2. Two player game\n0. Quit\n";
+    input = userInput(msg);
   }
   return input;
 }
+
+
+std::string menuEntry()
+{
+  std::string input = " ";
+  while(!validateInputMenu(input, MENUENTRY))
+  {
+    std::cout << YELLOW << "\n\nWelcome to AdaShip!\n\n" << ENDCOLOUR;
+    std::string msg = "Select:\n1.Start\n0.Exit game\n";
+    input = userInput(msg);
+  }
+  return input;
+}
+
+  

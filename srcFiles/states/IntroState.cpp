@@ -2,6 +2,7 @@
 #include "../../headerFiles/states/IntroState.h"
 #include "../../headerFiles/StateMachine.h"
 #include "../../headerFiles/Utility.h"
+#include "../../headerFiles/Menu.h"
 
 #include <string>
 #include <memory>
@@ -29,12 +30,8 @@ void IntroState::update()
 
 void IntroState::render()
 {
-  std::string input;
-  std::string msg;
-  std::cout << YELLOW << "\n\nWelcome to AdaShip! let's play :)\n\n" << ENDCOLOUR;
-  msg = "press enter to start or 0 to exit game\n";
-  input = userInput(msg);
-  if (input.length() == 0) {
+  std::string input = menuEntry();
+  if (input == "1") {
     //move to setup state
     update();
   }
