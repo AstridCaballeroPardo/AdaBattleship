@@ -63,3 +63,5 @@ void placing(Grid* grid);
 void playerTurn(Grid* grid);
 
 void setPlayersType(Grid* gridPlayer1, Grid* gridPlayer2, std::string type);
+
+void playerTurnLoop(Grid* grid, bool& isNotQuit, char playerLabel);

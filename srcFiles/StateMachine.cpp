@@ -25,15 +25,14 @@ StateMachine::StateMachine()
   currentState = states_.find("intro")->second; 
   gridPlayer1_ = new Grid;
   gridPlayer2_ = new Grid;
-  
   // change("intro");
 }
 //Destructor
 StateMachine::~StateMachine()
 {
-  // delete currentState;
-  // delete gridPlayer1_;
-  // delete gridPlayer2_;
+  delete currentState;
+  delete gridPlayer1_;
+  delete gridPlayer2_;
 }
 
 StateMachine* StateMachine::inst_= nullptr;

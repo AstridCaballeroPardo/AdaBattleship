@@ -9,24 +9,6 @@
 
 #include <unistd.h>
 
-//refactoring
-void playerTurnLoop(Grid* grid, bool& isNotQuit, char playerLabel) { 
- while(!isFleetCompleted(grid)) {
-         
-     std::cout << YELLOW << "\nPlayer" << playerLabel << " set your fleet: \n" << ENDCOLOUR;
-    
-     playerTurn(grid);
-         
-     isNotQuit = continueResetQuit(grid);
-     if(!isNotQuit) {
-       break;
-     }
-   }
-}
-
-
-
-
 //Constructor
 SetupState::SetupState():BaseState(){}
 //Destructor

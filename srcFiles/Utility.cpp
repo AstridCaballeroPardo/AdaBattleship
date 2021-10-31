@@ -417,3 +417,17 @@ void setPlayersType(Grid* gridPlayer1, Grid* gridPlayer2, std::string type) {
    gridPlayer2->setPlayerType("human");
  }
 }
+
+void playerTurnLoop(Grid* grid, bool& isNotQuit, char playerLabel) { 
+ while(!isFleetCompleted(grid)) {
+         
+     std::cout << YELLOW << "\nPlayer" << playerLabel << " set your fleet: \n" << ENDCOLOUR;
+    
+     playerTurn(grid);
+         
+     isNotQuit = continueResetQuit(grid);
+     if(!isNotQuit) {
+       break;
+     }
+   }
+}
