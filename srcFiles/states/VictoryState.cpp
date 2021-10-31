@@ -1,8 +1,8 @@
 #include "../../headerFiles/states/BaseState.h"
 #include "../../headerFiles/states/VictoryState.h"
 #include "../../headerFiles/constants.h"
-#include "../../headerFiles/Utility.h"
 #include "../../headerFiles/Menu.h"
+#include "../../headerFiles/StateMachine.h"
 
 #include <string>
 #include <iostream>

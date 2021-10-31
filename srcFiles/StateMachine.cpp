@@ -29,7 +29,12 @@ StateMachine::StateMachine()
   // change("intro");
 }
 //Destructor
-StateMachine::~StateMachine(){}
+StateMachine::~StateMachine()
+{
+  // delete currentState;
+  // delete gridPlayer1_;
+  // delete gridPlayer2_;
+}
 
 StateMachine* StateMachine::inst_= nullptr;
 

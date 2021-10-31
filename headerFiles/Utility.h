@@ -5,8 +5,9 @@
 #include <map>
 
 #include "states/BaseState.h"
-#include "StateMachine.h"
+#include "constants.h"
 #include "Grid.h"
+#include "Tile.h"
 
 typedef std::map<std::string, BaseState*> MAP;
 
@@ -51,6 +52,14 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
 
 bool validateInputMenu(std::string str, std::string regPatt);
 
-void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, char row, int column, int tileState, char icon, int shipId); 
+void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, char row, int column, int tileState, char icon, int shipId);
 
 bool isFleetCompleted(Grid* grid);
+
+bool continueResetQuit(Grid* grid);
+
+void placing(Grid* grid);
+
+void playerTurn(Grid* grid);
+
+void setPlayersType(Grid* gridPlayer1, Grid* gridPlayer2, std::string type);

@@ -9,6 +9,7 @@
 #include "../headerFiles/constants.h"
 #include "../headerFiles/Grid.h"
 #include "../headerFiles/Utility.h"
+#include "../headerFiles/Menu.h"
 
 //validate the player input has follows the expected pattern to place ships
 bool validateInputFormat(std::string str)
@@ -364,4 +365,55 @@ bool isFleetCompleted(Grid* grid){
     return true;
   }
   return false;
+}
+
+bool continueResetQuit(Grid* grid) {
+ std::string input;
+ input = menuContinue();
+ if (input == "1")
+ {
+   return true;
+ }
+ else if (input == "2")
+ {
+   grid->getFleet().resetFleet(grid->getGrid());
+   return true;
+ }
+ else
+ {
+   return false;
+ }
+}
+ 
+void placing(Grid* grid)
+{
+ std::string input;
+ input = menuSetFleet();
+ if (input == "1")
+ {
+   manuallySetFleet(grid);
+ }
+ else if (input == "2")
+ {
+   automaticallySetFleet(grid);    
+ }
+}
+ 
+void playerTurn(Grid* grid)
+{
+ //keep placing for player or quit?
+ grid->renderGrid();
+ placing(grid);
+ grid->renderGrid();
+}
+ 
+void setPlayersType(Grid* gridPlayer1, Grid* gridPlayer2, std::string type) {
+ if (type == "1") {
+   gridPlayer1->setPlayerType("human");
+   gridPlayer2->setPlayerType("computer");
+ }
+ else if (type == "2") {
+   gridPlayer1->setPlayerType("human");
+   gridPlayer2->setPlayerType("human");
+ }
 }
