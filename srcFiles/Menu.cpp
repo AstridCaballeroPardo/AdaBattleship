@@ -347,4 +347,13 @@ std::string menuEntry()
   return input;
 }
 
-  
+std::string menuShoot()
+{
+   std::string input = " ";
+    while(!validateInputMenu(input, MENUSETMODE))
+    {
+    std::string msg = "\n1.Manually\n2.Auto-fire\n";
+    input = userInput(msg);
+    }
+    return input;
+}

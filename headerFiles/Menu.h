@@ -17,3 +17,4 @@ std::string menuSetFleet();
 std::string menuEndGame();
 std::string menuGameType();
 std::string menuEntry();
+std::string menuShoot();

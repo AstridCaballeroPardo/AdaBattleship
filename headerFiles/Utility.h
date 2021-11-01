@@ -48,7 +48,7 @@ udtCoordInput indexToXY(int index, int gridSize);
 
 std::string getStringForEnum( int enum_val );
 
-void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer);
+void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired);
 
 bool validateInputMenu(std::string str, std::string regPatt);
 

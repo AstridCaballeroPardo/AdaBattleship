@@ -251,7 +251,7 @@ std::string getStringForEnum(int enum_val)
     return tmp;
 }
 
-void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer)
+void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired)
 {
   int shipTargetId;
   int tileTargetState;
@@ -259,11 +259,11 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
   //check random index is in set(find is O(log n))
   // if (indexSetPlayer.find(valIndex) != indexSetPlayer.end())
   // {
-    if (gridPlayer.getPlayerType() == "human") {
+    if (isAutofired) {
       x = (valIndex / gridSize);            
       coordInput.column = (valIndex % gridSize);
     } 
-    else if (gridPlayer.getPlayerType() == "computer")
+    else if (!isAutofired)
     {
       x = letterToInt(coordInput.row);
     }
@@ -312,12 +312,12 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
       tileTarget.setTileState((int)tileState::bombedTile);              
     }
 
-    //if human it is allowed to shoot an already shooted tile, human wastes her/his turn    
-    if (gridPlayer.getPlayerType() == "computer")
-    {
+    //update tiles, indexSet should only have not bombed tiles
+    // if (isAutofired)
+    // {
       //remove tile's index from set so computer won't select it again
       removeTarjetSet(valIndex, indexSetPlayer);
-    }
+    // }
 
     //end of players's turn
     //display player's grid

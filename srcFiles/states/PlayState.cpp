@@ -54,34 +54,61 @@ void PlayState::enter()
       std::cout << YELLOW << "\nPlayerA's turn\n" << ENDCOLOUR;
       grid2.renderGrid();
 
-      msg = "\nEnter row letter, column number(e.g. B4): ";
-      input = userInput(msg);
-      //validate input
-      if(validateInputShootFormat(input))
-      {
-        coordInput = getParams(input, REGEXSHOOTTILE);
-        //validate is within limits
-        //calculate index value ((row * length of grid's side) + col)
-        indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
-        
-        if(indexSetPlayer2.find(indVal) != indexSetPlayer2.end()) 
+      //ask shoot method. Manual/auto-fired
+      input = menuShoot();
+      if (input == "1") {
+        msg = "\nEnter row letter, column number(e.g. B4): ";
+        input = userInput(msg);
+        //validate input
+        if(validateInputShootFormat(input))
         {
-          playerShoot(indexSetPlayer2, indVal, gridSize, coordInput, grid2);  
+          coordInput = getParams(input, REGEXSHOOTTILE);
+          //validate is within limits
+          //calculate index value ((row * length of grid's side) + col)
+          indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
+          
+          if(indexSetPlayer2.find(indVal) != indexSetPlayer2.end()) 
+          {
+            playerShoot(indexSetPlayer2, indVal, gridSize, coordInput, grid2, false);  
+            //keep track of bombed tiles         
+            bombedTilesGrid2.push_back(indVal); 
+            //user ends turn or quits game
+            inputMenuTurn = menuTurn();
+            if (inputMenuTurn == "0") {
+              isNotQuit = false;            
+            }                         
+            break; 
+          }
+          else 
+          {
+            //display message error
+            std::cout << "\033[1;31mOut of boundaries, try again.\033[0m\n\n";
+          }
+        } 
+
+      }
+      else 
+      {        
+        //add time delay
+        //add a time delay to improve game's pace.
+        usleep(2000000);
+        //get random index based on set size
+        randomIndex = randomVal(0, totalTiles - 1);
+
+        //check random index is in set(find is O(log n))
+        if (indexSetPlayer2.find(randomIndex) != indexSetPlayer2.end())
+        {
+          playerShoot(indexSetPlayer2, randomIndex, gridSize, coordInput, grid2, true);
           //keep track of bombed tiles         
-          bombedTilesGrid2.push_back(indVal); 
+          bombedTilesGrid2.push_back(randomIndex);                  
           //user ends turn or quits game
           inputMenuTurn = menuTurn();
           if (inputMenuTurn == "0") {
             isNotQuit = false;            
           }                         
-          break; 
-        }
-        else 
-        {
-          //display message error
-          std::cout << "\033[1;31mOut of boundaries, try again.\033[0m\n\n";
-        }
-      }      
+          break;  
+        } 
+      }
     }
     //go in if user wants to keep playing and player2 has ships left
     if (isNotQuit && grid2.getFleet().getSize() != 0) {
@@ -102,7 +129,7 @@ void PlayState::enter()
           //check random index is in set(find is O(log n))
           if (indexSetPlayer1.find(randomIndex) != indexSetPlayer1.end())
           {
-            playerShoot(indexSetPlayer1, randomIndex, gridSize, coordInput, grid1);
+            playerShoot(indexSetPlayer1, randomIndex, gridSize, coordInput, grid1, true);
             //keep track of bombed tiles         
             bombedTilesGrid1.push_back(randomIndex);                  
             //user ends turn or quits game
@@ -123,32 +150,58 @@ void PlayState::enter()
           std::cout << YELLOW << "\nPlayerB's turn\n" << ENDCOLOUR;
           StateMachine::getInstance()->getGridPlayer1()->renderGrid();
 
-          msg = "\nEnter row letter, column number(e.g. B4): ";
-          input = userInput(msg);
-          //validate input
-          if(validateInputShootFormat(input))
-          {
-            coordInput = getParams(input, REGEXSHOOTTILE);
-            //validate is within limits
-            //calculate index value ((row * length of grid's side) + col)
-            indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
-            
-            if(indexSetPlayer1.find(indVal) != indexSetPlayer2.end()) 
+          //ask shoot method. Manual/auto-fired
+          input = menuShoot();
+          if (input == "1") {
+            msg = "\nEnter row letter, column number(e.g. B4): ";
+            input = userInput(msg);
+            //validate input
+            if(validateInputShootFormat(input))
             {
-              playerShoot(indexSetPlayer1, indVal, gridSize, coordInput,grid1);      //keep track of bombed tiles         
-              bombedTilesGrid1.push_back(indVal);                  
+              coordInput = getParams(input, REGEXSHOOTTILE);
+              //validate is within limits
+              //calculate index value ((row * length of grid's side) + col)
+              indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
+              
+              if(indexSetPlayer1.find(indVal) != indexSetPlayer2.end()) 
+              {
+                playerShoot(indexSetPlayer1, indVal, gridSize, coordInput,grid1, false);      //keep track of bombed tiles         
+                bombedTilesGrid1.push_back(indVal);                  
+                //user ends turn or quits game
+                inputMenuTurn = menuTurn();
+                if (inputMenuTurn == "0") {
+                  isNotQuit = false;            
+                }                         
+                break;  
+              }
+              else 
+              {
+                //display message error
+                std::cout << "\033[1;31mOut of boundaries, try again.\033[0m\n\n";
+              }
+            }
+          }
+          else
+          {
+            //add time delay
+            //add a time delay to improve game's pace.
+            usleep(2000000);
+            //get random index based on set size
+            randomIndex = randomVal(0, totalTiles - 1);
+
+            //check random index is in set(find is O(log n))
+            if (indexSetPlayer2.find(randomIndex) != indexSetPlayer2.end())
+            {
+              playerShoot(indexSetPlayer2, randomIndex, gridSize, coordInput, grid2, true);
+              //keep track of bombed tiles         
+              bombedTilesGrid2.push_back(randomIndex);                  
               //user ends turn or quits game
               inputMenuTurn = menuTurn();
               if (inputMenuTurn == "0") {
                 isNotQuit = false;            
               }                         
               break;  
-            }
-            else 
-            {
-              //display message error
-              std::cout << "\033[1;31mOut of boundaries, try again.\033[0m\n\n";
-            }
+            } 
           }
         }        
       }    
