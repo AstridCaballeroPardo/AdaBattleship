@@ -117,6 +117,8 @@ std::string userInput(std::string msg)
     case 5:
       Len = 2;
       break;
+    case 0:    
+      break;
   }
   return Len;
 }
@@ -322,31 +324,31 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
     gridPlayer.renderGrid(); 
 }
 
-void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, char row, int column, int tileState, char icon, int shipId) 
+void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, std::shared_ptr<Tile> tmpTile) 
 {
   for (int n = 0; n < len; n++) 
         {
           //reset horizontally to the right 
           if (orientation == 'H') 
           {
-            //reset tile
-            grid[x][y + n].setX(row) ; 
+            //reset tile            
+            grid[x][y + n].setX(tmpTile->getX()) ; 
             //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)
-            grid[x][y + n].setY(column);
-            grid[x][y + n].setTileState(tileState);
-            grid[x][y + n].setIcon(icon);
-            grid[x][y + n].setShipId(shipId);
+            grid[x][y + n].setY(tmpTile->getY());
+            grid[x][y + n].setTileState(tmpTile->getTileState());
+            grid[x][y + n].setIcon(tmpTile->getIcon());
+            grid[x][y + n].setShipId(tmpTile->getShipId());
           }  
           //reset vertically to the bottom
           else if(orientation == 'V')
           {
             //reset tile
-            grid[x + n][y].setX(row) ;  
+            grid[x + n][y].setX(tmpTile->getX()) ;  
             //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)     
-            grid[x + n][y].setY(column);
-            grid[x + n][y].setTileState(tileState);
-            grid[x + n][y].setIcon(icon);
-            grid[x + n][y].setShipId(shipId);
+            grid[x + n][y].setY(tmpTile->getY());
+            grid[x + n][y].setTileState(tmpTile->getTileState());
+            grid[x + n][y].setIcon(tmpTile->getIcon());
+            grid[x + n][y].setShipId(tmpTile->getShipId());
           }
         } 
 }

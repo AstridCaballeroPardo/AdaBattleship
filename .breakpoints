@@ -1,3 +1,20 @@
 {
-  "files": {}
+  "files": {
+    "srcFiles/Menu.cpp": [
+      {
+        "id": "3218ea3f-ab38-4c87-813c-695ade6174ed",
+        "line": 195,
+        "version": 6403,
+        "index": 6156
+      }
+    ],
+    "srcFiles/states/SetupState.cpp": [
+      {
+        "id": "f0826452-84c6-47c3-9cd6-efe61492ebe0",
+        "line": 47,
+        "version": 7000,
+        "index": 1184
+      }
+    ]
+  }
 }

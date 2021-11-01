@@ -52,7 +52,7 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
 
 bool validateInputMenu(std::string str, std::string regPatt);
 
-void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, char row, int column, int tileState, char icon, int shipId);
+void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, std::shared_ptr<Tile> tmpTile);
 
 bool isFleetCompleted(Grid* grid);
 

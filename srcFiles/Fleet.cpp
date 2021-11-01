@@ -53,7 +53,6 @@ void Fleet::reduceFleetSize(){
   size_ --;
 }  
 
-//TODO fix bug
 void Fleet::resetFleet(std::vector<std::vector<Tile>>& grid)
 {
   for (int i = 0, count = 0; i < fleetVector_.size(); i++) 
@@ -72,15 +71,13 @@ void Fleet::resetFleet(std::vector<std::vector<Tile>>& grid)
         int x=(tileIndex / gridSize);
         int y= (tileIndex % gridSize);  
         //new values
-        char row = ' ';
-        int column = -1;
-        int tileState = (int)tileState::emptyTile;
-        char icon = '~';
-        int shipId = 0;  
+        std::shared_ptr<Tile> tmpTile = std::make_shared<Tile>();        
         
-        resetTiles(len, grid, orientation, x, y, row, column, tileState, icon, shipId);
+        resetTiles(len, grid, orientation, x, y, tmpTile);
       }
       //reset ship
       fleetVector_[i].setShip(0, 0, -1);
-    }  
+    }
+    //reset Fleet size
+    size_ = FLEET_SIZE;
 }

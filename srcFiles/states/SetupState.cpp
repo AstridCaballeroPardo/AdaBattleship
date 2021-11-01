@@ -77,10 +77,12 @@ void SetupState::enter()
 
 void SetupState::exit()
 {
+  Grid& grid1 = *StateMachine::getInstance()->getGridPlayer1();
+  Grid& grid2 = *StateMachine::getInstance()->getGridPlayer2();
   // transition back to intro
-  StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
+  StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(grid1.getGrid());
   
-  StateMachine::getInstance()->getGridPlayer2()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer2()->getGrid());
+  StateMachine::getInstance()->getGridPlayer2()->getFleet().resetFleet(grid2.getGrid());
   StateMachine::getInstance()->change("intro"); 
 }
 void SetupState::update()

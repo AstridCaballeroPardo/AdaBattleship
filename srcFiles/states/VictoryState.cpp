@@ -43,8 +43,6 @@
       grid2.getFleet().resetFleet(grid2.getGrid());
       //reset bombed empty tiles 
       resetBombedTiles(grid2, bombedTilesGrid2);
-
-    
       render();
     }
     void VictoryState::update()
