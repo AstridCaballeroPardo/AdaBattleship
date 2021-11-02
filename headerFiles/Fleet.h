@@ -14,7 +14,6 @@ class Fleet{
     int size_;
     int gridId_;
     std::vector<Ship> fleetVector_;
-    
 
   public:
     //constructor
@@ -32,8 +31,7 @@ class Fleet{
     std::vector<Ship>& getFleetVector() {return fleetVector_;};
     
     Ship& getShip(std::vector<Ship>& fleetVector, int shipId);  
-    void reduceFleetSize();   
-    void resetFleet(std::vector<std::vector<Tile>>& grid);  
+    void reduceFleetSize();       
     bool isShipInFleet(int shipType); 
     bool isFleetCompleted();
 };

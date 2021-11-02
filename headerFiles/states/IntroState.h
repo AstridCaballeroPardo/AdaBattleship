@@ -1,11 +1,11 @@
 #pragma once
 
-#include "BaseState.h"
-#include "../StateMachine.h"
-
 #include <map>
 #include <string>
 #include <memory>
+
+#include "BaseState.h"
+#include "../StateMachine.h"
 
 class IntroState:public BaseState {
   public:

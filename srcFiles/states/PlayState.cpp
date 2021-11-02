@@ -1,3 +1,7 @@
+
+#include <math.h>
+#include <unistd.h>
+
 #include "../../headerFiles/states/BaseState.h"
 #include "../../headerFiles/states/PlayState.h"
 #include "../../headerFiles/StateMachine.h"
@@ -7,11 +11,6 @@
 #include "../../headerFiles/Ship.h"
 #include "../../headerFiles/Grid.h"
 #include "../../headerFiles/Menu.h"
-
-#include <math.h>
-#include <unistd.h>
-
-//refactoring
 
 //Constructor
 PlayState::PlayState():BaseState() {}
@@ -122,12 +121,12 @@ void PlayState::exit(std::vector<int>& bombedTilesGrid1, std::vector<int>& bombe
   Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();
   //transition back to intro
   //reset ships
-  grid1.getFleet().resetFleet(grid1.getGrid());
+  grid1.resetFleet();
   //reset bombed empty tiles 
   grid1.resetBombedTiles(bombedTilesGrid1);
   
   //reset ships
-  grid2.getFleet().resetFleet(grid2.getGrid());
+  grid2.resetFleet();
   //reset bombed empty tiles 
   grid2.resetBombedTiles(bombedTilesGrid2);
 

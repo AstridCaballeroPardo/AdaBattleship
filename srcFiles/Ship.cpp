@@ -1,11 +1,12 @@
-#include "../headerFiles/Ship.h"
-#include "../headerFiles/Tile.h"
-#include "../headerFiles/Utility.h"
 
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <string>
+
+#include "../headerFiles/Ship.h"
+#include "../headerFiles/Tile.h"
+#include "../headerFiles/Utility.h"
 
 //initializing the static variable
 int Ship::currentShipId_ = 1;

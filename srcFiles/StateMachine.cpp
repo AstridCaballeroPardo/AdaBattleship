@@ -1,3 +1,7 @@
+
+#include <iostream>
+#include <map>
+
 #include "../headerFiles/StateMachine.h"
 #include "../headerFiles/states/BaseState.h"
 #include "../headerFiles/states/IntroState.h"
@@ -7,11 +11,6 @@
 #include "../headerFiles/states/GameOverState.h"
 #include "../headerFiles/Utility.h"
 #include "../headerFiles/Grid.h"
-
-#include <iostream>
-#include <map>
-
-
 
 //Constructor
 StateMachine::StateMachine():gridPlayer1_(), gridPlayer2_()

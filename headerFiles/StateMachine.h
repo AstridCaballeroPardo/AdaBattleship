@@ -1,12 +1,10 @@
 #pragma once
 
-#include "Grid.h"
-#include "states/BaseState.h"
-
-
 #include <iostream>
 #include <map>
 
+#include "Grid.h"
+#include "states/BaseState.h"
 
 //StateMachine class Points at something that is active (active state). Using this class to implement the State Pattern
 class StateMachine {

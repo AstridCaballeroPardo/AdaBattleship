@@ -5,7 +5,6 @@
 #include <map>
 #include <set>
 
-
 #include "states/BaseState.h"
 #include "constants.h"
 #include "Grid.h"
@@ -52,7 +51,7 @@ void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, 
 
 bool validateInputMenu(std::string str, std::string regPatt);
 
-void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, std::shared_ptr<Tile> tmpTile);
+// void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, std::shared_ptr<Tile> tmpTile);
 
 bool continueResetQuit(Grid& grid);
 

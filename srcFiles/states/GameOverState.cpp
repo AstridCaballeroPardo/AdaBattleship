@@ -1,13 +1,13 @@
+
+#include <string>
+#include <iostream>
+
 #include "../../headerFiles/states/BaseState.h"
 #include "../../headerFiles/states/GameOverState.h"
 #include "../../headerFiles/constants.h"
 #include "../../headerFiles/Menu.h"
 #include "../../headerFiles/StateMachine.h"
 #include "../../headerFiles/Utility.h"
-
-#include <string>
-#include <iostream>
-
 
 //Constructor
 GameOverState::GameOverState():BaseState(){}
@@ -29,12 +29,12 @@ void GameOverState::exit()
   std::vector<int>& bombedTilesGrid2 = StateMachine::getInstance()->getBombedTilesGrid1();
 
   //reset ships
-  grid1.getFleet().resetFleet(grid1.getGrid());
+  grid1.resetFleet();
   //reset bombed empty tiles 
   grid1.resetBombedTiles(bombedTilesGrid1);
   
   //reset ships
-  grid2.getFleet().resetFleet(grid2.getGrid());
+  grid2.resetFleet();
   //reset bombed empty tiles 
   grid2.resetBombedTiles(bombedTilesGrid2);
   

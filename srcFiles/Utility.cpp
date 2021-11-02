@@ -14,7 +14,7 @@
 //validate the player input has follows the expected pattern to place ships
 bool validateInputFormat(std::string str)
 {
-   std::regex regexPattern(REGEXPLACESHIP); //starts with a letter, has only one letter, after the letter it might have one space, after a space (if exists) must have a number of max two digits (grid won't be bigger than 25x25 this is a constraint in order to not exceed the row letters and avoid to go into double letters (i.e. AA, AB, etc))   
+   std::regex regexPattern(REGEXPLACESHIP); //starts with a letter, has only one letter, after the letter it might have one space, after a space (if exists) must have a number of max two digits 
     std::smatch match;  
     if (std::regex_search(str, match, regexPattern)){
       return true;
@@ -25,7 +25,7 @@ bool validateInputFormat(std::string str)
 //validate the player input has follows the expected pattern to shoot
 bool validateInputShootFormat(std::string str)
 {
-  std::regex regexPattern(REGEXSHOOTTILE); //starts with a letter, has only one letter, after the letter it might have one space, after a space (if exists) must have a number of max two digits (grid won't be bigger than 25x25 this is a constraint in order to not exceed the row letters and avoid to go into double letters (i.e. AA, AB, etc))   
+  std::regex regexPattern(REGEXSHOOTTILE); //starts with a letter, has only one letter, after the letter it might have one space, after a space (if exists) must have a number of max two digits 
       std::smatch match;  
       if (std::regex_search(str, match, regexPattern)){
         return true;
@@ -247,102 +247,63 @@ void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, 
   int shipTargetId;
   int tileTargetState;
   int x;
-  //check random index is in set(find is O(log n))
-  // if (indexSetPlayer.find(valIndex) != indexSetPlayer.end())
-  // {
-    if (isAutofired) {
-      x = (valIndex / gridSize);            
-      coordInput.column = (valIndex % gridSize);
-    } 
-    else if (!isAutofired)
+  //check random index is in set(find is O(log n))  
+  if (isAutofired) {
+    x = (valIndex / gridSize);            
+    coordInput.column = (valIndex % gridSize);
+  } 
+  else if (!isAutofired)
+  {
+    x = letterToInt(coordInput.row);
+  }
+
+  //go to targeted tile
+  std::vector<std::vector<Tile>>& grid = gridPlayer.getGrid();
+  Tile& tileTarget = grid[x][coordInput.column];
+  tileTargetState = tileTarget.getTileState();
+
+  if (tileTargetState == 1) 
+  {
+    //Update tile. change tileState and icon              
+    tileTarget.setTileState((int)tileState::bombedTile);
+    tileTarget.setIcon('X');
+
+    //identify shipId from tile
+    shipTargetId = tileTarget.getShipId();
+    
+    //find ship in fleet
+    std::vector<Ship>& ships = gridPlayer.getFleet().getFleetVector();              
+    Ship& shipTarget = gridPlayer.getFleet().getShip(ships, shipTargetId);
+    
+    shipTarget.reduceShipLen();
+
+    //update fleet if ship is sunk
+    if (shipTarget.getShipLen() == 0)
     {
-      x = letterToInt(coordInput.row);
-    }
+      shipTarget.setIsSunk(true);
+      std::cout << "\033[1;32mShip is sunk!\033[0m\n";
 
-    //go to targeted tile
-    std::vector<std::vector<Tile>>& grid = gridPlayer.getGrid();
-    Tile& tileTarget = grid[x][coordInput.column];
-    tileTargetState = tileTarget.getTileState();
-
-    if (tileTargetState == 1) 
-    {
-      //Update tile. change tileState and icon              
-      tileTarget.setTileState((int)tileState::bombedTile);
-      tileTarget.setIcon('X');
-
-      //identify shipId from tile
-      shipTargetId = tileTarget.getShipId();
+      Fleet& fleet = gridPlayer.getFleet();
+      fleet.reduceFleetSize();
       
-      //find ship in fleet
-      std::vector<Ship>& ships = gridPlayer.getFleet().getFleetVector();              
-      Ship& shipTarget = gridPlayer.getFleet().getShip(ships, shipTargetId);
-      // if (shipTarget.getShipId() == shipTargetId)
-      // {
-        //reduce length
-        shipTarget.reduceShipLen();
+      if (fleet.getSize() == 0) 
+      {
+        std::cout << "\033[1;32mFleet is sunk!\033[0m\n";            
+      } 
+    }      
+  } 
+  else if (tileTargetState == 0) 
+  {
+    //Update tile. change tileState and icon
+    tileTarget.setTileState((int)tileState::bombedTile);              
+  }    
+  removeTarjetVector(valIndex, indexVectPlayer);    
 
-        //update fleet if ship is sunk
-        if (shipTarget.getShipLen() == 0)
-        {
-          shipTarget.setIsSunk(true);
-          std::cout << "\033[1;32mShip is sunk!\033[0m\n";
-
-          Fleet& fleet = gridPlayer.getFleet();
-          fleet.reduceFleetSize();
-          
-          if (fleet.getSize() == 0) 
-          {
-            std::cout << "\033[1;32mFleet is sunk!\033[0m\n";            
-          } 
-        }
-      // }
-    } 
-    else if (tileTargetState == 0) 
-    {
-      //Update tile. change tileState and icon
-      tileTarget.setTileState((int)tileState::bombedTile);              
-    }
-
-    //update tiles, indexSet should only have not bombed tiles
-    // if (isAutofired)
-    // {
-      //remove tile's index from set so computer won't select it again
-      removeTarjetVector(valIndex, indexVectPlayer);
-    // }
-
-    //end of players's turn
-    //display player's grid
-    gridPlayer.renderGrid(); 
+  //end of players's turn
+  //display player's grid
+  gridPlayer.renderGrid(); 
 }
 
-void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, std::shared_ptr<Tile> tmpTile) 
-{
-  for (int n = 0; n < len; n++) 
-        {
-          //reset horizontally to the right 
-          if (orientation == 'H') 
-          {
-            //reset tile            
-            grid[x][y + n].setX(tmpTile->getX()) ; 
-            //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)
-            grid[x][y + n].setY(tmpTile->getY());
-            grid[x][y + n].setTileState(tmpTile->getTileState());
-            grid[x][y + n].setIcon(tmpTile->getIcon());
-            grid[x][y + n].setShipId(tmpTile->getShipId());
-          }  
-          //reset vertically to the bottom
-          else if(orientation == 'V')
-          {
-            //reset tile
-            grid[x + n][y].setX(tmpTile->getX()) ;  
-            //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)     
-            grid[x + n][y].setY(tmpTile->getY());
-            grid[x + n][y].setTileState(tmpTile->getTileState());
-            grid[x + n][y].setIcon(tmpTile->getIcon());
-            grid[x + n][y].setShipId(tmpTile->getShipId());
-          }
-        } 
-}
 
 bool continueResetQuit(Grid& grid) {
  std::string input;
@@ -353,7 +314,7 @@ bool continueResetQuit(Grid& grid) {
  }
  else if (input == "2")
  {
-   grid.getFleet().resetFleet(grid.getGrid());
+   grid.resetFleet();
    return true;
  }
  else

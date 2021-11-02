@@ -1,11 +1,11 @@
-#include "../headerFiles/Tile.h"
-#include "../headerFiles/constants.h"
-
 
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <string>
+
+#include "../headerFiles/Tile.h"
+#include "../headerFiles/constants.h"
 
 //Implementing constructor
 Tile::Tile():x_(' '),y_(-1),tileState_((int)tileState::emptyTile),shipId_(0), icon_('~'){}

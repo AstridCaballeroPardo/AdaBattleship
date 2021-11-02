@@ -1,3 +1,6 @@
+
+#include <unistd.h>
+
 #include "../../headerFiles/states/BaseState.h"
 #include "../../headerFiles/states/SetupState.h"
 #include "../../headerFiles/Grid.h"
@@ -7,7 +10,6 @@
 #include "../../headerFiles/StateMachine.h"
 #include "../../headerFiles/Utility.h"
 
-#include <unistd.h>
 
 //Constructor
 SetupState::SetupState():BaseState(){}
@@ -83,9 +85,9 @@ void SetupState::exit()
   Grid& grid1 = StateMachine::getInstance()->getGridPlayer1();
   Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();
   // transition back to intro
-  grid1.getFleet().resetFleet(grid1.getGrid());
+  grid1.resetFleet();
   
-  grid2.getFleet().resetFleet(grid2.getGrid());
+  grid2.resetFleet();
   
   StateMachine::getInstance()->change("intro"); 
 }

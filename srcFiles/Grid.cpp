@@ -1,17 +1,15 @@
-#include "../headerFiles/Grid.h"
-#include "../headerFiles/Tile.h"
-#include "../headerFiles/Ship.h"
-#include "../headerFiles/Fleet.h"
-#include "../headerFiles/constants.h"
-#include "../headerFiles/Utility.h"
 
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <string>
 
-/**refactoring**/
-
+#include "../headerFiles/Grid.h"
+#include "../headerFiles/Tile.h"
+#include "../headerFiles/Ship.h"
+#include "../headerFiles/Fleet.h"
+#include "../headerFiles/constants.h"
+#include "../headerFiles/Utility.h"
 
 //initializing the static variable
 int Grid::currentGridId_ = 1;
@@ -85,9 +83,7 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
   int len = 0;
   int x = 0;
   bool isShipInFleet_ = false;
-  int eT = (int)tileState::emptyTile;
-  // int sT = (int)TileState::shipTile;
-  // int bT = (int)TileState::bombedTile;
+  int eT = (int)tileState::emptyTile;  
 
   //check if fleet already has placed the inputted shiptype
   //call fleet
@@ -179,3 +175,63 @@ void Grid::resetBombedTiles(std::vector<int>& bombedTilesGrid)
    }
  }
 }
+
+void Grid::resetTiles(int len, char orientation, int x, int y, std::shared_ptr<Tile> tmpTile) 
+{
+  for (int n = 0; n < len; n++) 
+        {
+          //reset horizontally to the right 
+          if (orientation == 'H') 
+          {
+            //reset tile            
+            grid[x][y + n].setX(tmpTile->getX()) ; 
+            //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)
+            grid[x][y + n].setY(tmpTile->getY());
+            grid[x][y + n].setTileState(tmpTile->getTileState());
+            grid[x][y + n].setIcon(tmpTile->getIcon());
+            grid[x][y + n].setShipId(tmpTile->getShipId());
+          }  
+          //reset vertically to the bottom
+          else if(orientation == 'V')
+          {
+            //reset tile
+            grid[x + n][y].setX(tmpTile->getX()) ;  
+            //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)     
+            grid[x + n][y].setY(tmpTile->getY());
+            grid[x + n][y].setTileState(tmpTile->getTileState());
+            grid[x + n][y].setIcon(tmpTile->getIcon());
+            grid[x + n][y].setShipId(tmpTile->getShipId());
+          }
+        } 
+}
+
+void Grid::resetFleet()
+{
+  udtCoordInput coordInput;
+  std::vector<Ship>& fleetV = getFleet().getFleetVector();
+  for (int i = 0, count = 0; i < fleetV.size(); i++) 
+    {
+      if(fleetV[i].getShipType() != 0)
+      {
+         //reset tiles of placed ship
+        int shipType = fleetV[i].getShipType();
+        char orientation = fleetV[i].getOrientation(); 
+        int len = calcShipLength(shipType);        
+
+        //get Tiles
+        int gridSize= grid.size();        
+        int tileIndex = fleetV[i].getShipIndex();
+        coordInput = indexToXY(tileIndex, gridSize);        
+        //new values
+        std::shared_ptr<Tile> tmpTile = std::make_shared<Tile>();        
+        
+        resetTiles(len, orientation, letterToInt(coordInput.row), coordInput.column, tmpTile);
+      }
+      //reset ship
+      fleetV[i].setShip(0, 0, -1);      
+    }
+    //reset Fleet size
+    getFleet().setSize(FLEET_SIZE);
+}
+
+

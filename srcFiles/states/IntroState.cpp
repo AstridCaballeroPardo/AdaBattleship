@@ -1,11 +1,12 @@
+
+#include <string>
+#include <memory>
+
 #include "../../headerFiles/states/BaseState.h"
 #include "../../headerFiles/states/IntroState.h"
 #include "../../headerFiles/StateMachine.h"
 #include "../../headerFiles/Utility.h"
 #include "../../headerFiles/Menu.h"
-
-#include <string>
-#include <memory>
 
 //Constructor
 IntroState::IntroState():BaseState() {}
