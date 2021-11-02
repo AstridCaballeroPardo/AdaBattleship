@@ -79,3 +79,7 @@ bool isManualTargetValid(std::vector<int> vectorResourse, int val);
 int userInputToIndex(char row, int column, int gridSize);
 
 bool withinBounds(char row, int column, int gridSize);
+
+void autoFire(std::vector<int>& indexVecPlayer, int gridSize, udtCoordInput coordInput, Grid& grid, std::vector<int>& bombedTilesGrid, bool& isNotQuit); 
+
+void manualShoot(udtCoordInput coordInput, int indVal, int gridSize, std::vector<int>& indexVecPlayer, std::vector<int>& bombedTilesGrid, bool& isNotQuit, Grid& grid); 

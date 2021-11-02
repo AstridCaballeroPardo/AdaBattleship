@@ -480,3 +480,59 @@ bool withinBounds(char row, int column, int gridSize) {
   }
   return false;
 }
+
+void autoFire(std::vector<int>& indexVecPlayer, int gridSize, udtCoordInput coordInput, Grid& grid, std::vector<int>& bombedTilesGrid, bool& isNotQuit) 
+{
+  //get random index based on set size
+  int randomIndex = randomVal(0, indexVecPlayer.size() - 1); 
+  //get value at randomIndex
+  int valAtRandomIndx = indexVecPlayer[randomIndex];
+  
+  playerShoot(indexVecPlayer, valAtRandomIndx, gridSize, coordInput, grid, true);
+  //keep track of bombed tiles         
+  bombedTilesGrid.push_back(valAtRandomIndx);                  
+  //user ends turn or quits game
+  std::string input = menuTurn();
+  if (input == "0") {
+    isNotQuit = false;            
+  } 
+}
+
+void manualShoot(udtCoordInput coordInput, int indVal, int gridSize, std::vector<int>& indexVecPlayer, std::vector<int>& bombedTilesGrid, bool& isNotQuit, Grid& grid) 
+{
+  while (true) 
+  {  
+    std::string input;
+    std::string msg;
+    msg = "\nEnter row letter, column number(e.g. B4): ";
+    input = userInput(msg);
+    //validate input
+    if(!validateInputShootFormat(input))
+    {
+      //display message error
+      std::cout << "\033[1;31mIncorrect entry, try again (e.g. B4 1 V).\033[0m\n\n";
+      continue;
+    }
+    coordInput = getParams(input, REGEXSHOOTTILE);
+    //validate is within limits
+    //calculate index value ((row * length of grid's side) + col)    
+    indVal = userInputToIndex(coordInput.row, coordInput.column, gridSize); 
+    
+    if(!(isManualTargetValid(indexVecPlayer, indVal) && withinBounds(coordInput.row, coordInput.column, gridSize)))
+    {
+      //display message error
+      std::cout << "\033[1;31mTile already shot or target out of boundaries, try again.\033[0m\n\n";
+      continue;
+    }
+    
+    playerShoot(indexVecPlayer, indVal, gridSize, coordInput, grid, false);  
+    //keep track of bombed tiles         
+    bombedTilesGrid.push_back(indVal); 
+    //user ends turn or quits game
+    input = menuTurn();
+    if (input == "0") {
+      isNotQuit = false;            
+    }                         
+    break; 
+  } 
+}
