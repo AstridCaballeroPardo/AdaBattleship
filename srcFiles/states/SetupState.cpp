@@ -1,5 +1,6 @@
 
 #include <unistd.h>
+#include <math.h>
 
 #include "../../headerFiles/states/BaseState.h"
 #include "../../headerFiles/states/SetupState.h"
@@ -9,6 +10,7 @@
 #include "../../headerFiles/Menu.h"
 #include "../../headerFiles/StateMachine.h"
 #include "../../headerFiles/Utility.h"
+#include "../../headerFiles/SetupHelper.h"
 
 
 //Constructor

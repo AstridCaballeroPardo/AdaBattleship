@@ -41,24 +41,8 @@ udtCoordInput indexToXY(int index, int gridSize);
 
 std::string getStringForEnum( int enum_val );
 
-// void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired);
-
 bool continueResetQuit(Grid& grid);
-
-void placing(Grid& grid);
-
-void playerTurn(Grid& grid);
-
-void setPlayersType(Grid& gridPlayer1, Grid& gridPlayer2, std::string type);
-
-void playerTurnLoop(Grid& grid, bool& isNotQuit, char playerLabel);
 
 std::vector<int> vectorResourse(int size); 
 
-// bool isManualTargetValid(std::vector<int> vectorResourse, int val);
-
 int userInputToIndex(char row, int column, int gridSize);
-
-// void autoFire(std::vector<int>& indexVecPlayer, int gridSize, udtCoordInput coordInput, Grid& grid, std::vector<int>& bombedTilesGrid, bool& isNotQuit); 
-
-// void manualShoot(udtCoordInput coordInput, int indVal, int gridSize, std::vector<int>& indexVecPlayer, std::vector<int>& bombedTilesGrid, bool& isNotQuit, Grid& grid); 

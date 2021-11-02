@@ -3,12 +3,12 @@
 #include <random>
 
 
-
 #include "../headerFiles/constants.h"
 #include "../headerFiles/Grid.h"
 #include "../headerFiles/Menu.h"
 #include "../headerFiles/Utility.h"
 #include "../headerFiles/Validation.h"
+#include "../headerFiles/PlayHelper.h"
 
 void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired)
 {

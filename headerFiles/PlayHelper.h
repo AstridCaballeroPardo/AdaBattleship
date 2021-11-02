@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 
 void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired);
 
