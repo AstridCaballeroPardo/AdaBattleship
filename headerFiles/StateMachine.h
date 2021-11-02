@@ -24,6 +24,8 @@ class StateMachine {
     std::vector<int> bombedTilesGrid1_;
     std::vector<int> bombedTilesGrid2_;
     
+    
+    
   public:
     
     StateMachine(StateMachine &other) = delete; 
@@ -35,14 +37,14 @@ class StateMachine {
     static StateMachine *getInstance();
     
     //getters
-    Grid* getGridPlayer1() const 
+    Grid& getGridPlayer1()  
     {
-        return gridPlayer1_;
+        return *gridPlayer1_;
     }
 
-    Grid* getGridPlayer2() const 
+    Grid& getGridPlayer2()  
     {
-        return gridPlayer2_;
+        return *gridPlayer2_;
     }
 
     std::vector<int>& getBombedTilesGrid1() {

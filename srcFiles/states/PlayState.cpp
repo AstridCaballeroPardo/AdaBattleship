@@ -24,8 +24,8 @@ void PlayState::enter()
   std::string input;
   std::string msg;
   udtCoordInput coordInput;  
-  Grid& grid1 = *StateMachine::getInstance()->getGridPlayer1();
-  Grid& grid2 = *StateMachine::getInstance()->getGridPlayer2();
+  Grid& grid1 = StateMachine::getInstance()->getGridPlayer1();
+  Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();
   int gridSize = grid1.getSize();
   int totalTiles = pow(gridSize, 2);
 
@@ -86,7 +86,7 @@ void PlayState::enter()
         //player2's turn         
         //display oponent's board
         std::cout << YELLOW << "\nPlayerB's turn\n" << ENDCOLOUR;
-        StateMachine::getInstance()->getGridPlayer1()->renderGrid();
+        grid1.renderGrid();
 
         //ask shoot method. Manual/auto-fired
         input = menuShoot();
@@ -118,8 +118,8 @@ void PlayState::enter()
 
 void PlayState::exit(std::vector<int>& bombedTilesGrid1, std::vector<int>& bombedTilesGrid2)
 {
-  Grid& grid1 = *StateMachine::getInstance()->getGridPlayer1();
-  Grid& grid2 = *StateMachine::getInstance()->getGridPlayer2();
+  Grid& grid1 = StateMachine::getInstance()->getGridPlayer1();
+  Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();
   //transition back to intro
   //reset ships
   grid1.getFleet().resetFleet(grid1.getGrid());
@@ -136,8 +136,8 @@ void PlayState::exit(std::vector<int>& bombedTilesGrid1, std::vector<int>& bombe
 
 void PlayState::update()
 {
-  Grid& grid1 = *StateMachine::getInstance()->getGridPlayer1();
-  Grid& grid2 = *StateMachine::getInstance()->getGridPlayer2();
+  Grid& grid1 = StateMachine::getInstance()->getGridPlayer1();
+  Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();
   
   // check if grid2 is computer
   if (grid2.getPlayerType() == "computer") 

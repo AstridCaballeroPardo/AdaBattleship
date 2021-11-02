@@ -61,17 +61,17 @@ void menuOrientation()
   std::cout << "H. Horizontal\n";
 }
 
-void manuallySetFleet(Grid* grid)
+void manuallySetFleet(Grid& grid)
 {
   std::string input;  
   std::string msg;
   udtCoordInput coordInput;   
-  int shipCount =grid->getFleet().getSize(); 
-  int totalTiles = pow(grid->getSize(), 2);
+  int shipCount =grid.getFleet().getSize(); 
+  int totalTiles = pow(grid.getSize(), 2);
   int availableTiles_ = 0;
-  int gridSize = grid->getSize();
+  int gridSize = grid.getSize();
   int len = 0;
-  std::vector<Ship>& ships = grid->getFleet().getFleetVector();
+  std::vector<Ship>& ships = grid.getFleet().getFleetVector();
 
 
   //create set with values form 0 to GRID_SIZE (side's size), they will represent the location of the elements (tiles) in the grid    
@@ -122,7 +122,7 @@ void manuallySetFleet(Grid* grid)
   
       //update grid with player's input        
         if (availableTiles_ == len){      
-          if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, indVal)) {
+          if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, indVal)) {
             // grid->renderGrid(); 
             //keep track of placed ships to know when fleet is completed
             shipCount --; 
@@ -142,7 +142,7 @@ void manuallySetFleet(Grid* grid)
         } 
       //keep track if fleet is completed
       if (shipCount == 0){
-        grid->renderGrid();
+        grid.renderGrid();
         menuShipType(ships);
         std::cout << "\n\033[1;32mAll ships placed!\033[0m\n\n";        
         break;
@@ -154,12 +154,12 @@ void manuallySetFleet(Grid* grid)
   } 
 }
 
-void getUnplacedShips(Grid* grid, int shipCount, std::vector<int>& unplacedShipsVect, int gridSize, std::set<int>& indexSet)
+void getUnplacedShips(Grid& grid, int shipCount, std::vector<int>& unplacedShipsVect, int gridSize, std::set<int>& indexSet)
 {
     //check if shipType[i] != 0
   for (int i = 0; i < shipCount; i++) 
   {
-    Ship tmpShip = grid->getFleet().getFleetVector()[i];
+    Ship tmpShip = grid.getFleet().getFleetVector()[i];
     int shipType = tmpShip.getShipType();
     if(shipType != 0) 
     {
@@ -176,13 +176,13 @@ void getUnplacedShips(Grid* grid, int shipCount, std::vector<int>& unplacedShips
   }
 }
 
-void automaticallySetFleet(Grid* grid) 
+void automaticallySetFleet(Grid& grid) 
 {
-  int totalTiles = pow(grid->getSize(), 2);
-  int shipCount = grid->getFleet().getSize();
+  int totalTiles = pow(grid.getSize(), 2);
+  int shipCount = grid.getFleet().getSize();
   udtCoordInput coordInput; 
   int randomIndex = 0;
-  int gridSize = grid->getSize();
+  int gridSize = grid.getSize();
   int len = 0;
   int availableTiles_ = 0;
   // int shipTypeIt = 0;
@@ -230,7 +230,7 @@ void automaticallySetFleet(Grid* grid)
         coordInput.shipType = unplacedShipsVect[i];
       
         //update grid with player's input                       
-        if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
+        if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
           //keep track of placed ships to know when fleet is completed           
           i++;
 
@@ -252,7 +252,7 @@ void automaticallySetFleet(Grid* grid)
           coordInput.shipType = unplacedShipsVect[i];
       
           //update grid with player's input                       
-          if(grid->placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
+          if(grid.placeShip(coordInput.row, coordInput.column, coordInput.shipType, coordInput.orientation, randomIndex)) {
             //keep track of placed ships to know when fleet is completed
             i++;
 

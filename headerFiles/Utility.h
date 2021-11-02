@@ -56,17 +56,17 @@ bool validateInputMenu(std::string str, std::string regPatt);
 
 void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, std::shared_ptr<Tile> tmpTile);
 
-bool isFleetCompleted(Grid* grid);
+bool isFleetCompleted(Grid& grid);
 
-bool continueResetQuit(Grid* grid);
+bool continueResetQuit(Grid& grid);
 
-void placing(Grid* grid);
+void placing(Grid& grid);
 
-void playerTurn(Grid* grid);
+void playerTurn(Grid& grid);
 
-void setPlayersType(Grid* gridPlayer1, Grid* gridPlayer2, std::string type);
+void setPlayersType(Grid& gridPlayer1, Grid& gridPlayer2, std::string type);
 
-void playerTurnLoop(Grid* grid, bool& isNotQuit, char playerLabel);
+void playerTurnLoop(Grid& grid, bool& isNotQuit, char playerLabel);
 
 void resetTile(Grid& grid, int x, int y, std::shared_ptr<Tile> tmpTile);
 

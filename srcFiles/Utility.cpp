@@ -353,20 +353,20 @@ void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, 
         } 
 }
 
-bool isFleetCompleted(Grid* grid){
+bool isFleetCompleted(Grid& grid){
   int count = 0;
-  for (int i = 0; i < grid->getFleet().getSize(); i++) {
-    if (grid->getFleet().getFleetVector()[i].getShipType() != 0) {
+  for (int i = 0; i < grid.getFleet().getSize(); i++) {
+    if (grid.getFleet().getFleetVector()[i].getShipType() != 0) {
       count++;
     }
   }
-  if (count == grid->getFleet().getSize()) {
+  if (count == grid.getFleet().getSize()) {
     return true;
   }
   return false;
 }
 
-bool continueResetQuit(Grid* grid) {
+bool continueResetQuit(Grid& grid) {
  std::string input;
  input = menuContinue();
  if (input == "1")
@@ -375,7 +375,7 @@ bool continueResetQuit(Grid* grid) {
  }
  else if (input == "2")
  {
-   grid->getFleet().resetFleet(grid->getGrid());
+   grid.getFleet().resetFleet(grid.getGrid());
    return true;
  }
  else
@@ -384,7 +384,7 @@ bool continueResetQuit(Grid* grid) {
  }
 }
  
-void placing(Grid* grid)
+void placing(Grid& grid)
 {
  std::string input;
  input = menuSetFleet();
@@ -398,26 +398,26 @@ void placing(Grid* grid)
  }
 }
  
-void playerTurn(Grid* grid)
+void playerTurn(Grid& grid)
 {
  //keep placing for player or quit?
- grid->renderGrid();
+ grid.renderGrid();
  placing(grid);
- grid->renderGrid();
+ grid.renderGrid();
 }
  
-void setPlayersType(Grid* gridPlayer1, Grid* gridPlayer2, std::string type) {
+void setPlayersType(Grid& gridPlayer1, Grid& gridPlayer2, std::string type) {
  if (type == "1") {
-   gridPlayer1->setPlayerType("human");
-   gridPlayer2->setPlayerType("computer");
+   gridPlayer1.setPlayerType("human");
+   gridPlayer2.setPlayerType("computer");
  }
  else if (type == "2") {
-   gridPlayer1->setPlayerType("human");
-   gridPlayer2->setPlayerType("human");
+   gridPlayer1.setPlayerType("human");
+   gridPlayer2.setPlayerType("human");
  }
 }
 
-void playerTurnLoop(Grid* grid, bool& isNotQuit, char playerLabel) { 
+void playerTurnLoop(Grid& grid, bool& isNotQuit, char playerLabel) { 
  while(!isFleetCompleted(grid)) {
          
      std::cout << YELLOW << "\nPlayer" << playerLabel << " set your fleet: \n" << ENDCOLOUR;

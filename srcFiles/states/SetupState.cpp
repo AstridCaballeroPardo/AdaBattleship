@@ -24,15 +24,18 @@ void SetupState::enter()
   std::string input;
 
   input = menuGameType();
+
+  Grid& grid1 = StateMachine::getInstance()->getGridPlayer1();
+  Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();
   
   //set type of players human/computer
-  setPlayersType(StateMachine::getInstance()->getGridPlayer1(), StateMachine::getInstance()->getGridPlayer2(), input);
+  setPlayersType(grid1, grid2, input);
   
   //player vs computer
   if (input == "1") 
   {
     playerLabel ='A';
-    playerTurnLoop(StateMachine::getInstance()->getGridPlayer1(), isNotQuit, playerLabel);
+    playerTurnLoop(grid1, isNotQuit, playerLabel);
     
     if (!isNotQuit) 
     {
@@ -44,14 +47,14 @@ void SetupState::enter()
       std::cout << GREEN << "\nComputer placing Fleet...\n\n" << ENDCOLOUR;
       //add a time delay to improve game's pace.
       usleep(2000000);
-      automaticallySetFleet(StateMachine::getInstance()->getGridPlayer2());  
+      automaticallySetFleet(grid2);  
       render ();
     }  
   }  
   else if(input == "2") 
   {
     playerLabel ='A';
-    playerTurnLoop(StateMachine::getInstance()->getGridPlayer1(), isNotQuit, playerLabel);
+    playerTurnLoop(grid2, isNotQuit, playerLabel);
     
     if (!isNotQuit) 
     {
@@ -61,7 +64,7 @@ void SetupState::enter()
     else 
     {
       playerLabel ='B';
-      playerTurnLoop(StateMachine::getInstance()->getGridPlayer2(), isNotQuit, playerLabel);
+      playerTurnLoop(grid2, isNotQuit, playerLabel);
 
       if (!isNotQuit) 
       {
@@ -77,12 +80,12 @@ void SetupState::enter()
 
 void SetupState::exit()
 {
-  Grid& grid1 = *StateMachine::getInstance()->getGridPlayer1();
-  Grid& grid2 = *StateMachine::getInstance()->getGridPlayer2();
+  Grid& grid1 = StateMachine::getInstance()->getGridPlayer1();
+  Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();
   // transition back to intro
-  StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(grid1.getGrid());
+  grid1.getFleet().resetFleet(grid1.getGrid());
   
-  StateMachine::getInstance()->getGridPlayer2()->getFleet().resetFleet(grid2.getGrid());
+  grid2.getFleet().resetFleet(grid2.getGrid());
   StateMachine::getInstance()->change("intro"); 
 }
 void SetupState::update()
@@ -92,20 +95,23 @@ void SetupState::update()
 }
 void SetupState::render()
 {
+  Grid& grid1 = StateMachine::getInstance()->getGridPlayer1();
+  Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();
+
   std::cout << YELLOW << "PlayerA Fleet\n" << ENDCOLOUR;
-  StateMachine::getInstance()->getGridPlayer1()->renderGrid();
+  grid1.renderGrid();
 
   std::cout << "\n\n";
 
-  if (StateMachine::getInstance()->getGridPlayer2()->getPlayerType() == "computer")
+  if (grid2.getPlayerType() == "computer")
   {
   std::cout << YELLOW << "Computer Fleet\n" << ENDCOLOUR;
-  StateMachine::getInstance()->getGridPlayer2()->renderGrid();
+  grid2.renderGrid();
   }
-  else if (StateMachine::getInstance()->getGridPlayer2()->getPlayerType() == "human")
+  else if (grid2.getPlayerType() == "human")
   {
   std::cout << YELLOW << "PlayerB Fleet\n" << ENDCOLOUR;
-  StateMachine::getInstance()->getGridPlayer2()->renderGrid();
+  grid2.renderGrid();
   }
 
   std::string inputMenuToPlay = menuTransToPlay();

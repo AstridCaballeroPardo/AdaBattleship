@@ -28,8 +28,8 @@
     void VictoryState::exit()
     {
       //clean
-      Grid& grid1 = *StateMachine::getInstance()->getGridPlayer1();
-      Grid& grid2 = *StateMachine::getInstance()->getGridPlayer2();      
+      Grid& grid1 = StateMachine::getInstance()->getGridPlayer1();
+      Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();      
 
       std::vector<int>& bombedTilesGrid1 = StateMachine::getInstance()->getBombedTilesGrid1();
       std::vector<int>& bombedTilesGrid2 = StateMachine::getInstance()->getBombedTilesGrid1();
