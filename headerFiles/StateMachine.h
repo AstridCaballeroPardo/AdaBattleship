@@ -23,8 +23,8 @@ class StateMachine {
     // Grid* gridPlayer2_ = nullptr;
     std::vector<int> bombedTilesGrid1_;
     std::vector<int> bombedTilesGrid2_;
-    Grid gridPlayer1_ ;
-    Grid gridPlayer2_ ;
+    Grid gridPlayer1_;
+    Grid gridPlayer2_;
     
     
   public:

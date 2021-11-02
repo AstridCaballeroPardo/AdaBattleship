@@ -54,7 +54,7 @@ void SetupState::enter()
   else if(input == "2") 
   {
     playerLabel ='A';
-    playerTurnLoop(grid2, isNotQuit, playerLabel);
+    playerTurnLoop(grid1, isNotQuit, playerLabel);
     
     if (!isNotQuit) 
     {
@@ -86,6 +86,7 @@ void SetupState::exit()
   grid1.getFleet().resetFleet(grid1.getGrid());
   
   grid2.getFleet().resetFleet(grid2.getGrid());
+  
   StateMachine::getInstance()->change("intro"); 
 }
 void SetupState::update()
