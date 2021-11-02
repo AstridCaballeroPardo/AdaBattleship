@@ -17,7 +17,7 @@
 int Grid::currentGridId_ = 1;
 
 //Implementing constructor
-Grid::Grid(int size):gridId_(currentGridId_++),gridFleet(),grid(), size_(size)
+Grid::Grid(int size):gridId_(currentGridId_++),gridFleet(),grid(), size_(size), playerType_()
 {
   setGrid(size_);  
   // renderGrid();   
@@ -30,19 +30,41 @@ void Grid::renderGrid()
   std::cout << "\n";
   //print headers - column
   std::cout << std::setfill(' ') << std::setw(TILE_WIDTH + 1);
-  for (int i = 1; i <= size_; i++){     
+  for (int i = 1; i <= size_; i++)
+  {     
     std::cout << "|" << std::setw(TILE_PADDING) << " "  << i << "  ";
   }
   std::cout << "|\n";
   std::cout << std::setw(TILE_WIDTH + 1);
   std::cout << " " << std::setfill('-') << std::setw((size_ * TILE_WIDTH) + size_) << '\n';
-  for (int x = 0; x < size_; x++) {
+  for (int x = 0; x < size_; x++) 
+  {
     //print headers - row
     std::cout << std::setfill(' ') << std::setw(TILE_PADDING) << " " << intToLetter(x) << "  ";
       
     //print tiles
-    for (int y = 0; y < size_; y++) {        
-      std::cout << "|" << std::setw(TILE_PADDING) << " " << Grid::grid[x][y].getIcon() << "  ";
+    for (int y = 0; y < size_; y++) 
+    {        
+      int tileState = Grid::grid[x][y].getTileState();
+      char icon = Grid::grid[x][y].getIcon();
+
+      if(tileState == 0) 
+      {
+        std::cout << "|" << std::setw(TILE_PADDING) << " " << BLUEBACK << icon << ENDCOLOUR << "  ";
+      }
+      else if (tileState == 1) 
+      {
+        std::cout << "|" << std::setw(TILE_PADDING) << " " << YELLOW << icon << ENDCOLOUR << "  ";
+      }
+      else if (tileState == 2 && icon == '~') 
+      {
+        std::cout << "|" << std::setw(TILE_PADDING) << " " << LIGHTBLUE << icon << ENDCOLOUR << "  ";
+      }
+      else if (tileState == 2 && icon == 'X') 
+      {
+        std::cout << "|" << std::setw(TILE_PADDING) << " " << RED << icon << ENDCOLOUR << "  ";
+      }
+      
     }    
   std::cout << "|\n";    
   }  
@@ -63,7 +85,7 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
   int len = 0;
   int x = 0;
   bool isShipInFleet_ = false;
-  int eT = (int)TileState::emptyTile;
+  int eT = (int)tileState::emptyTile;
   // int sT = (int)TileState::shipTile;
   // int bT = (int)TileState::bombedTile;
 
@@ -73,8 +95,8 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
   isShipInFleet_ = isShipInFleet(ships, shipType); 
 
   // place ship
-  if (!isShipInFleet_) {  
-  
+  if (!isShipInFleet_) 
+  {  
     len = calcShipLength(shipType);
     
     // x is the scaled value of the letter
@@ -82,30 +104,35 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
     
     //update grid    
     //find unassigned ship
-    for (int i = 0, count = 0; i < gridFleet.getSize() && count < 1; i++) {
-      if(ships[i].getShipType() == 0){
+    for (int i = 0, count = 0; i < gridFleet.getSize() && count < 1; i++) 
+    {
+      if(ships[i].getShipType() == 0)
+      {
         // count is used to make sure only one ship gets updated instead of all the ships of the vector
         count++;
         //update empty ship
         ships[i].setShip(shipType, orientation, index);
-        for (int n = 0; n < len; n++) {
+        for (int n = 0; n < len; n++) 
+        {
           //update horizontally to the right 
-          if (orientation == 'H') {
+          if (orientation == 'H') 
+          {
             //update tile
             grid[x][y + n].setX(letter) ; 
             //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)
             grid[x][y + n].setY(y + n + 1);
-            grid[x][y + n].setTileState((int)TileState::shipTile);
+            grid[x][y + n].setTileState((int)tileState::shipTile);
             grid[x][y + n].setIcon('^');
             grid[x][y + n].setShipId(ships[i].getShipId());
           }  
           //update vertically to the bottom
-          else if(orientation == 'V'){
+          else if(orientation == 'V')
+          {
             //update tile
             grid[x + n][y].setX(letter + n) ;  
             //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)     
             grid[x + n][y].setY(y + 1);
-            grid[x + n][y].setTileState((int)TileState::shipTile);
+            grid[x + n][y].setTileState((int)tileState::shipTile);
             grid[x + n][y].setIcon('^');
             grid[x + n][y].setShipId(ships[i].getShipId());
           }
@@ -113,18 +140,22 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
       }
     }
     return true;    
-  } else {
+  } else 
+  {
     std::cout << "\033[1;31mShip already placed, try again.\033[0m\n\n";
   }
   return false;
 }
 
- Tile Grid::getTile(char row, int column){   
-   Tile& myTile = grid[letterToInt(row)][column];
-   return myTile;
- }
 
- void Grid::setFleetId(int gridId){   
-   gridFleet.setGridId(gridId);
- }
+void Grid::setFleetId(int gridId)
+{   
+  gridFleet.setGridId(gridId);
+}
+
+void Grid::setPlayerType(std::string playerType)
+{
+  playerType_ = playerType;
+}
+
 

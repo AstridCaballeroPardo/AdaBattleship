@@ -1,9 +1,8 @@
 #pragma once
 
 #include <string>
-
-#include "constants.h"
-
+#include <vector>
+#include <memory>
 
 class Tile{
   private:
@@ -30,4 +29,5 @@ class Tile{
     int getTileState() const {return tileState_;}
     int getShipId() const {return shipId_;}
     char getIcon() const {return icon_;}    
+  
 };
