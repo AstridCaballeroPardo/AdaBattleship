@@ -1,8 +1,10 @@
 #pragma once
 
 #include <regex>
-#include <set>
+#include <vector>
 #include <map>
+#include <set>
+
 
 #include "states/BaseState.h"
 #include "constants.h"
@@ -42,13 +44,13 @@ int availableTiles(char orientation, int randomNum, int gridSize, std::set<int>&
 
 void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>& index, int len);
 
-void removeTarjetSet(int randomNum, std::set<int>& index);
+void removeTarjetVector(int randomNum, std::set<int>& indexVec);
 
 udtCoordInput indexToXY(int index, int gridSize);
 
 std::string getStringForEnum( int enum_val );
 
-void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired);
+void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired);
 
 bool validateInputMenu(std::string str, std::string regPatt);
 
@@ -69,3 +71,11 @@ void playerTurnLoop(Grid* grid, bool& isNotQuit, char playerLabel);
 void resetTile(Grid& grid, int x, int y, std::shared_ptr<Tile> tmpTile);
 
 void resetBombedTiles(Grid& grid, std::vector<int>& bombedTilesGrid);
+
+std::vector<int> vectorResourse(int size); 
+
+bool isManualTargetValid(std::vector<int> vectorResourse, int val);
+
+int userInputToIndex(char row, int column, int gridSize);
+
+bool withinBounds(char row, int column, int gridSize);

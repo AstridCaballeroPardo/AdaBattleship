@@ -2,7 +2,7 @@
 #include <memory>
 #include <regex>
 #include <cctype>
-#include <set>
+#include <vector>
 #include <random>
 #include <math.h> 
 
@@ -215,9 +215,9 @@ void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>
           }
 }
 
-void removeTarjetSet(int randomNum, std::set<int>& index)
+void removeTarjetVector(int randomNum, std::vector<int>& indexVec)
 {
-  index.erase(randomNum);
+  indexVec.erase(std::remove(indexVec.begin(), indexVec.end(), randomNum), indexVec.end());
 }
 
 udtCoordInput indexToXY(int index, int gridSize) 
@@ -251,7 +251,7 @@ std::string getStringForEnum(int enum_val)
     return tmp;
 }
 
-void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired)
+void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired)
 {
   int shipTargetId;
   int tileTargetState;
@@ -316,7 +316,7 @@ void playerShoot(std::set<int>& indexSetPlayer, int valIndex, int gridSize, udtC
     // if (isAutofired)
     // {
       //remove tile's index from set so computer won't select it again
-      removeTarjetSet(valIndex, indexSetPlayer);
+      removeTarjetVector(valIndex, indexVectPlayer);
     // }
 
     //end of players's turn
@@ -451,4 +451,32 @@ void resetBombedTiles(Grid& grid, std::vector<int>& bombedTilesGrid)
      resetTile(grid, x, y, tmpTile);
    }
  }
+}
+
+std::vector<int> vectorResourse(int size) {
+  std::vector<int> vectorR;
+  for (int i = 0; i < size; i++) {
+    vectorR.push_back(i);
+  }
+  return vectorR;
+}
+
+bool isManualTargetValid(std::vector<int> vectorResourse, int val) {
+  for (int i = 0; i < vectorResourse.size(); i++) {
+    if (vectorResourse[i] == val) {
+      return true;
+    }
+  }
+  return false;
+} 
+
+int userInputToIndex(char row, int column, int gridSize) {
+  return ((row - CAPITAL_LETTER)  * gridSize) + column;
+}
+
+bool withinBounds(char row, int column, int gridSize) {
+  if ((row - CAPITAL_LETTER ) < gridSize && column < gridSize) {
+    return true;
+  }
+  return false;
 }

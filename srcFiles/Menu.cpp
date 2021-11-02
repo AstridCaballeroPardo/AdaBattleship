@@ -109,11 +109,12 @@ void manuallySetFleet(Grid* grid)
       len = calcShipLength(coordInput.shipType); 
 
       //calculate index value ((row * length of grid's side) + col)
-      int indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
+      // int indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
+      int indVal = userInputToIndex(coordInput.row, coordInput.column, gridSize); 
       availableTiles_ = 0;
 
       //check if target index is in set(find is O(log n))
-      if (indexSet.find(indVal) != indexSet.end()){
+      if (indexSet.find(indVal) != indexSet.end() && withinBounds(coordInput.row, coordInput.column, gridSize)){
       availableTiles_++;
 
       //check number of tiles available in the set collection

@@ -49,7 +49,7 @@ void GameOverState::render()
 {  
   std::cout << RED << "\n\nGame over :(\n\n" << ENDCOLOUR;
   std::string input = menuEndGame();
-  if (input.length() == 1) {
+  if (input == "1") {
     //move to intro state
     update();
   }

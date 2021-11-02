@@ -55,7 +55,7 @@
     {
       std::cout << YELLOW << "you win!!! Campe@n! :)\n\n" << ENDCOLOUR;      
       std::string input = menuEndGame();
-      if (input.length() == 1) {
+      if (input == "1") {
         //move to intro state
         update();
       }      

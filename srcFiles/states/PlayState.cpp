@@ -34,11 +34,11 @@ void PlayState::enter()
 
   int totalTiles = pow(gridSize, 2);
   //create set with values form 0 to GRID_SIZE (side's size), they will represent the location of the elements (tiles) in the grid
-  std::set<int> indexSetPlayer1 = createSet(totalTiles); 
+  std::vector<int> indexVecPlayer1 = vectorResourse(totalTiles); 
   int indVal;
-  std::set<int> indexSetPlayer2 = createSet(totalTiles); 
-  int randomIndex = 0;
-
+  std::vector<int> indexVecPlayer2 = vectorResourse(totalTiles); 
+  int randomIndex = -1; 
+  int valAtRandomIndx = -1;
   // bool keepPlaying = true;
   bool isNotQuit = true;
 
@@ -65,11 +65,12 @@ void PlayState::enter()
           coordInput = getParams(input, REGEXSHOOTTILE);
           //validate is within limits
           //calculate index value ((row * length of grid's side) + col)
-          indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
+          // indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
+          indVal = userInputToIndex(coordInput.row, coordInput.column, gridSize); 
           
-          if(indexSetPlayer2.find(indVal) != indexSetPlayer2.end()) 
+          if(isManualTargetValid(indexVecPlayer2, indVal) && withinBounds(coordInput.row, coordInput.column, gridSize)) 
           {
-            playerShoot(indexSetPlayer2, indVal, gridSize, coordInput, grid2, false);  
+            playerShoot(indexVecPlayer2, indVal, gridSize, coordInput, grid2, false);  
             //keep track of bombed tiles         
             bombedTilesGrid2.push_back(indVal); 
             //user ends turn or quits game
@@ -82,7 +83,7 @@ void PlayState::enter()
           else 
           {
             //display message error
-            std::cout << "\033[1;31mOut of boundaries, try again.\033[0m\n\n";
+            std::cout << "\033[1;31mTile already shooted or target out of boundaries, try again.\033[0m\n\n";
           }
         } 
 
@@ -93,21 +94,23 @@ void PlayState::enter()
         //add a time delay to improve game's pace.
         usleep(2000000);
         //get random index based on set size
-        randomIndex = randomVal(0, totalTiles - 1);
+        randomIndex = randomVal(0, indexVecPlayer2.size() - 1); 
+        //get value at randomIndex
+        valAtRandomIndx = indexVecPlayer2[randomIndex];
 
         //check random index is in set(find is O(log n))
-        if (indexSetPlayer2.find(randomIndex) != indexSetPlayer2.end())
-        {
-          playerShoot(indexSetPlayer2, randomIndex, gridSize, coordInput, grid2, true);
+        // if (indexVecPlayer2.find(randomIndex) != indexVecPlayer2.end())
+        // {
+          playerShoot(indexVecPlayer2, valAtRandomIndx, gridSize, coordInput, grid2, true);
           //keep track of bombed tiles         
-          bombedTilesGrid2.push_back(randomIndex);                  
+          bombedTilesGrid2.push_back(valAtRandomIndx);                  
           //user ends turn or quits game
           inputMenuTurn = menuTurn();
           if (inputMenuTurn == "0") {
             isNotQuit = false;            
           }                         
           break;  
-        } 
+        // } 
       }
     }
     //go in if user wants to keep playing and player2 has ships left
@@ -124,21 +127,22 @@ void PlayState::enter()
           //add a time delay to improve game's pace.
           usleep(2000000);
           //get random index based on set size
-          randomIndex = randomVal(0, totalTiles - 1);
+          randomIndex = randomVal(0, indexVecPlayer1.size() - 1);
+          valAtRandomIndx = indexVecPlayer1[randomIndex];
 
           //check random index is in set(find is O(log n))
-          if (indexSetPlayer1.find(randomIndex) != indexSetPlayer1.end())
-          {
-            playerShoot(indexSetPlayer1, randomIndex, gridSize, coordInput, grid1, true);
+          // if (indexVecPlayer1.find(randomIndex) != indexVecPlayer1.end())
+          // {
+            playerShoot(indexVecPlayer1, valAtRandomIndx, gridSize, coordInput, grid1, true);
             //keep track of bombed tiles         
-            bombedTilesGrid1.push_back(randomIndex);                  
+            bombedTilesGrid1.push_back(valAtRandomIndx);                  
             //user ends turn or quits game
             inputMenuTurn = menuTurn();
             if (inputMenuTurn == "0") {
               isNotQuit = false;            
             }                         
             break;  
-          }          
+          // }          
         }              
       }
       else 
@@ -161,11 +165,12 @@ void PlayState::enter()
               coordInput = getParams(input, REGEXSHOOTTILE);
               //validate is within limits
               //calculate index value ((row * length of grid's side) + col)
-              indVal = ((coordInput.row - CAPITAL_LETTER)  * gridSize) + coordInput.column;
+              indVal = userInputToIndex(coordInput.row, coordInput.column, gridSize); 
               
-              if(indexSetPlayer1.find(indVal) != indexSetPlayer2.end()) 
+              
+              if(isManualTargetValid(indexVecPlayer1, indVal) && withinBounds(coordInput.row, coordInput.column, gridSize)) 
               {
-                playerShoot(indexSetPlayer1, indVal, gridSize, coordInput,grid1, false);      //keep track of bombed tiles         
+                playerShoot(indexVecPlayer1, indVal, gridSize, coordInput,grid1, false);      //keep track of bombed tiles         
                 bombedTilesGrid1.push_back(indVal);                  
                 //user ends turn or quits game
                 inputMenuTurn = menuTurn();
@@ -187,21 +192,22 @@ void PlayState::enter()
             //add a time delay to improve game's pace.
             usleep(2000000);
             //get random index based on set size
-            randomIndex = randomVal(0, totalTiles - 1);
+            randomIndex = randomVal(0, indexVecPlayer1.size() - 1);
+            valAtRandomIndx = indexVecPlayer1[randomIndex];
 
             //check random index is in set(find is O(log n))
-            if (indexSetPlayer2.find(randomIndex) != indexSetPlayer2.end())
-            {
-              playerShoot(indexSetPlayer2, randomIndex, gridSize, coordInput, grid2, true);
+            // if (indexVecPlayer2.find(randomIndex) != indexVecPlayer2.end())
+            // {
+              playerShoot(indexVecPlayer1, valAtRandomIndx, gridSize, coordInput, grid1, true);
               //keep track of bombed tiles         
-              bombedTilesGrid2.push_back(randomIndex);                  
+              bombedTilesGrid1.push_back(valAtRandomIndx);                  
               //user ends turn or quits game
               inputMenuTurn = menuTurn();
               if (inputMenuTurn == "0") {
                 isNotQuit = false;            
               }                         
               break;  
-            } 
+            // } 
           }
         }        
       }    
