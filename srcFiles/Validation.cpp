@@ -37,7 +37,7 @@ bool validateInputMenu(std::string str, std::string regPatt)
 }
 
 bool validateBounds(char row, int column, int gridSize) {
-  if ((row - CAPITAL_LETTER ) < gridSize && column < gridSize) {
+  if ((row - CAPITAL_LETTER ) < gridSize && (column >= 0 && column < gridSize)) {
     return true;
   }
   return false;
