@@ -31,3 +31,5 @@ void Tile::setIcon(char icon)
 {
   icon_ = icon;
 }
+
+

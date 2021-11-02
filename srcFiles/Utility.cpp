@@ -132,15 +132,6 @@ char intToLetter(int x)
    return x + CAPITAL_LETTER ;
 }
 
-bool isShipInFleet(std::vector<Ship>& ships, int shipType)
-{
-    for (int i = 0; i < ships.size(); i++) {
-      if (ships[i].getShipType() == shipType) {        
-        return true;
-      }
-    }
-    return false;
-}
 
 std::set<int> createSet(int size)
 {
@@ -353,19 +344,6 @@ void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, 
         } 
 }
 
-bool isFleetCompleted(Grid& grid){
-  int count = 0;
-  for (int i = 0; i < grid.getFleet().getSize(); i++) {
-    if (grid.getFleet().getFleetVector()[i].getShipType() != 0) {
-      count++;
-    }
-  }
-  if (count == grid.getFleet().getSize()) {
-    return true;
-  }
-  return false;
-}
-
 bool continueResetQuit(Grid& grid) {
  std::string input;
  input = menuContinue();
@@ -418,7 +396,7 @@ void setPlayersType(Grid& gridPlayer1, Grid& gridPlayer2, std::string type) {
 }
 
 void playerTurnLoop(Grid& grid, bool& isNotQuit, char playerLabel) { 
- while(!isFleetCompleted(grid)) {
+ while(!grid.getFleet().isFleetCompleted()) {
          
      std::cout << YELLOW << "\nPlayer" << playerLabel << " set your fleet: \n" << ENDCOLOUR;
     
@@ -429,28 +407,6 @@ void playerTurnLoop(Grid& grid, bool& isNotQuit, char playerLabel) {
        break;
      }
    }
-}
-
-void resetTile(Grid& grid, int x, int y, std::shared_ptr<Tile> tmpTile)
-{
- grid.getGrid()[x][y].setTileState(tmpTile->getTileState());
-}
-
-void resetBombedTiles(Grid& grid, std::vector<int>& bombedTilesGrid)
-{
- std::shared_ptr<Tile> tmpTile = std::make_shared<Tile>();
- for (int i = 0; i < bombedTilesGrid.size(); i++)
- {
-   //find tile and reset
-   //define len, orientation, x and y
-   int x =(bombedTilesGrid[i] / grid.getSize());
-   int y = (bombedTilesGrid[i] % grid.getSize());
-   //only reset the bombed tiles that didn't belong to ships. There is another reset function that reset the ships wheter they were bombed or not.
-   if (grid.getGrid()[x][y].getIcon() == '~' && grid.getGrid()[x][y].getTileState() == 2)
-   {
-     resetTile(grid, x, y, tmpTile);
-   }
- }
 }
 
 std::vector<int> vectorResourse(int size) {

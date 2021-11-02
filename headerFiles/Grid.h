@@ -6,6 +6,7 @@
 
 #include "Tile.h"
 #include "Fleet.h"
+#include "Ship.h"
 #include "constants.h"
 
 class Grid {
@@ -38,4 +39,6 @@ class Grid {
     std::string getPlayerType() const {return playerType_;}
     
     bool placeShip(char letter, int number, int shipType, char orientation, int index);
+    void resetTile(int x, int y, std::shared_ptr<Tile> tmpTile);
+    void resetBombedTiles(std::vector<int>& bombedTilesGrid); 
 };

@@ -28,6 +28,6 @@ class Tile{
     int getY() const {return y_;}
     int getTileState() const {return tileState_;}
     int getShipId() const {return shipId_;}
-    char getIcon() const {return icon_;}    
+    char getIcon() const {return icon_;}      
   
 };

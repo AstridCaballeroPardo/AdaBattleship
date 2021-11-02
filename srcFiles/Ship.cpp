@@ -1,6 +1,5 @@
 #include "../headerFiles/Ship.h"
 #include "../headerFiles/Tile.h"
-// #include "../headerFiles/constants.h"
 #include "../headerFiles/Utility.h"
 
 #include <iostream>
@@ -31,7 +30,3 @@ void Ship::setShip(int shipType, char orientation, int index)
 void Ship::reduceShipLen(){
   shipLen_--;
 }
-
-
-
-

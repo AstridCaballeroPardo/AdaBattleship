@@ -124,12 +124,12 @@ void PlayState::exit(std::vector<int>& bombedTilesGrid1, std::vector<int>& bombe
   //reset ships
   grid1.getFleet().resetFleet(grid1.getGrid());
   //reset bombed empty tiles 
-  resetBombedTiles(grid1, bombedTilesGrid1);
+  grid1.resetBombedTiles(bombedTilesGrid1);
   
   //reset ships
   grid2.getFleet().resetFleet(grid2.getGrid());
   //reset bombed empty tiles 
-  resetBombedTiles(grid2, bombedTilesGrid2);
+  grid2.resetBombedTiles(bombedTilesGrid2);
 
   StateMachine::getInstance()->change("intro"); 
 };

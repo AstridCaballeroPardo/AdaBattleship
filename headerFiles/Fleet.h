@@ -5,11 +5,9 @@
 #include <vector>
 #include <memory>
 
-
 #include "constants.h"
 #include "Ship.h"
 #include "Grid.h"
-
 
 class Fleet{
   private:    
@@ -35,5 +33,7 @@ class Fleet{
     
     Ship& getShip(std::vector<Ship>& fleetVector, int shipId);  
     void reduceFleetSize();   
-    void resetFleet(std::vector<std::vector<Tile>>& grid);   
+    void resetFleet(std::vector<std::vector<Tile>>& grid);  
+    bool isShipInFleet(int shipType); 
+    bool isFleetCompleted();
 };

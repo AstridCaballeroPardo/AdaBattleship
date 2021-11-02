@@ -18,10 +18,8 @@ class Ship {
 
     //Grid member methods
     void setShip(int shipType, char orientation, int index);
-
     void setIsSunk(bool sunk);
-
-    void reduceShipLen();
+    void reduceShipLen();   
 
 
     //inline implementation to have access to the private attributes
@@ -31,4 +29,5 @@ class Ship {
     int getOrientation()const {return orientation_;}
     bool getIsSunk()const {return isSunk;}  
     int getShipIndex()const {return index_;} 
+    
 };

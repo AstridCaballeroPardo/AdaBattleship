@@ -32,8 +32,6 @@ int letterToInt(char letter);
 
 char intToLetter(int x);
 
-bool isShipInFleet(std::vector<Ship>& ships, int shipType);
-
 std::set<int> createSet(int size);
 
 int randomVal( int min, int max);
@@ -56,8 +54,6 @@ bool validateInputMenu(std::string str, std::string regPatt);
 
 void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, std::shared_ptr<Tile> tmpTile);
 
-bool isFleetCompleted(Grid& grid);
-
 bool continueResetQuit(Grid& grid);
 
 void placing(Grid& grid);
@@ -67,10 +63,6 @@ void playerTurn(Grid& grid);
 void setPlayersType(Grid& gridPlayer1, Grid& gridPlayer2, std::string type);
 
 void playerTurnLoop(Grid& grid, bool& isNotQuit, char playerLabel);
-
-void resetTile(Grid& grid, int x, int y, std::shared_ptr<Tile> tmpTile);
-
-void resetBombedTiles(Grid& grid, std::vector<int>& bombedTilesGrid);
 
 std::vector<int> vectorResourse(int size); 
 

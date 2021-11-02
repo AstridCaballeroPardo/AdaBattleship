@@ -1,7 +1,6 @@
 #include "../headerFiles/Grid.h"
 #include "../headerFiles/Tile.h"
 #include "../headerFiles/Fleet.h"
-#include "../headerFiles/Ship.h"
 #include "../headerFiles/constants.h"
 #include "../headerFiles/Utility.h"
 
@@ -55,29 +54,54 @@ void Fleet::reduceFleetSize(){
 
 void Fleet::resetFleet(std::vector<std::vector<Tile>>& grid)
 {
+  udtCoordInput coordInput;
   for (int i = 0, count = 0; i < fleetVector_.size(); i++) 
     {
       if(fleetVector_[i].getShipType() != 0)
       {
          //reset tiles of placed ship
         int shipType = fleetVector_[i].getShipType();
-        char orientation = fleetVector_[i].getOrientation();        
-        int len = calcShipLength(shipType);
+        char orientation = fleetVector_[i].getOrientation(); 
+        int len = calcShipLength(shipType);        
 
         //get Tiles
         int gridSize= grid.size();
         // int totalTiles = pow(gridSize, 2);
         int tileIndex = fleetVector_[i].getShipIndex();
-        int x=(tileIndex / gridSize);
-        int y= (tileIndex % gridSize);  
+        coordInput = indexToXY(tileIndex, gridSize);
+        // int x=(tileIndex / gridSize);
+        // int y= (tileIndex % gridSize);  
         //new values
         std::shared_ptr<Tile> tmpTile = std::make_shared<Tile>();        
         
-        resetTiles(len, grid, orientation, x, y, tmpTile);
+        resetTiles(len, grid, orientation, letterToInt(coordInput.row), coordInput.column, tmpTile);
       }
       //reset ship
-      fleetVector_[i].setShip(0, 0, -1);
+      fleetVector_[i].setShip(0, 0, -1);      
     }
     //reset Fleet size
     size_ = FLEET_SIZE;
+}
+
+bool Fleet::isShipInFleet(int shipType)
+{
+    for (int i = 0; i < fleetVector_.size(); i++) {
+      if (fleetVector_[i].getShipType() == shipType) {        
+        return true;
+      }
+    }
+    return false;
+}
+
+bool Fleet::isFleetCompleted(){
+  int count = 0;
+  for (int i = 0; i < fleetVector_.size(); i++) {
+    if (fleetVector_[i].getShipType() != 0) {
+      count++;
+    }
+  }
+  if (count == fleetVector_.size()) {
+    return true;
+  }
+  return false;
 }

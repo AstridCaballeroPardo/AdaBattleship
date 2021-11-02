@@ -92,7 +92,7 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
   //check if fleet already has placed the inputted shiptype
   //call fleet
   std::vector<Ship>& ships = gridFleet.getFleetVector(); //Getting the FleetVector by reference.
-  isShipInFleet_ = isShipInFleet(ships, shipType); 
+  isShipInFleet_ = gridFleet.isShipInFleet(shipType); 
 
   // place ship
   if (!isShipInFleet_) 
@@ -158,4 +158,24 @@ void Grid::setPlayerType(std::string playerType)
   playerType_ = playerType;
 }
 
+void Grid::resetTile(int x, int y, std::shared_ptr<Tile> tmpTile)
+{
+  grid[x][y].setTileState(tmpTile->getTileState());
+}
 
+void Grid::resetBombedTiles(std::vector<int>& bombedTilesGrid)
+{
+ std::shared_ptr<Tile> tmpTile = std::make_shared<Tile>();
+ for (int i = 0; i < bombedTilesGrid.size(); i++)
+ {
+   //find tile and reset
+   //define len, orientation, x and y
+   int x =(bombedTilesGrid[i] / size_);
+   int y = (bombedTilesGrid[i] % size_);
+   //only reset the bombed tiles that didn't belong to ships. There is another reset function that reset the ships wheter they were bombed or not.
+   if (grid[x][y].getIcon() == '~' && grid[x][y].getTileState() == 2)
+   {
+     resetTile(x, y, tmpTile);
+   }
+ }
+}
