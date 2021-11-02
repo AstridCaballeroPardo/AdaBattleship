@@ -12,12 +12,6 @@
 
 typedef std::map<std::string, BaseState*> MAP;
 
-bool validateInputFormat(std::string str);
-
-bool validateInputShootFormat(std::string str);
-
-bool validateCoordLimits(udtCoordInput coord, int gridSize);
-
 std::smatch extractSubStr(std::string input, std::string regPatt);
 
 //Parsing player input
@@ -41,17 +35,13 @@ int availableTiles(char orientation, int randomNum, int gridSize, std::set<int>&
 
 void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>& index, int len);
 
-void removeTarjetVector(int randomNum, std::set<int>& indexVec);
+void removeTarjetVector(int randomNum, std::vector<int>& indexVec);
 
 udtCoordInput indexToXY(int index, int gridSize);
 
 std::string getStringForEnum( int enum_val );
 
-void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired);
-
-bool validateInputMenu(std::string str, std::string regPatt);
-
-// void resetTiles(int len, std::vector<std::vector<Tile>>& grid,char orientation, int x, int y, std::shared_ptr<Tile> tmpTile);
+// void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired);
 
 bool continueResetQuit(Grid& grid);
 
@@ -65,12 +55,10 @@ void playerTurnLoop(Grid& grid, bool& isNotQuit, char playerLabel);
 
 std::vector<int> vectorResourse(int size); 
 
-bool isManualTargetValid(std::vector<int> vectorResourse, int val);
+// bool isManualTargetValid(std::vector<int> vectorResourse, int val);
 
 int userInputToIndex(char row, int column, int gridSize);
 
-bool withinBounds(char row, int column, int gridSize);
+// void autoFire(std::vector<int>& indexVecPlayer, int gridSize, udtCoordInput coordInput, Grid& grid, std::vector<int>& bombedTilesGrid, bool& isNotQuit); 
 
-void autoFire(std::vector<int>& indexVecPlayer, int gridSize, udtCoordInput coordInput, Grid& grid, std::vector<int>& bombedTilesGrid, bool& isNotQuit); 
-
-void manualShoot(udtCoordInput coordInput, int indVal, int gridSize, std::vector<int>& indexVecPlayer, std::vector<int>& bombedTilesGrid, bool& isNotQuit, Grid& grid); 
+// void manualShoot(udtCoordInput coordInput, int indVal, int gridSize, std::vector<int>& indexVecPlayer, std::vector<int>& bombedTilesGrid, bool& isNotQuit, Grid& grid); 

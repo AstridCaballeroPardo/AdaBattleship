@@ -6,11 +6,8 @@
 #include "../../headerFiles/states/PlayState.h"
 #include "../../headerFiles/StateMachine.h"
 #include "../../headerFiles/Utility.h"
-#include "../../headerFiles/constants.h"
-#include "../../headerFiles/Fleet.h"
-#include "../../headerFiles/Ship.h"
 #include "../../headerFiles/Grid.h"
-#include "../../headerFiles/Menu.h"
+#include "../../headerFiles/PlayHelper.h"
 
 //Constructor
 PlayState::PlayState():BaseState() {}
@@ -38,29 +35,15 @@ void PlayState::enter()
   int randomIndex = -1; 
   // int valAtRandomIndx = -1;  
   bool isNotQuit = true;
+  char playerLabel = ' ';
   
   //take turns until one of the fleets is sunk
   while (grid1.getFleet().getSize() != 0 && grid2.getFleet().getSize() != 0) 
   {
-    //player1's turn    
-    //display oponent's board
-    std::cout << YELLOW << "\nPlayerA's turn\n" << ENDCOLOUR;
-    grid2.renderGrid();
-
-    //ask shoot method. Manual/auto-fired
-    input = menuShoot();
-    if (input == "1") {      
-      manualShoot(coordInput, indVal, gridSize, indexVecPlayer2, bombedTilesGrid2, isNotQuit, grid2); 
-    }
-    //autofire
-    else 
-    {        
-      //add time delay
-      //add a time delay to improve game's pace.
-      usleep(2000000);
-      
-      autoFire(indexVecPlayer2, gridSize, coordInput, grid2, bombedTilesGrid2, isNotQuit);
-    }
+    //player1's turn   
+    playerLabel = 'A'; 
+    
+    playerShootTurn(grid2, indexVecPlayer2, bombedTilesGrid2, playerLabel, coordInput, indVal, gridSize, isNotQuit);
     
     //go in if user wants to keep playing and player2 has ships left
     if (isNotQuit && grid2.getFleet().getSize() != 0) {
@@ -84,22 +67,9 @@ void PlayState::enter()
       {
         //player2's turn         
         //display oponent's board
-        std::cout << YELLOW << "\nPlayerB's turn\n" << ENDCOLOUR;
-        grid1.renderGrid();
-
-        //ask shoot method. Manual/auto-fired
-        input = menuShoot();
-        if (input == "1") {
-            manualShoot(coordInput, indVal, gridSize, indexVecPlayer1, bombedTilesGrid1, isNotQuit, grid1); 
-        }
-        else
-        {
-          //add time delay
-          //add a time delay to improve game's pace.
-          usleep(2000000);
-          
-          autoFire(indexVecPlayer1, gridSize, coordInput, grid1, bombedTilesGrid1, isNotQuit);  
-        }
+        playerLabel = 'B'; 
+       
+        playerShootTurn(grid1, indexVecPlayer1, bombedTilesGrid1, playerLabel, coordInput, indVal, gridSize, isNotQuit);
       }    
     }
     if (!isNotQuit) 

@@ -12,6 +12,7 @@
 #include "../headerFiles/Ship.h"
 #include "../headerFiles/Utility.h"
 #include "../headerFiles/constants.h"
+#include "../headerFiles/Validation.h"
 
 void shipTextToPrint(int shipType, std::string shipTypeStr, std::string msg)
 {
@@ -114,7 +115,7 @@ void manuallySetFleet(Grid& grid)
       availableTiles_ = 0;
 
       //check if target index is in set(find is O(log n))
-      if (indexSet.find(indVal) != indexSet.end() && withinBounds(coordInput.row, coordInput.column, gridSize)){
+      if (indexSet.find(indVal) != indexSet.end() && validateBounds(coordInput.row, coordInput.column, gridSize)){
       availableTiles_++;
 
       //check number of tiles available in the set collection
