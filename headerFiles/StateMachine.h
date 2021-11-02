@@ -19,11 +19,12 @@ class StateMachine {
   protected:
     std::map<std::string, BaseState*> states_;
     BaseState* currentState = nullptr;
-    Grid* gridPlayer1_ = nullptr;
-    Grid* gridPlayer2_ = nullptr;
+    // Grid* gridPlayer1_ = nullptr;
+    // Grid* gridPlayer2_ = nullptr;
     std::vector<int> bombedTilesGrid1_;
     std::vector<int> bombedTilesGrid2_;
-    
+    Grid gridPlayer1_ ;
+    Grid gridPlayer2_ ;
     
     
   public:
@@ -39,12 +40,12 @@ class StateMachine {
     //getters
     Grid& getGridPlayer1()  
     {
-        return *gridPlayer1_;
+        return gridPlayer1_;
     }
 
     Grid& getGridPlayer2()  
     {
-        return *gridPlayer2_;
+        return gridPlayer2_;
     }
 
     std::vector<int>& getBombedTilesGrid1() {

@@ -14,7 +14,7 @@
 
 
 //Constructor
-StateMachine::StateMachine()
+StateMachine::StateMachine():gridPlayer1_(), gridPlayer2_()
 {
   states_.insert(std::make_pair("intro", new IntroState()));
   states_.insert(std::make_pair("setup", new SetupState()));
@@ -23,8 +23,8 @@ StateMachine::StateMachine()
   states_.insert(std::make_pair("gameover", new GameOverState()));
 
   currentState = states_.find("intro")->second; 
-  gridPlayer1_ = new Grid;
-  gridPlayer2_ = new Grid;
+  // gridPlayer1_ = new Grid;
+  // gridPlayer2_ = new Grid;
   // change("intro");
 }
 //Destructor
