@@ -8,4 +8,4 @@ void autoFire(std::vector<int>& indexVecPlayer, int gridSize, udtCoordInput coor
 
 void manualShoot(udtCoordInput coordInput, int indVal, int gridSize, std::vector<int>& indexVecPlayer, std::vector<int>& bombedTilesGrid, bool& isNotQuit, Grid& grid); 
 
-void playerShootTurn(Grid& grid, std::vector<int> indexVecPlayer, std::vector<int> bombedTilesGrid, char playerLabel, udtCoordInput coordInput, int indVal, int gridSize, bool& isNotQuit); 
+void playerShootTurn(Grid& grid, std::vector<int>& indexVecPlayer, std::vector<int>& bombedTilesGrid, char playerLabel, udtCoordInput coordInput, int indVal, int gridSize, bool& isNotQuit); 

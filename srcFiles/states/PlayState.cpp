@@ -26,7 +26,7 @@ void PlayState::enter()
   int totalTiles = pow(gridSize, 2);
 
   std::vector<int>& bombedTilesGrid1 = StateMachine::getInstance()->getBombedTilesGrid1();
-  std::vector<int>& bombedTilesGrid2 = StateMachine::getInstance()->getBombedTilesGrid1();
+  std::vector<int>& bombedTilesGrid2 = StateMachine::getInstance()->getBombedTilesGrid2();
   
   //create vector with values form 0 to GRID_SIZE (side's size), they will represent the location of the elements (tiles) in the grid
   std::vector<int> indexVecPlayer1 = vectorResourse(totalTiles);   

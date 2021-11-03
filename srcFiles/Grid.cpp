@@ -147,8 +147,10 @@ void Grid::resetBombedTiles(std::vector<int>& bombedTilesGrid)
    if (grid[x][y].getIcon() == '~' && grid[x][y].getTileState() == 2)
    {
      resetTile(x, y, tmpTile);
-   }
+   }   
  }
+ //empty the vector holding the bombed tiles
+ bombedTilesGrid.clear();
 }
 
 void Grid::resetTiles(int shipLen, char orientation, int x, int y, std::shared_ptr<Tile> tmpTile) 

@@ -128,7 +128,7 @@ void manualShoot(udtCoordInput coordInput, int indVal, int gridSize, std::vector
   } 
 }
 
-void playerShootTurn(Grid& grid, std::vector<int> indexVecPlayer, std::vector<int> bombedTilesGrid, char playerLabel, udtCoordInput coordInput, int indVal, int gridSize, bool& isNotQuit) 
+void playerShootTurn(Grid& grid, std::vector<int>& indexVecPlayer, std::vector<int>& bombedTilesGrid, char playerLabel, udtCoordInput coordInput, int indVal, int gridSize, bool& isNotQuit) 
 {
   std::string input;
   //display oponent's board
