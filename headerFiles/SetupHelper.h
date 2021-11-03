@@ -5,6 +5,7 @@
 
 #include "Grid.h"
 
+void setupPlacingShip(int shipLen, udtCoordInput& coordInput, int randomIndex, int gridSize, std::vector<int>& unplacedShipsVect, int& placedShip, Grid& grid, std::set<int>& indexSet);
 void manuallySetFleet(Grid& grid);
 void getUnplacedShips(Grid& grid, int shipCount, std::vector<int>& unplacedShipsVect, int gridSize, std::set<int>& indexSet);
 void automaticallySetFleet(Grid& grid);
