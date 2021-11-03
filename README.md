@@ -1,6 +1,6 @@
 # 1. Challenge Outline  
 ### a. Summary and review of the problem, overall proposed solution. 
-The [proposed solution](https://replit.com/@AstridCaballero/AdaBattleship#Documentation/designOverAll.draw) is to implement the **State pattern** to wrap the game. 
+The [proposed solution](https://replit.com/@AstridCaballero/AdaBattleship#Documentation/designOverAll.draw) is to implement the **State pattern** to wrap the game. (In case the replit link can't be accessed then find the proposed solution in [GitHub](Documentation/designOverAll.pdf)).
 
 This pattern allows different behaviours depending on the state it is in at a given moment. for example, during the *'setup state'* the *'enter()'* method is all about setting the fleets of both players but when it transitions to *'play state'* the *'enter()'* method is all about shooting. Similarly for the *'exit()'* method, if the game is in the *'setup state'* then to exit it only needs to reset the Fleets; if the game is in the 'play state' then *'exit()'* needs to reset the fleet and also reset the tiles that were bombed.
 
