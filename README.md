@@ -327,10 +327,10 @@ void SetupState::enter()
   }
 }
 ```
-There are while loops anymore! a strategy I found online[^2] is to decompose conditional blocks into separate functions. Another strategy, is to replace conditions with guard clauses instead. Applying this strategies helped to reduce the code, made it more readable and provide functions that can be reuse by other functions.
+There are not while loops anymore! a strategy I found online[^2] is to decompose conditional blocks into separate functions. Another strategy, is to replace conditions with guard clauses instead. Applying this strategies helped to reduce the code, made it more readable and provide functions that can be reuse by other functions.
 
 ### b. Implementation and effective use of ‘advanced’ programming principles (with examples). 
-As I already mentioned, I implemented the State and the Singleton pattern in the design of the game (the design can be found [here](https://replit.com/@AstridCaballero/AdaBattleship#Documentation/designOverAll.draw)).
+As I already mentioned, I implemented the State and Singleton pattern in the design of the game (the design can be found [here](https://replit.com/@AstridCaballero/AdaBattleship#Documentation/designOverAll.draw)).
 
 Implementing the State pattern also was an opportunity to use **inheritance** and **polymorphism**.
 
@@ -482,9 +482,9 @@ void Grid::resetBombedTiles(std::vector<int>& bombedTilesGrid)
 
 I would have liked to be able to check for memory leaks and to get completely rid of raw pointers.
 
-I also, wanted to implement a strategy for the computer to target ships. I designed the epic but I lacked the time to implemented and test it properly. Because of this I was not able to test the 'GameOver' state. However, because I was able to implement the 'two player' version of the game I was able to test the second grid which is the same one that the computer uses. 
+I also, wanted to implement a strategy for the computer to target ships. I designed the epic but I lacked the time to implement and test it properly. Because of this, I was not able to test the 'GameOver' state. However, because I was able to implement the 'two player' version of the game I was able to test the second grid which is the same one that the computer uses. 
 
-A pleasant sorprise when running into bugs was to realise that I was becoming more in tune with my code. I was able to deduce where the issues arose :nerd_face:, which made debugging faster.
+A pleasant surprise when running into bugs was to realise that I was becoming more in tune with my code. I was able to deduce where the issues arose :nerd_face:, which made debugging faster.
 
 I had a lot of fun implementing the State pattern, it was challenging and rewarding. I am looking forward to learn new patterns as they not only provide a strong design but also it is very interesting to see such creative ways of solving problems and learn to identify them.
 
