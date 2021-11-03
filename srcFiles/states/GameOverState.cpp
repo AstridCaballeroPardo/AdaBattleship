@@ -47,7 +47,8 @@ void GameOverState::update()
 }
 void GameOverState::render()
 {  
-  std::cout << RED << "\n\nGame over :(\n\n" << ENDCOLOUR;
+  std::cout << RED << "\n\nGame over :( \n\n" << ENDCOLOUR;
+  std::cout << "\n\nyou will do better next time ;)\n\n";
   std::string input = menuEndGame();
   if (input == "1") {
     //move to intro state
