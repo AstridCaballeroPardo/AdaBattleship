@@ -131,112 +131,358 @@ Once I had the **State and singleton patterns** the game had a good flow and the
 Below is an example of some of the arrow code I created :scream_cat:
 
 ```
-bool Grid::placeShip(char letter, int y, int shipType, char orientation, int index)
+void SetupState::enter()
 {
-  int countAvailableTiles = 0;
-  int len = 0;
-  int x = 0;
-  bool isShipInFleet_ = false;
-  int eT = (int)tileState::emptyTile;
-  // int sT = (int)TileState::shipTile;
-  // int bT = (int)TileState::bombedTile;
+  //ask type of game to play
+  std::string input;
+  std::string msg;
+  
+  msg = "Select from the menu: \n1. One player vs computer game\n2. Two player game\n3. Quit\n";
 
-  //check if fleet already has placed the inputted shiptype
-  //call fleet
-  std::vector<Ship>& ships = gridFleet.getFleetVector(); //Getting the FleetVector by reference.
-  isShipInFleet_ = isShipInFleet(ships, shipType); 
+  input = userInput(msg);
 
-  // place ship
-  if (!isShipInFleet_) 
-  {  
-    len = calcShipLength(shipType);
-    
-    // x is the scaled value of the letter
-    x = letterToInt(letter);
-    
-    //update grid    
-    //find unassigned ship
-    for (int i = 0, count = 0; i < gridFleet.getSize() && count < 1; i++) 
-    {
-      if(ships[i].getShipType() == 0)
-      {
-        // count is used to make sure only one ship gets updated instead of all the ships of the vector
-        count++;
-        //update empty ship
-        ships[i].setShip(shipType, orientation, index);
-        for (int n = 0; n < len; n++) 
+  if (input == "1") 
+  {
+    StateMachine::getInstance()->getGridPlayer1()->setPlayerType("human"); 
+    StateMachine::getInstance()->getGridPlayer2()->setPlayerType("computer");
+
+    while(true) {
+      std::cout << YELLOW << "\nPlayerA set your fleet: \n" << ENDCOLOUR; 
+      StateMachine::getInstance()->getGridPlayer1()->renderGrid();     
+      
+      while (true) {
+        //if fleet is completed
+        if (isFleetCompleted(StateMachine::getInstance()->getGridPlayer1())) 
         {
-          //update horizontally to the right 
-          if (orientation == 'H') 
+          //ask what to to next
+          input = menuContinue();
+          if (input == "1") 
           {
-            //update tile
-            grid[x][y + n].setX(letter) ; 
-            //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)
-            grid[x][y + n].setY(y + n + 1);
-            grid[x][y + n].setTileState((int)tileState::shipTile);
-            grid[x][y + n].setIcon('^');
-            grid[x][y + n].setShipId(ships[i].getShipId());
-          }  
-          //update vertically to the bottom
-          else if(orientation == 'V')
-          {
-            //update tile
-            grid[x + n][y].setX(letter + n) ;  
-            //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)     
-            grid[x + n][y].setY(y + 1);
-            grid[x + n][y].setTileState((int)tileState::shipTile);
-            grid[x + n][y].setIcon('^');
-            grid[x + n][y].setShipId(ships[i].getShipId());
+            break;
           }
+          else if (input == "2") 
+          {
+            StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
+          }
+          else 
+          {
+            exit();
+          }
+          
+        }
+
+        //if fleet is not completed
+        input = menuSetFleet();
+        if (input == "1") {
+          manuallySetFleet(StateMachine::getInstance()->getGridPlayer1()); 
+        }
+        else if (input == "2") 
+        {
+          automaticallySetFleet(StateMachine::getInstance()->getGridPlayer1());
+        }
+        else if (input == "3") 
+        {
+          StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
+        }
+        else {
+          exit();
         }
       }
+      break;
     }
-    return true;    
-  } else 
-  {
-    std::cout << "\033[1;31mShip already placed, try again.\033[0m\n\n";
-  }
-  return false;
-}
-```
-Function after refactoring:
-```
-bool Grid::placeShip(char letter, int y, int shipType, char orientation, int index)
-{
-  int countAvailableTiles = 0;
-  int shipLen = 0;
-  int x = 0;
-  bool isShipInFleet_ = false;
-  int eT = (int)tileState::emptyTile; 
-  std::vector<Ship>& ships = gridFleet.getFleetVector(); 
-  isShipInFleet_ = gridFleet.isShipInFleet(shipType); 
-
-  if (isShipInFleet_) 
-  {
-    std::cout << "\033[1;31mShip already placed, try again.\033[0m\n\n";
-    return false;
-  }
-  shipLen = calcShipLength(shipType);  
-  x = letterToInt(letter);
- 
-  for (int shipIndx = 0, count = 0; shipIndx < gridFleet.getSize() && count < 1; shipIndx++) 
-  {
-    if(!(ships[shipIndx].getShipType() == 0)) {
-      continue;
-    } 
-    count++;
-    
-    ships[shipIndx].setShip(shipType, orientation, index);
       
-    setShipTile(orientation, shipLen, letter, x, y, ships, shipIndx); 
+    std::cout << GREEN << "\nComputer placing Fleet...\n\n" << ENDCOLOUR;
+    //add a time delay to improve game's pace.
+    usleep(2000000);
+    automaticallySetFleet(StateMachine::getInstance()->getGridPlayer2());        
+    
+  }  
+  else if(input == "2") 
+  {
+    StateMachine::getInstance()->getGridPlayer1()->setPlayerType("human"); 
+    StateMachine::getInstance()->getGridPlayer2()->setPlayerType("human");
+
+      while(true) {
+      std::cout << YELLOW << "\nPlayerA set your fleet: \n" << ENDCOLOUR;
+      manuallySetFleet(StateMachine::getInstance()->getGridPlayer1());
+
+      std::string inputMenuReset = menuContinue();
+      //reset
+      if (inputMenuReset == "2")
+      {    
+      StateMachine::getInstance()->getGridPlayer1()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer1()->getGrid());
+      }
+      else if(inputMenuReset == "3")
+      {
+        //auto-place all/remaining ships
+        automaticallySetFleet(StateMachine::getInstance()->getGridPlayer1());
+      }
+      else if(inputMenuReset == "0")
+      {
+        exit();
+      }
+      else 
+      {
+        break;
+      }
+    }
+
+      while(true) {
+      std::cout << YELLOW << "\nPlayerB set your fleet: \n" << ENDCOLOUR;
+      manuallySetFleet(StateMachine::getInstance()->getGridPlayer2());
+
+      std::string inputMenuReset = menuContinue();
+      //reset
+      if (inputMenuReset == "2")
+      {    
+      StateMachine::getInstance()->getGridPlayer2()->getFleet().resetFleet(StateMachine::getInstance()->getGridPlayer2()->getGrid());
+      }
+      else if(inputMenuReset == "3")
+      {
+        //auto-place all/remaining ships
+        automaticallySetFleet(StateMachine::getInstance()->getGridPlayer2());
+      }
+      else if(inputMenuReset == "0")
+      {
+        exit();
+      }
+      else 
+      {
+        break;
+      }
+    }       
   }
-  return true;
+  else
+  {
+    exit();
+  }
+  
+  render();
 }
 ```
+Function after refactoring :smiley_cat:
+```
+void SetupState::enter()
+{
+  char playerLabel = ' ';
+  bool isNotQuit = true;
+  
+  //ask type of game to play
+  std::string input;
+
+  input = menuGameType();
+
+  Grid& grid1 = StateMachine::getInstance()->getGridPlayer1();
+  Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();
+  
+  //set type of players human/computer
+  setPlayersType(grid1, grid2, input);
+  
+  //player vs computer
+  if (input == "1") 
+  {
+    playerLabel ='A';
+    playerTurnLoop(grid1, isNotQuit, playerLabel);
+    
+    if (!isNotQuit) 
+    {
+      exit();
+    }  
+    //next player
+    else 
+    {
+      std::cout << GREEN << "\nComputer placing Fleet...\n\n" << ENDCOLOUR;
+      //add a time delay to improve game's pace.
+      usleep(2000000);
+      automaticallySetFleet(grid2);  
+      render ();
+    }  
+  }  
+  else if(input == "2") 
+  {
+    playerLabel ='A';
+    playerTurnLoop(grid1, isNotQuit, playerLabel);
+    
+    if (!isNotQuit) 
+    {
+      exit();
+    }  
+    //next player
+    else 
+    {
+      playerLabel ='B';
+      playerTurnLoop(grid2, isNotQuit, playerLabel);
+
+      if (!isNotQuit) 
+      {
+        exit();
+      }
+      else 
+      {
+        render ();
+      } 
+    }   
+  }
+}
+```
+There are while loops anymore! a strategy I found online[^2] is to decompose conditional blocks into separate functions. Another strategy, is to replace conditions with guard clauses instead. Applying this strategies helped to reduce the code, made it more readable and provide functions that can be reuse by other functions.
 
 ### b. Implementation and effective use of ‘advanced’ programming principles (with examples). 
+As I already mentioned, I implemented the State and the Singleton pattern in the design of the game (the design can be found [here](https://replit.com/@AstridCaballero/AdaBattleship#Documentation/designOverAll.draw)).
+
+Implementing the State pattern also was an opportunity to use **inheritance** and **polymorphism**.
+
+For example:
+
+#### Base class
+```
+//abstract class that will be the base for the 'states' of the game. 'virtual' is what allows polymorphism
+class BaseState {
+  public:
+    //Constructor
+    BaseState();
+    //Destructor
+    virtual ~BaseState();
+
+    //member methods
+    virtual void enter();
+    virtual void enter(int params);
+    virtual void exit();
+    virtual void exit(std::vector<int>& bombedTilesGrid1, std::vector<int>& bombedTilesGrid2);
+    virtual void update();
+    virtual void render();
+};
+```
+#### Derived class:
+```
+class PlayState: public BaseState {
+  public:
+    //Constructor
+    PlayState();
+    //Destructor
+    ~PlayState();
+
+    //member methods
+    void enter();
+    void exit(std::vector<int>& bombedTilesGrid1, std::vector<int>& bombedTilesGrid2);
+    void update();
+    void render();  
+};
+```
+I also was able to use function overloading. The base class has two methods called *'enter()'* and two methods called *'exit()'*.
+
+
 ### c. Features showcase and embedded innovations (with examples) - opportunity to ‘highlight’ best bits. d. Improved algorithms – research, design, implementation, and tested confirmation (with examples). e. Reflective review, opportunities to improve and continued professional development.
 
+- Game flows nicely from Introduction to setting up the Fleets to playing,  in particular when the player quits. If the player is setting the Fleet or is playing and decides to quit, the game takes the user to the intro state where the user then can fully exit the game but still has the opportunity to change her/his mind and start a new game.
 
+Example of the code that allows this flow:
+```
+void SetupState::exit()
+{
+  Grid& grid1 = StateMachine::getInstance()->getGridPlayer1();
+  Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();
+  
+  // transition back to intro
+  grid1.resetFleet();  
+  grid2.resetFleet();  
+  StateMachine::getInstance()->change("intro"); 
+}
 
-[^1]: Head First Design Patterns, second Edition page 406. 
+void SetupState::update()
+{
+  //transition to next state
+  StateMachine::getInstance()->change("play"); 
+}
+```
+
+- I feel the game covers a good amount of input validation and allows the users to try again without breaking the game.
+
+Example of validation functions:
+```
+bool validateInputFormat(std::string str);
+
+bool validateInputShootFormat(std::string str);
+
+bool validateInputMenu(std::string str, std::string regPatt);
+
+bool validateBounds(char row, int column, int gridSize);
+
+bool isManualTargetValid(std::vector<int> vectorResourse, int val);
+```
+
+- When autoplacing the ships (all/remaining), the game generates a random target and a random orienattion. I like that if the target is valid but the orientation doesn't have available tiles then it tries using the other orientation, before giving up and trying a new random target.
+
+```
+void automaticallySetFleet(Grid& grid) 
+{
+  ....
+
+    //get random index based on set size
+    randomIndex = randomVal(0, totalTiles - 1);    
+
+    //check random index is in set(find is O(log n))
+    if (!(indexSet.find(randomIndex) != indexSet.end())) 
+    {
+      continue;
+    }
+    // if (indexSet.find(randomIndex) != indexSet.end()){
+    availableTiles_++;
+
+    //get random orientation 
+    coordInput.orientation = orientationIntToChar(randomVal( 1, 2));
+
+    //check number of tiles available
+    availableTiles_ += availableTiles(coordInput.orientation, randomIndex, gridSize, indexSet, shipLen);
+    if (!(availableTiles_ == shipLen)) 
+    {
+      //try the other orientation
+      availableTiles_ = 1;        
+      coordInput.orientation = coordInput.orientation == 'H' ? 'V':'H';
+
+      //check number of tiles available
+      availableTiles_ += availableTiles(coordInput.orientation, randomIndex, gridSize, indexSet, shipLen);
+    }    
+    if (!(availableTiles_ == shipLen)) 
+    {
+      continue;
+    }
+    //setup and place the ship
+    setupPlacingShip(shipLen, coordInput, randomIndex, gridSize, unplacedShipsVect, placedShip, grid, indexSet);        
+  }  
+} 
+```
+
+- Resetting the Tiles was also an interesting one. There are two reset problems depending where you are in the game. If the player is setting the Fleet and decides to quit or reset, the game resets the only the ships. But if the player is in the play state and the user decides to quit then the game resets the ships but it also resets the tiles that were bombed but didn't belong to a Fleet. For that the game keeps track of the shooted tiles, whit this process I am avoiding to check every tile of the grid.
+
+Below is the function that rests tiles that were bombed but don't below to a ship.
+
+```
+void Grid::resetBombedTiles(std::vector<int>& bombedTilesGrid)
+{
+ std::shared_ptr<Tile> tmpTile = std::make_shared<Tile>();
+ for (int i = 0; i < bombedTilesGrid.size(); i++)
+ {
+   //find tile and reset
+   //define shipLen, orientation, x and y
+   int x =(bombedTilesGrid[i] / size_);
+   int y = (bombedTilesGrid[i] % size_);
+   //only reset the bombed tiles that didn't belong to ships. There is another reset function that resets the ships wheter they were bombed or not.
+   if (grid[x][y].getIcon() == '~' && grid[x][y].getTileState() == 2)
+   {
+     resetTile(x, y, tmpTile);
+   }   
+ }
+ //empty the vector holding the bombed tiles
+ bombedTilesGrid.clear();
+}
+```
+
+I would have liked to be able to check for memory leaks and to get completely rid of raw pointers.
+
+I also, wanted to implement a strategy for the computer to target ships. I designed the epic but I lacked the time to implemented and test it properly. Because of this I was not able to test the 'GameOver' state. However, because I was able to implement the 'two player' version of the game I was able to test the second grid which is the same one that the computer uses. 
+
+I had a lot of fun implementing the State pattern, it was challenging and rewarding. I am looking forward to learn new patterns as they not only provide a strong design but also it is very interesting to see such creative ways of solving problems and learn to identify them.
+
+[^1]: Freeman, E., Robson, E., Sierra, K., & Bates, B. (2020). Head First design patterns. Sebastopol, CA: O'Reilly.
+[^2]: https://blog.codinghorror.com/flattening-arrow-code/

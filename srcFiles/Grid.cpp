@@ -143,7 +143,7 @@ void Grid::resetBombedTiles(std::vector<int>& bombedTilesGrid)
    //define shipLen, orientation, x and y
    int x =(bombedTilesGrid[i] / size_);
    int y = (bombedTilesGrid[i] % size_);
-   //only reset the bombed tiles that didn't belong to ships. There is another reset function that reset the ships wheter they were bombed or not.
+   //only reset the bombed tiles that didn't belong to ships. There is another reset function that resets the ships wheter they were bombed or not.
    if (grid[x][y].getIcon() == '~' && grid[x][y].getTileState() == 2)
    {
      resetTile(x, y, tmpTile);

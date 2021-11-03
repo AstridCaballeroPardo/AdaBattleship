@@ -49,9 +49,6 @@ void PlayState::enter()
     if (isNotQuit && grid2.getFleet().getSize() != 0) {
       if (grid2.getPlayerType() == "computer")
       {
-        //computer's turn
-        // while(true)
-        // {  
           //display oponent's board
           std::cout << YELLOW << "\nComputer's turn...\n" << ENDCOLOUR;
           grid1.renderGrid();
@@ -60,8 +57,6 @@ void PlayState::enter()
           usleep(2000000);
            
           autoFire(indexVecPlayer1, gridSize, coordInput, grid1, bombedTilesGrid1, isNotQuit); 
-        //   break;        
-        // }              
       }
       else 
       {
