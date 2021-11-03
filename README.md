@@ -128,7 +128,111 @@ Once I had the **State and singleton patterns** the game had a good flow and the
 
 # 3. Evaluation 
 ### a. Analysis with embedded examples of key code refactoring, reuse, smells. 
+Below is an example of some of the arrow code I created :scream_cat:
 
+```
+bool Grid::placeShip(char letter, int y, int shipType, char orientation, int index)
+{
+  int countAvailableTiles = 0;
+  int len = 0;
+  int x = 0;
+  bool isShipInFleet_ = false;
+  int eT = (int)tileState::emptyTile;
+  // int sT = (int)TileState::shipTile;
+  // int bT = (int)TileState::bombedTile;
+
+  //check if fleet already has placed the inputted shiptype
+  //call fleet
+  std::vector<Ship>& ships = gridFleet.getFleetVector(); //Getting the FleetVector by reference.
+  isShipInFleet_ = isShipInFleet(ships, shipType); 
+
+  // place ship
+  if (!isShipInFleet_) 
+  {  
+    len = calcShipLength(shipType);
+    
+    // x is the scaled value of the letter
+    x = letterToInt(letter);
+    
+    //update grid    
+    //find unassigned ship
+    for (int i = 0, count = 0; i < gridFleet.getSize() && count < 1; i++) 
+    {
+      if(ships[i].getShipType() == 0)
+      {
+        // count is used to make sure only one ship gets updated instead of all the ships of the vector
+        count++;
+        //update empty ship
+        ships[i].setShip(shipType, orientation, index);
+        for (int n = 0; n < len; n++) 
+        {
+          //update horizontally to the right 
+          if (orientation == 'H') 
+          {
+            //update tile
+            grid[x][y + n].setX(letter) ; 
+            //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)
+            grid[x][y + n].setY(y + n + 1);
+            grid[x][y + n].setTileState((int)tileState::shipTile);
+            grid[x][y + n].setIcon('^');
+            grid[x][y + n].setShipId(ships[i].getShipId());
+          }  
+          //update vertically to the bottom
+          else if(orientation == 'V')
+          {
+            //update tile
+            grid[x + n][y].setX(letter + n) ;  
+            //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)     
+            grid[x + n][y].setY(y + 1);
+            grid[x + n][y].setTileState((int)tileState::shipTile);
+            grid[x + n][y].setIcon('^');
+            grid[x + n][y].setShipId(ships[i].getShipId());
+          }
+        }
+      }
+    }
+    return true;    
+  } else 
+  {
+    std::cout << "\033[1;31mShip already placed, try again.\033[0m\n\n";
+  }
+  return false;
+}
+```
+Function after refactoring:
+```
+bool Grid::placeShip(char letter, int y, int shipType, char orientation, int index)
+{
+  int countAvailableTiles = 0;
+  int shipLen = 0;
+  int x = 0;
+  bool isShipInFleet_ = false;
+  int eT = (int)tileState::emptyTile; 
+  std::vector<Ship>& ships = gridFleet.getFleetVector(); 
+  isShipInFleet_ = gridFleet.isShipInFleet(shipType); 
+
+  if (isShipInFleet_) 
+  {
+    std::cout << "\033[1;31mShip already placed, try again.\033[0m\n\n";
+    return false;
+  }
+  shipLen = calcShipLength(shipType);  
+  x = letterToInt(letter);
+ 
+  for (int shipIndx = 0, count = 0; shipIndx < gridFleet.getSize() && count < 1; shipIndx++) 
+  {
+    if(!(ships[shipIndx].getShipType() == 0)) {
+      continue;
+    } 
+    count++;
+    
+    ships[shipIndx].setShip(shipType, orientation, index);
+      
+    setShipTile(orientation, shipLen, letter, x, y, ships, shipIndx); 
+  }
+  return true;
+}
+```
 
 ### b. Implementation and effective use of ‘advanced’ programming principles (with examples). 
 ### c. Features showcase and embedded innovations (with examples) - opportunity to ‘highlight’ best bits. d. Improved algorithms – research, design, implementation, and tested confirmation (with examples). e. Reflective review, opportunities to improve and continued professional development.
