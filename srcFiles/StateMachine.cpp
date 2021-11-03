@@ -21,17 +21,12 @@ StateMachine::StateMachine():gridPlayer1_(), gridPlayer2_()
   states_.insert(std::make_pair("victory", new VictoryState()));
   states_.insert(std::make_pair("gameover", new GameOverState()));
 
-  currentState = states_.find("intro")->second; 
-  // gridPlayer1_ = new Grid;
-  // gridPlayer2_ = new Grid;
-  // change("intro");
+  currentState = states_.find("intro")->second;   
 }
 //Destructor
 StateMachine::~StateMachine()
 {
-  delete currentState;
-  // delete gridPlayer1_;
-  // delete gridPlayer2_;
+  delete currentState; 
 }
 
 StateMachine* StateMachine::inst_= nullptr;

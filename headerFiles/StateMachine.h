@@ -16,9 +16,7 @@ class StateMachine {
   
   protected:
     std::map<std::string, BaseState*> states_;
-    BaseState* currentState = nullptr;
-    // Grid* gridPlayer1_ = nullptr;
-    // Grid* gridPlayer2_ = nullptr;
+    BaseState* currentState = nullptr;   
     std::vector<int> bombedTilesGrid1_;
     std::vector<int> bombedTilesGrid2_;
     Grid gridPlayer1_;
