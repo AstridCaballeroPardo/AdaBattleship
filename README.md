@@ -1,15 +1,28 @@
 # 1. Challenge Outline  
 ### a. Summary and review of the problem, overall proposed solution. 
-The [proposed solution](Documentation/designOverAll.draw) is to implement the State pattern to wrap up the game. 
+The [proposed solution](https://replit.com/@AstridCaballero/AdaBattleship#Documentation/designOverAll.draw) is to implement the **State pattern** to wrap the game. 
 
-This pattern allows to have different behaviours depending on the state it is at a given moment. for example, during the 'setup state' the 'enter()' method is all about setting the fleets of both players but when we transition to 'play state' the 'enter()' method is all about shooting. Similarly for the 'exit()' method, if the game is in the 'setup state' then to exit it only needs to reset the Fleets; if the game is in the 'play state' then 'exit()' needs to reset the fleet and also reset the tiles that were bombed.
+This pattern allows different behaviours depending on the state it is in at a given moment. for example, during the *'setup state'* the *'enter()'* method is all about setting the fleets of both players but when it transitions to *'play state'* the *'enter()'* method is all about shooting. Similarly for the *'exit()'* method, if the game is in the *'setup state'* then to exit it only needs to reset the Fleets; if the game is in the 'play state' then *'exit()'* needs to reset the fleet and also reset the tiles that were bombed.
 
-The state pattern provides a good separation of concerns in terms of what we want to do at certain state of the game. It also, helps to loop through the game efforlestly, for example when a player decides to quit the game, the user is taken to the 'intro state' where she/he can either start a new game or exit the game completly.
+The state pattern provides a good separation of concerns in terms of what is required in a certain phase of the game. It also, helps to loop through the game efforlestly, for example when a player decides to quit the game, the user is taken to the *'intro state'* where she/he can either start a new game or exit the game completely.
 
-In order to access the game's grids (one grid/board per player) the design also implements the Singleton pattern. The grids are instanciated inside the 'state machine', so making the 'state machine' a Singleton allows global access to the grids. 
+In order to access the game's grids (one grid/board per player) the design also implements the **Singleton pattern**. The grids are instanciated inside the *'state machine'*, so making the *'state machine'* a **Singleton** allows global access to the grids. 
 
 ### b. UML style diagram illustrating initial overall solution (linked to 1a) 
+see Diagram [here](https://replit.com/@AstridCaballero/AdaBattleship#Documentation/designOverAll.draw)
 ### c. Initial working plan, overall approach, development strategy and approach to quality (linked to 1a,  1b). 
+The process started by deciding which classes to implement:
+ * Grid
+ * Fleet
+ * Ship
+ * Tile
+ 
+ The design of how they relate to each other are [here](https://replit.com/@AstridCaballero/AdaBattleship#Documentation/designOverAll.draw), under the subtitle **'Details!'**
+
+ **Testing** was performed during the implementation of the classes that represent the objects of the game, see examples [here](https://replit.com/@AstridCaballero/AdaBattleship#Documentation/testing.md).
+
+
+ 
 ### d. Analysis and decomposition of the overall problem into key ‘epic’ style tasks (linked to 1b, 1c). e. Initial object-oriented design ideas and planned phased breakdown into smaller tasks (linked to 1d). 
 
 
