@@ -31,9 +31,9 @@ int randomVal( int min, int max);
 
 char orientationIntToChar(int orientation);
 
-int availableTiles(char orientation, int randomNum, int gridSize, std::set<int>& index, int len);
+int availableTiles(char orientation, int randomNum, int gridSize, std::set<int>& index, int shipLen);
 
-void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>& index, int len);
+void removeValueSet(char orientation, int randomNum, int gridSize, std::set<int>& index, int shipLen);
 
 void removeTarjetVector(int randomNum, std::vector<int>& indexVec);
 

@@ -41,6 +41,7 @@ class Grid {
     bool placeShip(char letter, int number, int shipType, char orientation, int index);
     void resetTile(int x, int y, std::shared_ptr<Tile> tmpTile);
     void resetBombedTiles(std::vector<int>& bombedTilesGrid); 
-    void resetTiles(int len, char orientation, int x, int y, std::shared_ptr<Tile> tmpTile);
+    void resetTiles(int shipLen, char orientation, int x, int y, std::shared_ptr<Tile> tmpTile);
     void resetFleet(); 
+    void setShipTile(char orientation,int shipLen, char letter, int x, int y, std::vector<Ship>& ships, int shipIndx);
 };

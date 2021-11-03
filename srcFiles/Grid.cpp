@@ -80,7 +80,7 @@ void Grid::renderGrid()
 bool Grid::placeShip(char letter, int y, int shipType, char orientation, int index)
 {
   int countAvailableTiles = 0;
-  int len = 0;
+  int shipLen = 0;
   int x = 0;
   bool isShipInFleet_ = false;
   int eT = (int)tileState::emptyTile;  
@@ -90,57 +90,32 @@ bool Grid::placeShip(char letter, int y, int shipType, char orientation, int ind
   std::vector<Ship>& ships = gridFleet.getFleetVector(); //Getting the FleetVector by reference.
   isShipInFleet_ = gridFleet.isShipInFleet(shipType); 
 
-  // place ship
-  if (!isShipInFleet_) 
-  {  
-    len = calcShipLength(shipType);
-    
-    // x is the scaled value of the letter
-    x = letterToInt(letter);
-    
-    //update grid    
-    //find unassigned ship
-    for (int i = 0, count = 0; i < gridFleet.getSize() && count < 1; i++) 
-    {
-      if(ships[i].getShipType() == 0)
-      {
-        // count is used to make sure only one ship gets updated instead of all the ships of the vector
-        count++;
-        //update empty ship
-        ships[i].setShip(shipType, orientation, index);
-        for (int n = 0; n < len; n++) 
-        {
-          //update horizontally to the right 
-          if (orientation == 'H') 
-          {
-            //update tile
-            grid[x][y + n].setX(letter) ; 
-            //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)
-            grid[x][y + n].setY(y + n + 1);
-            grid[x][y + n].setTileState((int)tileState::shipTile);
-            grid[x][y + n].setIcon('^');
-            grid[x][y + n].setShipId(ships[i].getShipId());
-          }  
-          //update vertically to the bottom
-          else if(orientation == 'V')
-          {
-            //update tile
-            grid[x + n][y].setX(letter + n) ;  
-            //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)     
-            grid[x + n][y].setY(y + 1);
-            grid[x + n][y].setTileState((int)tileState::shipTile);
-            grid[x + n][y].setIcon('^');
-            grid[x + n][y].setShipId(ships[i].getShipId());
-          }
-        }
-      }
-    }
-    return true;    
-  } else 
+  if (isShipInFleet_) 
   {
     std::cout << "\033[1;31mShip already placed, try again.\033[0m\n\n";
+    return false;
   }
-  return false;
+
+  shipLen = calcShipLength(shipType);
+  
+  // x is the scaled value of the letter
+  x = letterToInt(letter);
+    
+  //update grid    
+  //find unassigned ship
+  for (int shipIndx = 0, count = 0; shipIndx < gridFleet.getSize() && count < 1; shipIndx++) 
+  {
+    if(!(ships[shipIndx].getShipType() == 0)) {
+      continue;
+    }      
+    // count is used to make sure only one ship gets updated instead of all the ships of the vector
+    count++;
+    //update empty ship
+    ships[shipIndx].setShip(shipType, orientation, index);
+    //update tiles in ship   
+    setShipTile(orientation, shipLen, letter, x, y, ships, shipIndx); 
+  }
+  return true;
 }
 
 
@@ -165,7 +140,7 @@ void Grid::resetBombedTiles(std::vector<int>& bombedTilesGrid)
  for (int i = 0; i < bombedTilesGrid.size(); i++)
  {
    //find tile and reset
-   //define len, orientation, x and y
+   //define shipLen, orientation, x and y
    int x =(bombedTilesGrid[i] / size_);
    int y = (bombedTilesGrid[i] % size_);
    //only reset the bombed tiles that didn't belong to ships. There is another reset function that reset the ships wheter they were bombed or not.
@@ -176,9 +151,9 @@ void Grid::resetBombedTiles(std::vector<int>& bombedTilesGrid)
  }
 }
 
-void Grid::resetTiles(int len, char orientation, int x, int y, std::shared_ptr<Tile> tmpTile) 
+void Grid::resetTiles(int shipLen, char orientation, int x, int y, std::shared_ptr<Tile> tmpTile) 
 {
-  for (int n = 0; n < len; n++) 
+  for (int n = 0; n < shipLen; n++) 
         {
           //reset horizontally to the right 
           if (orientation == 'H') 
@@ -216,7 +191,7 @@ void Grid::resetFleet()
          //reset tiles of placed ship
         int shipType = fleetV[i].getShipType();
         char orientation = fleetV[i].getOrientation(); 
-        int len = calcShipLength(shipType);        
+        int shipLen = calcShipLength(shipType);        
 
         //get Tiles
         int gridSize= grid.size();        
@@ -225,13 +200,42 @@ void Grid::resetFleet()
         //new values
         std::shared_ptr<Tile> tmpTile = std::make_shared<Tile>();        
         
-        resetTiles(len, orientation, letterToInt(coordInput.row), coordInput.column, tmpTile);
+        resetTiles(shipLen, orientation, letterToInt(coordInput.row), coordInput.column, tmpTile);
       }
       //reset ship
       fleetV[i].setShip(0, 0, -1);      
     }
     //reset Fleet size
     getFleet().setSize(FLEET_SIZE);
+}
+
+void Grid::setShipTile(char orientation,int shipLen, char letter, int x, int y, std::vector<Ship>& ships, int shipIndx)
+{
+for (int n = 0; n < shipLen; n++) 
+  {
+    //update horizontally to the right 
+    if (orientation == 'H') 
+    {
+      //update tile
+      grid[x][y + n].setX(letter) ; 
+      //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)
+      grid[x][y + n].setY(y + n + 1);
+      grid[x][y + n].setTileState((int)tileState::shipTile);
+      grid[x][y + n].setIcon('^');
+      grid[x][y + n].setShipId(ships[shipIndx].getShipId());
+    }  
+    //update vertically to the bottom
+    else if(orientation == 'V')
+    {
+      //update tile
+      grid[x + n][y].setX(letter + n) ;  
+      //to set y, add 1 to 'y' because y has a zero based value (0 to (GRID_SIZE - 1)) but it needs to be one based value (1 to GRID_SIZE)     
+      grid[x + n][y].setY(y + 1);
+      grid[x + n][y].setTileState((int)tileState::shipTile);
+      grid[x + n][y].setIcon('^');
+      grid[x + n][y].setShipId(ships[shipIndx].getShipId());
+    }
+  } 
 }
 
 
