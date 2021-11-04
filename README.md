@@ -1,4 +1,4 @@
-# Demo video can also be found in [youtube] (https://youtu.be/qvQYAjfMuOA)
+# Demo video can also be found in [youtube](https://youtu.be/qvQYAjfMuOA)
 
 # 1. Challenge Outline  
 ### a. Summary and review of the problem, overall proposed solution. 
