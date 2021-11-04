@@ -1,3 +1,5 @@
+# Demo video can also be found in [youtube] (https://youtu.be/qvQYAjfMuOA)
+
 # 1. Challenge Outline  
 ### a. Summary and review of the problem, overall proposed solution. 
 The [proposed solution](https://replit.com/@AstridCaballero/AdaBattleship#Documentation/designOverAll.draw) is to implement the **State pattern** to wrap the game. (In case the replit link can't be accessed then find the proposed solution in [GitHub](Documentation/designOverAll.pdf)).
