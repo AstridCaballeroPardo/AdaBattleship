@@ -23,6 +23,7 @@ void SetupState::enter()
 {
   char playerLabel = ' ';
   bool isNotQuit = true;
+  bool hide = false;
   
   //ask type of game to play
   std::string input;
@@ -39,7 +40,7 @@ void SetupState::enter()
   if (input == "1") 
   {
     playerLabel ='A';
-    playerTurnLoop(grid1, isNotQuit, playerLabel);
+    playerTurnLoop(grid1, isNotQuit, playerLabel, hide);
     
     if (!isNotQuit) 
     {
@@ -58,7 +59,7 @@ void SetupState::enter()
   else if(input == "2") 
   {
     playerLabel ='A';
-    playerTurnLoop(grid1, isNotQuit, playerLabel);
+    playerTurnLoop(grid1, isNotQuit, playerLabel, hide);
     
     if (!isNotQuit) 
     {
@@ -68,7 +69,7 @@ void SetupState::enter()
     else 
     {
       playerLabel ='B';
-      playerTurnLoop(grid2, isNotQuit, playerLabel);
+      playerTurnLoop(grid2, isNotQuit, playerLabel, hide);
 
       if (!isNotQuit) 
       {
@@ -100,25 +101,6 @@ void SetupState::update()
 }
 void SetupState::render()
 {
-  Grid& grid1 = StateMachine::getInstance()->getGridPlayer1();
-  Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();
-
-  std::cout << YELLOW << "PlayerA Fleet\n" << ENDCOLOUR;
-  grid1.renderGrid();
-
-  std::cout << "\n\n";
-
-  if (grid2.getPlayerType() == "computer")
-  {
-  std::cout << YELLOW << "Computer Fleet\n" << ENDCOLOUR;
-  grid2.renderGrid();
-  }
-  else if (grid2.getPlayerType() == "human")
-  {
-  std::cout << YELLOW << "PlayerB Fleet\n" << ENDCOLOUR;
-  grid2.renderGrid();
-  }
-
   std::string inputMenuToPlay = menuTransToPlay();
   if (inputMenuToPlay == "1") {
     //move to the play state

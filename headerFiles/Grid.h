@@ -23,7 +23,7 @@ class Grid {
     Grid(int size = GRID_SIZE);  
 
     //Grid member methods
-    void renderGrid();
+    void renderGrid(bool hide);
 
     void setGrid(int size);
 

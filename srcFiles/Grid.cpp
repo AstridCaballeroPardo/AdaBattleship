@@ -23,7 +23,7 @@ Grid::Grid(int size):gridId_(currentGridId_++),gridFleet(),grid(), size_(size), 
 }
 
 //Implementing Grid member methods
-void Grid::renderGrid()
+void Grid::renderGrid(bool hide)
 {
   std::cout << "\n";
   //print headers - column
@@ -50,9 +50,13 @@ void Grid::renderGrid()
       {
         std::cout << "|" << std::setw(TILE_PADDING) << " " << BLUEBACK << icon << ENDCOLOUR << "  ";
       }
-      else if (tileState == 1) 
+      else if (tileState == 1 && !hide) 
       {
         std::cout << "|" << std::setw(TILE_PADDING) << " " << YELLOW << icon << ENDCOLOUR << "  ";
+      }
+      else if (tileState == 1 && hide) 
+      {
+       std::cout << "|" << std::setw(TILE_PADDING) << " " << BLUEBACK << '~' << ENDCOLOUR << "  ";
       }
       else if (tileState == 2 && icon == '~') 
       {

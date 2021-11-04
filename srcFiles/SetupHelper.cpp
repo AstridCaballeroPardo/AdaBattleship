@@ -24,7 +24,7 @@ void setupPlacingShip(int shipLen, udtCoordInput& coordInput, int randomIndex, i
   } 
 }
 
-void manuallySetFleet(Grid& grid)
+void manuallySetFleet(Grid& grid, bool hide)
 {
   std::string input;  
   std::string msg;
@@ -111,7 +111,7 @@ void manuallySetFleet(Grid& grid)
     } 
     //keep track if fleet is completed
     if (shipCount == 0){
-      grid.renderGrid();
+      grid.renderGrid(hide);
       menuShipType(ships);
       std::cout << "\n\033[1;32mAll ships placed!\033[0m\n\n";        
       break;
@@ -204,13 +204,13 @@ void automaticallySetFleet(Grid& grid)
   }  
 } 
 
-void placing(Grid& grid)
+void placing(Grid& grid, bool hide)
 {
  std::string input;
  input = menuSetFleet();
  if (input == "1")
  {
-   manuallySetFleet(grid);
+   manuallySetFleet(grid, hide);
  }
  else if (input == "2")
  {
@@ -218,12 +218,12 @@ void placing(Grid& grid)
  }
 }
  
-void playerTurn(Grid& grid)
+void playerTurn(Grid& grid, bool hide)
 {
  //keep placing for player or quit?
- grid.renderGrid();
- placing(grid);
- grid.renderGrid();
+ grid.renderGrid(hide);
+ placing(grid, hide);
+ grid.renderGrid(hide);
 }
  
 void setPlayersType(Grid& gridPlayer1, Grid& gridPlayer2, std::string type) {
@@ -237,12 +237,12 @@ void setPlayersType(Grid& gridPlayer1, Grid& gridPlayer2, std::string type) {
  }
 }
 
-void playerTurnLoop(Grid& grid, bool& isNotQuit, char playerLabel) { 
+void playerTurnLoop(Grid& grid, bool& isNotQuit, char playerLabel, bool hide) { 
  while(!grid.getFleet().isFleetCompleted()) {
          
      std::cout << YELLOW << "\nPlayer" << playerLabel << " set your fleet: \n" << ENDCOLOUR;
     
-     playerTurn(grid);
+     playerTurn(grid, hide);
          
      isNotQuit = continueResetQuit(grid);
      if(!isNotQuit) {

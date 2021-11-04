@@ -10,7 +10,7 @@
 #include "../headerFiles/Validation.h"
 #include "../headerFiles/PlayHelper.h"
 
-void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired)
+void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, udtCoordInput coordInput, Grid& gridPlayer, bool isAutofired, bool hide)
 {
   int shipTargetId;
   int tileTargetState;
@@ -69,17 +69,18 @@ void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, 
 
   //end of players's turn
   //display player's grid
-  gridPlayer.renderGrid(); 
+  gridPlayer.renderGrid(hide); 
 }
 
-void autoFire(std::vector<int>& indexVecPlayer, int gridSize, udtCoordInput coordInput, Grid& grid, std::vector<int>& bombedTilesGrid, bool& isNotQuit) 
+void autoFire(std::vector<int>& indexVecPlayer, int gridSize, udtCoordInput coordInput, Grid& grid, std::vector<int>& bombedTilesGrid, bool& isNotQuit, bool hide) 
 {
+  bool isAutofire = true;
   //get random index based on set size
   int randomIndex = randomVal(0, indexVecPlayer.size() - 1); 
   //get value at randomIndex
   int valAtRandomIndx = indexVecPlayer[randomIndex];
   
-  playerShoot(indexVecPlayer, valAtRandomIndx, gridSize, coordInput, grid, true);
+  playerShoot(indexVecPlayer, valAtRandomIndx, gridSize, coordInput, grid, isAutofire, hide);
   //keep track of bombed tiles         
   bombedTilesGrid.push_back(valAtRandomIndx);                  
   //user ends turn or quits game
@@ -89,8 +90,9 @@ void autoFire(std::vector<int>& indexVecPlayer, int gridSize, udtCoordInput coor
   } 
 }
 
-void manualShoot(udtCoordInput coordInput, int indVal, int gridSize, std::vector<int>& indexVecPlayer, std::vector<int>& bombedTilesGrid, bool& isNotQuit, Grid& grid) 
+void manualShoot(udtCoordInput coordInput, int indVal, int gridSize, std::vector<int>& indexVecPlayer, std::vector<int>& bombedTilesGrid, bool& isNotQuit, Grid& grid, bool hide) 
 {
+  bool isAutofire = false;
   while (true) 
   {  
     std::string input;
@@ -116,7 +118,7 @@ void manualShoot(udtCoordInput coordInput, int indVal, int gridSize, std::vector
       continue;
     }
     
-    playerShoot(indexVecPlayer, indVal, gridSize, coordInput, grid, false);  
+    playerShoot(indexVecPlayer, indVal, gridSize, coordInput, grid, isAutofire, hide);  
     //keep track of bombed tiles         
     bombedTilesGrid.push_back(indVal); 
     //user ends turn or quits game
@@ -128,17 +130,17 @@ void manualShoot(udtCoordInput coordInput, int indVal, int gridSize, std::vector
   } 
 }
 
-void playerShootTurn(Grid& grid, std::vector<int>& indexVecPlayer, std::vector<int>& bombedTilesGrid, char playerLabel, udtCoordInput coordInput, int indVal, int gridSize, bool& isNotQuit) 
+void playerShootTurn(Grid& grid, std::vector<int>& indexVecPlayer, std::vector<int>& bombedTilesGrid, char playerLabel, udtCoordInput coordInput, int indVal, int gridSize, bool& isNotQuit, bool hide) 
 {
   std::string input;
   //display oponent's board
   std::cout << YELLOW << "\nPlayer" << playerLabel << " \'s turn\n" << ENDCOLOUR;
-  grid.renderGrid();
+  grid.renderGrid(hide);
 
   //ask shoot method. Manual/auto-fired
   input = menuShoot();
   if (input == "1") {      
-    manualShoot(coordInput, indVal, gridSize, indexVecPlayer, bombedTilesGrid, isNotQuit, grid); 
+    manualShoot(coordInput, indVal, gridSize, indexVecPlayer, bombedTilesGrid, isNotQuit, grid, hide); 
   }
   //autofire
   else 
@@ -147,6 +149,6 @@ void playerShootTurn(Grid& grid, std::vector<int>& indexVecPlayer, std::vector<i
     //add a time delay to improve game's pace.
     usleep(2000000);
     
-    autoFire(indexVecPlayer, gridSize, coordInput, grid, bombedTilesGrid, isNotQuit);
+    autoFire(indexVecPlayer, gridSize, coordInput, grid, bombedTilesGrid, isNotQuit, hide);
   }
 }

@@ -17,6 +17,7 @@ PlayState::~PlayState(){}
 //member methods
 void PlayState::enter()
 {
+  bool hide = true;
   std::string input;
   std::string msg;
   udtCoordInput coordInput;  
@@ -43,7 +44,7 @@ void PlayState::enter()
     //player1's turn   
     playerLabel = 'A'; 
     
-    playerShootTurn(grid2, indexVecPlayer2, bombedTilesGrid2, playerLabel, coordInput, indVal, gridSize, isNotQuit);
+    playerShootTurn(grid2, indexVecPlayer2, bombedTilesGrid2, playerLabel, coordInput, indVal, gridSize, isNotQuit, hide);
     
     //go in if user wants to keep playing and player2 has ships left
     if (isNotQuit && grid2.getFleet().getSize() != 0) {
@@ -51,12 +52,12 @@ void PlayState::enter()
       {
           //display oponent's board
           std::cout << YELLOW << "\nComputer's turn...\n" << ENDCOLOUR;
-          grid1.renderGrid();
+          grid1.renderGrid(hide);
           //add time delay
           //add a time delay to improve game's pace.
           usleep(2000000);
            
-          autoFire(indexVecPlayer1, gridSize, coordInput, grid1, bombedTilesGrid1, isNotQuit); 
+          autoFire(indexVecPlayer1, gridSize, coordInput, grid1, bombedTilesGrid1, isNotQuit, hide); 
       }
       else 
       {
@@ -64,7 +65,7 @@ void PlayState::enter()
         //display oponent's board
         playerLabel = 'B'; 
        
-        playerShootTurn(grid1, indexVecPlayer1, bombedTilesGrid1, playerLabel, coordInput, indVal, gridSize, isNotQuit);
+        playerShootTurn(grid1, indexVecPlayer1, bombedTilesGrid1, playerLabel, coordInput, indVal, gridSize, isNotQuit, hide);
       }    
     }
     if (!isNotQuit) 
