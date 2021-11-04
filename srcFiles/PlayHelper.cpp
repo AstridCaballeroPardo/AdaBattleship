@@ -1,6 +1,7 @@
 #include <vector>
 #include <unistd.h>
 #include <random>
+#include <math.h>
 
 
 #include "../headerFiles/constants.h"
@@ -15,6 +16,7 @@ void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, 
   int shipTargetId;
   int tileTargetState;
   int x;
+  std::vector<int> adjacentTiles;
   //check random index is in set(find is O(log n))  
   if (isAutofired) {
     x = (valIndex / gridSize);            
@@ -35,6 +37,9 @@ void playerShoot(std::vector<int>& indexVectPlayer, int valIndex, int gridSize, 
     //Update tile. change tileState and icon              
     tileTarget.setTileState((int)tileState::bombedTile);
     tileTarget.setIcon('X');
+
+    //update adjacentTiles
+    getAdjacentTiles(tileIndx, gridSize, std::vector<int>& adjacentTiles);
 
     //identify shipId from tile
     shipTargetId = tileTarget.getShipId();
@@ -139,7 +144,8 @@ void playerShootTurn(Grid& grid, std::vector<int>& indexVecPlayer, std::vector<i
 
   //ask shoot method. Manual/auto-fired
   input = menuShoot();
-  if (input == "1") {      
+  if (input == "1") 
+  {      
     manualShoot(coordInput, indVal, gridSize, indexVecPlayer, bombedTilesGrid, isNotQuit, grid, hide); 
   }
   //autofire
@@ -151,4 +157,48 @@ void playerShootTurn(Grid& grid, std::vector<int>& indexVecPlayer, std::vector<i
     
     autoFire(indexVecPlayer, gridSize, coordInput, grid, bombedTilesGrid, isNotQuit, hide);
   }
+}
+
+void getAdjacentTiles(int tileIndx, int gridSize, std::vector<int>& adjacentTiles)
+{  
+  int totalTiles = pow(gridSize, 2);
+  //max size of vector is 4, min size is 2 (if the hit tile is in a corner)
+  //calculate the up, lower, left and right indexes
+  
+  //upper index
+  int tmpUp = tileIndx - gridSize;
+  //lower index
+  int tmpLow = tileIndx + gridSize;
+  // row of tileIndx
+  int row = tileIndx / gridSize;
+  //lower index
+  int tmpLeft = tileIndx - 1;
+  //lower index
+  int tmpRight = tileIndx + 1;
+
+  //check if the up, down, left and right indexes are within the boundaries
+  if(tmpUp >= 0) 
+  {
+    //add to the adjacentTiles vector the valid indexes
+    adjacentTiles.push_back(tmpUp);
+  }
+
+  if(tmpLow < totalTiles) 
+  {
+    //add to the adjacentTiles vector the valid indexes
+    adjacentTiles.push_back(tmpLow);
+  }
+  
+  if(tmpLeft / gridSize == row) 
+  {
+    //add to the adjacentTiles vector the valid indexes
+    adjacentTiles.push_back(tmpLeft);
+  }
+  
+  if(tmpRight / gridSize == row) 
+  {
+    //add to the adjacentTiles vector the valid indexes
+    adjacentTiles.push_back(tmpLeft);
+  }
+
 }
