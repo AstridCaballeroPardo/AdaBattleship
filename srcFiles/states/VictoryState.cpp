@@ -34,7 +34,7 @@ void VictoryState::exit()
   Grid& grid2 = StateMachine::getInstance()->getGridPlayer2();      
 
   std::vector<int>& bombedTilesGrid1 = StateMachine::getInstance()->getBombedTilesGrid1();
-  std::vector<int>& bombedTilesGrid2 = StateMachine::getInstance()->getBombedTilesGrid1();
+  std::vector<int>& bombedTilesGrid2 = StateMachine::getInstance()->getBombedTilesGrid2();
 
   //reset ships
   grid1.resetFleet();
