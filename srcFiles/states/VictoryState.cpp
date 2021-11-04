@@ -57,8 +57,13 @@ void VictoryState::render()
 {
   std::cout << YELLOW << "you win!!! Campe@n! :)\n\n" << ENDCOLOUR;      
   std::string input = menuEndGame();
-  if (input == "1") {
+  if (input == "1") 
+  {
     //move to intro state
     update();
-  }      
+  }    
+  else 
+  {
+    std::exit(0);
+  }  
 }

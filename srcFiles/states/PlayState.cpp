@@ -47,7 +47,8 @@ void PlayState::enter()
     playerShootTurn(grid2, indexVecPlayer2, bombedTilesGrid2, playerLabel, coordInput, indVal, gridSize, isNotQuit, hide);
     
     //go in if user wants to keep playing and player2 has ships left
-    if (isNotQuit && grid2.getFleet().getSize() != 0) {
+    if (isNotQuit && grid2.getFleet().getSize() != 0) 
+    {
       if (grid2.getPlayerType() == "computer")
       {
           //display oponent's board
@@ -70,12 +71,14 @@ void PlayState::enter()
     }
     if (!isNotQuit) 
     {
-      exit(bombedTilesGrid1, bombedTilesGrid2);      
+      exit(bombedTilesGrid1, bombedTilesGrid2); 
+      // break;     
     }
    // transition state
     else 
     {
       update();
+      // break;
     } 
   }
 }

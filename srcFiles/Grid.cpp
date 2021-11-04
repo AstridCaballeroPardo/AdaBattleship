@@ -209,7 +209,8 @@ void Grid::resetFleet()
         resetTiles(shipLen, orientation, letterToInt(coordInput.row), coordInput.column, tmpTile);
       }
       //reset ship
-      fleetV[i].setShip(0, 0, -1);      
+      fleetV[i].setShip(0, 0, -1);  
+      fleetV[i].setIsSunk(false);    
     }
     //reset Fleet size
     getFleet().setSize(FLEET_SIZE);
