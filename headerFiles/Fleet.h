@@ -28,8 +28,7 @@ class Fleet{
     //inline implementation to have access to the private attributes
     int getSize() const {return size_;}  
     int getGridId() const {return gridId_;}  
-    std::vector<Ship>& getFleetVector() {return fleetVector_;};
-    
+    std::vector<Ship>& getFleetVector() {return fleetVector_;};    
     Ship& getShip(std::vector<Ship>& fleetVector, int shipId);  
     void reduceFleetSize();       
     bool isShipInFleet(int shipType); 

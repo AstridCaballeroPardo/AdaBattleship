@@ -24,11 +24,8 @@ class Grid {
 
     //Grid member methods
     void renderGrid(bool hide);
-
     void setGrid(int size);
-
     void setFleetId(int gridId_);
-
     void setPlayerType(std::string playerType);
 
     //inline implementation to have access to the private attribute 'grid'    
